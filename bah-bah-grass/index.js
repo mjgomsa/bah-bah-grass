@@ -1,9 +1,9 @@
 let shared;
 let gridSize = 20;
 var won = false;
+const strt = Date.now();
+var timer_max = 92; // to account for 2ms
 var outOfTime = false;
-
-// only thing not working: the timer starting when gameOn,not since the beginning of game.
 
 function preload() {
   partyConnect(
@@ -21,14 +21,14 @@ function preload() {
   black_sheep = loadImage("black_sheep.png");
   me = partyLoadMyShared();
   guests = partyLoadGuestShareds();
+  
 }
 
 function setup() {
   if (partyIsHost()) {
     resetGrid();
     shared.eaten = 0;
-    shared.timer = 105;
-    setInterval(timerFunc, 1000);
+    // setInterval(timerFunc, 1000);
     shared.gameMode = 0;
   }
   
@@ -55,7 +55,7 @@ function draw() {
 
 
 function startingScreen() {
-  let srt_cnv = createCanvas(500, 500);
+  createCanvas(500, 500);
   background("beige");
   push();
   fill('black');
@@ -102,6 +102,11 @@ function mousePressed() {
 function gameOn() {
   createCanvas(500, 500);
   background("beige");
+  
+  const secs = Math.floor((Date.now() - strt)/1000);
+  shared.timer = timer_max - secs;
+  console.log("time = "+secs);
+
   translate(width / 10, height / 11);
   gridDraw();
 
@@ -126,7 +131,8 @@ function gameOn() {
   fill("black");
   textSize(20);
   text("Grass eaten: " + shared.eaten, 0, 430);
-  countDown();
+//   text(shared.timer, 360, 430);
+countDown();
 
   //if winner(gridSize *2 or timer runs out):
   if (shared.eaten == gridSize*gridSize) {
@@ -198,12 +204,6 @@ function resetGrid() {
     newGrid[col] = new Array(gridSize).fill(false);
   }
   shared.grid = newGrid;
-}
-
-function timerFunc() {
-  if (shared.timer > 0) {
-    shared.timer--;
-  }
 }
 
 function countDown() {
