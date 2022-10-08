@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Event Binding</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style type="text/css">
+		body {
+			margin: 0 auto;
+			max-width: 40em;
+			width: 88%;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app"></div>
+
+	<script src="../dist/reef.js"></script>
+	<script>
+		let {store, component} = reef;
+
+		// Track clicks
+		let data = store({count: 0});
+
+		// Log clicks
+		function log () {
+			data.count++;
+		}
+
+		function template () {
+			return `
+				<p>Clicked ${data.count} times.</p>
+				<p><button onclick="log()">Activate Me</button></p>`
+		}
+
+		// Render a button with an onclick event
+		component('#app', template, {events: true});
+	</script>
+
+</body>
+</html>
