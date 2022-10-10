@@ -2,7 +2,6 @@ let shared;
 let gridSize = 20;
 var won = false;
 var outOfTime = false;
-var made_it = false;
 
 function preload() {
     partyConnect(
@@ -17,7 +16,8 @@ function preload() {
         game_timer: 90,
         farmer_timer: 15,
         replanted_x: 0,
-        replanted_y: 0
+        replanted_y: 0,
+        made_it: false
     });
     sheep = loadImage("sheep.png");
     black_sheep = loadImage("black_sheep.png");
@@ -171,16 +171,16 @@ function replantingGrass() {
         text(shared.farmer_timer, width / 2, 430);
 
         if (me.sheep.posX == x && me.sheep.posY == y) {
-            made_it = true;
+            shared.made_it = true;
         }
         // if timer hasnt gone off and made_it is false
-        if ((shared.farmer_timer != 0) && (made_it == false)) {
+        if ((shared.farmer_timer != 0) && (shared.made_it == false)) {
             // console.log("seed is planted")
             shared.grid[shared.replanted_x][shared.replanted_y] = "replanted";
-        } else if ((shared.farmer_timer != 0) && (made_it == true)) {
+        } else if ((shared.farmer_timer != 0) && (shared.made_it == true)) {
             // console.log("you made it!");
             shared.grid[shared.replanted_x][shared.replanted_y] = "unplanted";
-        } else if ((shared.farmer_timer == 0) && (made_it == false)) {
+        } else if ((shared.farmer_timer == 0) && (shared.made_it == false)) {
             text("You didn't get to the seed in time!", width / 5, 460);
             for (i = 0; i < gridSize; i++) {
                 shared.grid[i][shared.replanted_y] = "planted";
