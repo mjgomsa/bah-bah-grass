@@ -8,7 +8,7 @@ var outOfTime = false;
 function preload() {
     partyConnect(
         "wss://deepstream-server-1.herokuapp.com",
-        "mjgomsa_bah-bah-grass",
+        "mjgomsa_bah-bah-grass_beta",
         "main"
     );
     shared = partyLoadShared("shared", {
