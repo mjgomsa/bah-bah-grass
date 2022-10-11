@@ -30,6 +30,8 @@ function preload() {
 }
 
 function setup() {
+    partyToggleInfo(true);
+
     if (partyIsHost()) {
         resetGrid();
         shared.eaten = 0;
@@ -138,20 +140,25 @@ function gameOn() {
     text("Grass eaten: " + shared.eaten, 0, 430);
 
     // timer
+    if (partyIsHost()) {
     if (frameCount % 60 === 0 && shared.game_timer > 0) {
         shared.game_timer--;
     }
     if (shared.game_timer === 0) {
         console.log("game over");
         outOfTime = true;
-        shared.gameMode = 3;
     }
+    }
+
+    // if (outOfTime == true) {
+    //     shared.gameMode = 3;
+    // }
     text(shared.game_timer, 380, 430);
 
     replantingGrass();
 
     //if winner(gridSize *2 or timer runs out):
-    if (shared.eaten == gridSize * gridSize) {
+    if ((shared.eaten == gridSize * gridSize) || (outOfTime === true)) {
         won = true;
         shared.gameMode = 3;
     }
@@ -163,11 +170,11 @@ function replantingGrass() {
 
     if (shared.eaten >= (gridSize * gridSize) / 4) {
         //start farmer timer
-        if (partyIsHost()) {
+        // if (partyIsHost()) {
             if (frameCount % 60 === 0 && shared.farmer_timer > 0) {
                 shared.farmer_timer--;
             }
-        }
+        // }
         text(shared.farmer_timer, width / 2, 430);
 
         if (me.sheep.posX == x && me.sheep.posY == y) {
