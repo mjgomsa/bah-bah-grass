@@ -1,5 +1,6 @@
 let shared;
 let shared_time;
+let farmer;
 let gridSize = 20;
 var won = false;
 var outOfTime = false;
@@ -7,7 +8,7 @@ var outOfTime = false;
 function preload() {
     partyConnect(
         "wss://deepstream-server-1.herokuapp.com",
-        "mjgomsa_bye-bye-grass",
+        "mjgomsa_bah-bah-grass",
         "main"
     );
     shared = partyLoadShared("shared", {
@@ -17,7 +18,13 @@ function preload() {
     shared_time = partyLoadShared("shared_time", {
         game_timer: 90,
         gameMode: 0
-    })
+    });
+    farmer = partyLoadShared("farmer", {
+        timer: 15,
+        replanted_x: 20,
+        replanted_y:20,
+        made_it: false
+    });
 
     sheep = loadImage("./assets/sheep.png");
     black_sheep = loadImage("./assets/black_sheep.png");
@@ -39,16 +46,25 @@ function setup() {
 
     if (partyIsHost()) {
         resetGrid();
+        setInterval(timerFunc, 1000);
         
     }
-    // shared.eaten = 0;
-    // shared_time.game_timer = 90;
-    // setInterval(timerFunc, 1000);
-    // shared_time.gameMode = 0;
-    frameRate(60);
+    shared.eaten = 0; // these prob can go
+    shared_time.game_timer = 90;
+    shared_time.gameMode = 0;
     
     me.sheep = { posX: gridSize * -1, posY: gridSize * 0 };
     guests.sheep = { posX: gridSize * -1, posY: gridSize * 0 };
+
+    farmer.timer = 15;
+    farmer.made_it = false;
+    farmer.replanted_x = 20;
+    farmer.replanted_y = 20;
+    
+    // farmer.replanted_x = floor(random(0, gridSize));
+    // farmer.replanted_y = floor(random(0, gridSize));
+    
+    
 }
 
 function draw() {
@@ -123,10 +139,9 @@ function gameOn() {
     fill("black");
     textSize(15);
     text("Grass eaten: " + shared.eaten, 60, 430);
-    
-    // setInterval(timerFunc, 1000);
-    timerFunc();
     countDown();
+
+    // replantingGrass();
 
     //if winner(gridSize *2 or timer runs out):
     if (shared.eaten == gridSize * gridSize) {
@@ -161,6 +176,38 @@ function gameOver() {
     }
 }
 
+function replantingGrass() {
+    const x = farmer.replanted_x * gridSize;
+    const y = farmer.replanted_y * gridSize;
+
+    if ((me.sheep.posX == x && me.sheep.posY == y)) {
+        farmer.made_it = true;
+    }
+
+    console.log(farmer.made_it);
+    frameRate(60);
+    if (shared.eaten >= 10) {
+            if (frameCount % 60 === 0 && farmer.timer > 0) {
+                farmer.timer--;
+            }
+        text(farmer.timer, width / 2, 430);
+
+        if (farmer.timer > 0) {
+            if (farmer.made_it == true) {
+                shared.grid[farmer.replanted_x][farmer.replanted_y] = "unplanted";
+            } else {
+                shared.grid[farmer.replanted_x][farmer.replanted_y] = "replanted";
+            }
+        } else {
+            text("You didn't get to the seed in time!", width / 5, 460);
+            for (i = 0; i < gridSize; i++) {
+                shared.grid[i][farmer.replanted_y] = "planted";
+            }
+        }
+
+    }
+}
+
 function gridDraw() {
     for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
@@ -177,6 +224,10 @@ function gridDraw() {
                     gridSize + 1,
                     gridSize + 1
                 );
+            } else if(shared.grid[col][row] === "replanted") {
+                // fill('#FFD700');
+                fill('yellow');
+                rect(x + 1, y + 1, gridSize, gridSize);
             } else {
                 fill('#94541E');
                 rect(x + 1, y + 1, gridSize, gridSize);
@@ -246,7 +297,7 @@ function resetGrid() {
 }
 
 function timerFunc() {
-    if (frameCount % 60 === 0 && shared_time.game_timer > 0) {
+    if (shared_time.game_timer > 0) {
         shared_time.game_timer--;
     }
 }
