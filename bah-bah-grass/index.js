@@ -49,9 +49,9 @@ function setup() {
         setInterval(timerFunc, 1000);
         
     }
-    shared.eaten = 0; // these prob can go
-    shared_time.game_timer = 90;
-    shared_time.gameMode = 0;
+    // shared.eaten = 0; // these prob can go
+    // shared_time.game_timer = 90;
+    // shared_time.gameMode = 0;
     
     me.sheep = { posX: gridSize * -1, posY: gridSize * 0 };
     guests.sheep = { posX: gridSize * -1, posY: gridSize * 0 };
