@@ -256,9 +256,10 @@ function gameTimer() {
 function replantingGrass() {
     const x = shared_farmer.posX * gridSize;
     const y = shared_farmer.posY * gridSize;
-    if ((me.sheep.posX == x && me.sheep.posY == y)) {
-        shared_farmer.madeIt = true;
-    }
+    
+    // if anyone gets to yellow spot:
+    const p1 = guests.find((p) => p.role === "player1");
+    const p2 = guests.find((p) => p.role === "player2");
 
     if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75) ||
         (shared_time.gameTimer <= 65 && shared_time.gameTimer > 55)) {
@@ -268,27 +269,33 @@ function replantingGrass() {
             if (frameCount % 60 === 0) {
                 shared_farmer.farmerTimer--;
             }
-        
-            if (shared_farmer.farmerTimer === 0) {
-                if (shared_farmer.madeIt === false) {
-                    console.log("Didn't get seed in time")
-                    for (i = 0; i < gridSize; i++) {
-                        shared.grid[i][shared_farmer.posY] = "planted";
-                    }
-                }
-            }
-            
-            if (shared_farmer.madeIt === true) {
-                console.log("You got to seed in time!")
-                shared.grid[shared_farmer.posX][shared_farmer.posY] = "unplanted";
+        }
+        if ((p1 === me) || (p2 === me)) {
+            if ((me.sheep.posX === x && me.sheep.posY === y)) {
+                shared_farmer.madeIt = true;
             }
         }
+        
+        if (shared_farmer.farmerTimer === 0) {
+            if (shared_farmer.madeIt === false) {
+                console.log("Didn't get seed in time")
+                for (i = 0; i < gridSize; i++) {
+                    shared.grid[i][shared_farmer.posY] = "planted";
+                }
+            }
+        }
+        
+        if (shared_farmer.madeIt === true) {
+            console.log("You got to seed in time!")
+            shared.grid[shared_farmer.posX][shared_farmer.posY] = "unplanted";
+        }
+
         text(shared_farmer.farmerTimer, 425,70);
     } else {
         partySetShared(shared_farmer, {
             farmerTimer : 10,
             posX: 5,
-            posY: 10,
+            posY: 0,
             madeIt: false
         });
     }
