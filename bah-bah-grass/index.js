@@ -1,8 +1,16 @@
 let shared;
 let me;
 let guests;
+
+let shared_time;
+var interval = 90000;
+var countdown;
+
 let gridSize = 20;
 var won = false;
+var outOfTime = false;
+
+// figure out timer start at gamemode = 3
 
 function preload() {
     partyConnect(
@@ -13,14 +21,20 @@ function preload() {
     shared = partyLoadShared("shared", {
         grid: [],
         eaten: 0,
+        gameMode: 0
     });
 
     me = partyLoadMyShared({role: "observer"});
     guests = partyLoadGuestShareds();
 
+    shared_time = partyLoadShared("shared_time");
+
     sheep = loadImage("./assets/sheep.png");
     black_sheep = loadImage("./assets/black_sheep.png");
     grass = loadImage("./assets/grass.png");
+    logo = loadImage("./assets/bahbahgrass_logo.png");
+    grass_start = loadImage("./assets/grass_starter.png");
+    grass_instruct = loadImage("./assets/grass_instruction.png")
 }
 
 
@@ -29,23 +43,84 @@ function setup() {
 
     if (partyIsHost()) {
         resetGrid();
+        partySetShared(shared_time, { gameTimer: 90 });
     }
 
+    // different starting position for each player
     for (i=0; i<guests.length; i++) {
         me.sheep = { posX: i*20, posY: 0 };
     }
+
+    
 }
 
 function draw() {
-    gameOn();
-    
+    switch (shared.gameMode) {
+        case 0:
+            startingScreen();
+            break;
+        case 1:
+            instructScreen();
+            break;
+        case 2:
+            gameOn();
+            break;
+        case 3:
+            gameOver();
+            break;
+    }
+}
+
+function startingScreen() {
+    createCanvas(600, 600);
+    background("#99ccff");
+    fill('#703e14');
+    push();
+    textSize(35);
+    pop();
+    push();
+    image(logo, 43, 100, 520, 260);
+    image(grass_start, 0, 0, 600, 600);
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    testing = text("Click anywhere to continue", 300, 350);
+    pop();
+}
+
+function instructScreen() {
+    createCanvas(600, 600);
+    background("#99ccff");
+    fill('#703e14');
+    image(logo, 220, 19, 160, 80);
+    image(grass_instruct, 0, 0, 600, 600);
+    push();
+    textSize(35);
+    textAlign(CENTER, CENTER);
+    textStyle(BOLD);
+    text("Instructions", 300, 150);
+    pop();
+    textSize(25);
+    textAlign(CENTER, CENTER);
+    textStyle(NORMAL);
+    text("Eat all grass squares with", 300, 200);
+    text("your teammates before", 300, 240);
+    text("the time runs out.", 300, 280);
+    push();
+    pop();
+    push();
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text("Click anywhere to continue", 300, 340);
+    pop();
+
 }
 
 function gameOn() {
     createCanvas(800, 800);
     assignPlayers();
     drawGrid();
-    //draw sheep, player 1 and player 2
+
+    //draw sheep for player 1
     const p1 = guests.find((p) => p.role === "player1");
     if (p1) {
         image(
@@ -56,7 +131,7 @@ function gameOn() {
             gridSize + 15
         );
     }
-
+    //draw sheep for player 2
     const p2 = guests.find((p) => p.role === "player2");
     if (p2) {
         image(
@@ -67,32 +142,49 @@ function gameOn() {
             gridSize + 15
         );
     }
+    gameTimer();
     drawUI();
 
     if (shared.eaten == gridSize * gridSize) {
         won = true;
-        // shared_time.gameMode = 3;
-        console.log("Game over: you win");
+        shared.gameMode = 3;
+        console.log("Game over: all grass eaten, you win");
     }
 }
 
-function drawUI() {
-    fill("black");
-    textSize(15);
-
-    text(me.role, 0,420);
-    console.log(me.role);
-    
-    text("Grass eaten: " + shared.eaten, 0, 440);
+function gameOver() {
+    textFont('Pixeloid Sans');
+    textAlign(CENTER, CENTER);
+    if (won == true) {
+        createCanvas(600, 600);
+        background("#99ccff");
+        fill('#703e14');
+        image(logo, 220, 19, 160, 80);
+        textSize(20);
+        text("Congratulations!", 300, 200);
+        textSize(30);
+        text("You WIN!", 300, 240);
+    }
+    if (outOfTime == true) {
+        createCanvas(600, 600);
+        background("#99ccff");
+        fill('#703e14');
+        image(grass_start, 0, 0, 600, 600);
+        image(logo, 220, 19, 160, 80);
+        textSize(20);
+        text("You're out of time...", 300, 200);
+        textSize(30);
+        text("You LOSE!", 300, 240);
+    }
 }
 
 function assignPlayers() {
     // if there isn't a player1
     if (!guests.find((p) => p.role === "player1")) {
-        console.log("need player1");
+        // console.log("need player1");
         // find the first observer
         const o = guests.find((p) => p.role === "observer");
-        console.log("found first observer", o, me, o === me);
+        // console.log("found first observer", o, me, o === me);
         // if thats me, take the role
         if (o === me) o.role = "player1";
     }
@@ -130,6 +222,29 @@ function drawGrid() {
     }
 }
 
+function gameTimer() {
+    if (partyIsHost()) {
+        if (frameCount % 60 === 0) {
+            shared_time.gameTimer--;
+        }
+    
+        if (shared_time.gameTimer === 0) {
+            console.log("Game Over: timer ran out")
+            outOfTime = true;
+            shared.gameMode = 3;
+        }
+    }
+   
+}
+
+function drawUI() {
+    fill("black");
+    textSize(15);
+    text(me.role, 0,420);
+    text("Grass eaten: " + shared.eaten, 0, 440);
+    text(shared_time.gameTimer, 380, 420);
+}
+
 function keyPressed() {
     const p1 = guests.find((p) => p.role === "player1");
     const p2 = guests.find((p) => p.role === "player2");
@@ -157,6 +272,14 @@ function keyPressed() {
     }
 }
 
+function mousePressed() {
+    if (shared.gameMode == 0) {
+        shared.gameMode = 1;
+    } else if (shared.gameMode == 1) {
+        shared.gameMode = 2;
+    }
+}
+
 function resetGrid() {
     const newGrid = [];
     for (let col = 0; col < gridSize; col++) {
@@ -164,3 +287,5 @@ function resetGrid() {
     }
     shared.grid = newGrid;
 }
+
+
