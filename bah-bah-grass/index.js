@@ -3,14 +3,10 @@ let me;
 let guests;
 
 let shared_time;
-var interval = 90000;
-var countdown;
+let shared_state;
 
 let gridSize = 20;
-var won = false;
-var outOfTime = false;
 
-// figure out timer start at gamemode = 3
 
 function preload() {
     partyConnect(
@@ -21,13 +17,18 @@ function preload() {
     shared = partyLoadShared("shared", {
         grid: [],
         eaten: 0,
-        gameMode: 0
     });
 
     me = partyLoadMyShared({role: "observer"});
     guests = partyLoadGuestShareds();
 
     shared_time = partyLoadShared("shared_time");
+
+    shared_state = partyLoadShared("shared_state", {
+        gameMode: 0,
+        won: false,
+        outOfTime: false
+    });
 
     sheep = loadImage("./assets/sheep.png");
     black_sheep = loadImage("./assets/black_sheep.png");
@@ -50,12 +51,11 @@ function setup() {
     for (i=0; i<guests.length; i++) {
         me.sheep = { posX: i*20, posY: 0 };
     }
-
     
 }
 
 function draw() {
-    switch (shared.gameMode) {
+    switch (shared_state.gameMode) {
         case 0:
             startingScreen();
             break;
@@ -116,7 +116,10 @@ function instructScreen() {
 }
 
 function gameOn() {
-    createCanvas(800, 800);
+    createCanvas(600, 600);
+    background('beige');
+    image(logo, 220, 19, 160, 80);
+    translate(90,100);
     assignPlayers();
     drawGrid();
 
@@ -146,8 +149,8 @@ function gameOn() {
     drawUI();
 
     if (shared.eaten == gridSize * gridSize) {
-        won = true;
-        shared.gameMode = 3;
+        shared_state.won = true;
+        shared_state.gameMode = 3;
         console.log("Game over: all grass eaten, you win");
     }
 }
@@ -155,7 +158,7 @@ function gameOn() {
 function gameOver() {
     textFont('Pixeloid Sans');
     textAlign(CENTER, CENTER);
-    if (won == true) {
+    if (shared_state.won === true) {
         createCanvas(600, 600);
         background("#99ccff");
         fill('#703e14');
@@ -165,7 +168,7 @@ function gameOver() {
         textSize(30);
         text("You WIN!", 300, 240);
     }
-    if (outOfTime == true) {
+    if (shared_state.outOfTime === true) {
         createCanvas(600, 600);
         background("#99ccff");
         fill('#703e14');
@@ -230,8 +233,8 @@ function gameTimer() {
     
         if (shared_time.gameTimer === 0) {
             console.log("Game Over: timer ran out")
-            outOfTime = true;
-            shared.gameMode = 3;
+            shared_state.outOfTime = true;
+            shared_state.gameMode = 3;
         }
     }
    
@@ -240,9 +243,9 @@ function gameTimer() {
 function drawUI() {
     fill("black");
     textSize(15);
-    text(me.role, 0,420);
-    text("Grass eaten: " + shared.eaten, 0, 440);
-    text(shared_time.gameTimer, 380, 420);
+    text(me.role, 25,420);
+    text("Grass eaten: " + shared.eaten, 50, 440);
+    text(shared_time.gameTimer, 390, 420);
 }
 
 function keyPressed() {
@@ -273,10 +276,10 @@ function keyPressed() {
 }
 
 function mousePressed() {
-    if (shared.gameMode == 0) {
-        shared.gameMode = 1;
-    } else if (shared.gameMode == 1) {
-        shared.gameMode = 2;
+    if (shared_state.gameMode == 0) {
+        shared_state.gameMode = 1;
+    } else if (shared_state.gameMode == 1) {
+        shared_state.gameMode = 2;
     }
 }
 
