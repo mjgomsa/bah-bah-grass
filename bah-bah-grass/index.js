@@ -33,8 +33,8 @@ function preload() {
 
     shared_farmer = partyLoadShared("shared_farmer", {
         farmerTimer : 10,
-        posX: 3,
-        posY: 10,
+        posX: 19,
+        posY: 7,
         madeIt: false
     });
 
@@ -257,6 +257,8 @@ function replantingGrass() {
     const x = shared_farmer.posX * gridSize;
     const y = shared_farmer.posY * gridSize;
     
+    // a little glitchy for the player that is not the host but for the most part works
+
     // if anyone gets to yellow spot:
     const p1 = guests.find((p) => p.role === "player1");
     const p2 = guests.find((p) => p.role === "player2");
@@ -275,7 +277,7 @@ function replantingGrass() {
                 shared_farmer.madeIt = true;
             }
         }
-        
+
         if (shared_farmer.farmerTimer === 0) {
             if (shared_farmer.madeIt === false) {
                 console.log("Didn't get seed in time")
@@ -294,8 +296,8 @@ function replantingGrass() {
     } else {
         partySetShared(shared_farmer, {
             farmerTimer : 10,
-            posX: 5,
-            posY: 0,
+            posX: 6,
+            posY: 18,
             madeIt: false
         });
     }
