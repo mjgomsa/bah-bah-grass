@@ -6,6 +6,8 @@ let shared_time;
 let shared_state;
 let shared_farmer;
 
+let nom
+
 let gridSize = 20;
 
 
@@ -38,28 +40,40 @@ function preload() {
         madeIt: false
     });
 
+    //player 1- sheep
     sheep = loadImage("./assets/sheep.png");
-    black_sheep = loadImage("./assets/black_sheep.png");
+    sheep_left = loadImage("./assets/sheep_left.png");
+    sheep_right = loadImage("./assets/sheep_right.png");
+    sheep_behind = loadImage("./assets/sheep_behind.png");
+
+    //player 2- ram
+    ram = loadImage("./assets/ram.png");
+    ram_left = loadImage("./assets/ram_left.png");
+    ram_right = loadImage("./assets/ram_right.png");
+    ram_behind = loadImage("./assets/ram_behind.png");
+
+    // other assets
     grass = loadImage("./assets/grass.png");
     logo = loadImage("./assets/bahbahgrass_logo.png");
     grass_start = loadImage("./assets/grass_starter.png");
     grass_instruct = loadImage("./assets/grass_instruction.png")
     farmer = loadImage("./assets/farmer.png");
+    nom = loadSound("./assets/nom_noise.wav");
 }
 
 
 function setup() {
+    nom.setVolume(0.1);
     partyToggleInfo(true);
+    textFont('Pixeloid Sans');
 
     if (partyIsHost()) {
         resetGrid();
         partySetShared(shared_time, { gameTimer: 90 });
     }
 
-    // different starting position for each player
-    for (i=0; i<guests.length; i++) {
-        me.sheep = { posX: i*20, posY: 0 };
-    }
+   
+    me.sheep = { posX: 0, posY: -20 };
 
     
 }
@@ -132,29 +146,7 @@ function gameOn() {
     translate(90,100);
     assignPlayers();
     drawGrid();
-
-    //draw sheep for player 1
-    const p1 = guests.find((p) => p.role === "player1");
-    if (p1) {
-        image(
-            sheep,
-            p1.sheep.posX - 8,
-            p1.sheep.posY - 10,
-            gridSize + 15,
-            gridSize + 15
-        );
-    }
-    //draw sheep for player 2
-    const p2 = guests.find((p) => p.role === "player2");
-    if (p2) {
-        image(
-            black_sheep,
-            p2.sheep.posX - 8,
-            p2.sheep.posY - 10,
-            gridSize + 15,
-            gridSize + 15
-        );
-    }
+    drawSheep();
     gameTimer();
     drawUI();
 
@@ -195,18 +187,18 @@ function gameOver() {
 }
 
 function assignPlayers() {
-    // if there isn't a player1
-    if (!guests.find((p) => p.role === "player1")) {
-        // console.log("need player1");
+    // if there isn't a sheep
+    if (!guests.find((p) => p.role === "sheep")) {
+        // console.log("need sheep");
         // find the first observer
         const o = guests.find((p) => p.role === "observer");
         // console.log("found first observer", o, me, o === me);
         // if thats me, take the role
-        if (o === me) o.role = "player1";
+        if (o === me) o.role = "sheep";
     }
-    if (!guests.find((p) => p.role === "player2")) {
+    if (!guests.find((p) => p.role === "ram")) {
         const o = guests.find((p) => p.role === "observer");
-        if (o === me) o.role = "player2";
+        if (o === me) o.role = "ram";
     }
 }
 
@@ -231,12 +223,114 @@ function drawGrid() {
                 fill('yellow');
                 rect(x , y , gridSize, gridSize);
             } else {
-                fill('#94541E');
-                rect(x , y , gridSize, gridSize);
+                if ((shared.grid[col][row] === "unplanted")) {
+                    fill('#94541E');
+                    rect(x , y , gridSize, gridSize);
+                }
             }
         }
     }
 }
+
+function drawSheep() {
+    translate(-8, -10);
+    //draw sheep for player 1
+    const p1 = guests.find((p) => p.role === "sheep");
+    if (p1) {
+        push();
+        translate(p1.sheep.posX, p1.sheep.posY);
+        rotateSheep_p1(p1);
+        imageMode(CENTER);
+        pop();
+    }
+    //draw sheep for player 2
+    const p2 = guests.find((p) => p.role === "ram");
+    if (p2) {
+        push();
+        translate(p2.sheep.posX, p2.sheep.posY);
+        rotateSheep_p2(p2);
+        imageMode(CENTER);
+        pop();
+    }
+}
+
+function rotateSheep_p1(test) {
+    if (test.direction === "down") {
+        image(
+            sheep,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    }
+    if (test.direction === "left"){
+        image(
+            sheep_left,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    };
+    if (test.direction === "right"){
+        image(
+            sheep_right,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    };
+    if (test.direction === "up"){
+        image(
+            sheep_behind,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    };
+  }
+
+function rotateSheep_p2(test) {
+    if (test.direction === "down") {
+        image(
+            ram,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    }
+    if (test.direction === "left"){
+        image(
+            ram_left,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    };
+    if (test.direction === "right"){
+        image(
+            ram_right,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    };
+    if (test.direction === "up"){
+        image(
+            ram_behind,
+            0,
+            0,
+            gridSize + 15,
+            gridSize + 15
+          );
+    };
+  }
 
 function gameTimer() {
     if (partyIsHost()) {
@@ -260,8 +354,8 @@ function replantingGrass() {
     // a little glitchy for the player that is not the host but for the most part works
 
     // if anyone gets to yellow spot:
-    const p1 = guests.find((p) => p.role === "player1");
-    const p2 = guests.find((p) => p.role === "player2");
+    const p1 = guests.find((p) => p.role === "sheep");
+    const p2 = guests.find((p) => p.role === "ram");
 
     if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75) ||
         (shared_time.gameTimer <= 65 && shared_time.gameTimer > 55)) {
@@ -272,13 +366,13 @@ function replantingGrass() {
                 shared_farmer.farmerTimer--;
             }
         }
-        if ((p1 === me) || (p2 === me)) {
+        if ((p1 === me) || (p2 === me)) { // if either player made it to the seed
             if ((me.sheep.posX === x && me.sheep.posY === y)) {
                 shared_farmer.madeIt = true;
             }
         }
 
-        if (shared_farmer.farmerTimer === 0) {
+        if (shared_farmer.farmerTimer === 0) { //this works!
             if (shared_farmer.madeIt === false) {
                 console.log("Didn't get seed in time")
                 for (i = 0; i < gridSize; i++) {
@@ -304,28 +398,35 @@ function replantingGrass() {
 }
 
 function drawUI() {
+    textAlign(CENTER, CENTER);
     fill("black");
     textSize(15);
-    text(me.role, 25,420);
-    text("Grass eaten: " + shared.eaten, 50, 440);
-    text(shared_time.gameTimer, 390, 420);
+    text(me.role,225,430);
+    text("Grass eaten: " + shared.eaten, 65, 430);
+    text(shared_time.gameTimer, 400, 430);
 }
 
 function keyPressed() {
-    const p1 = guests.find((p) => p.role === "player1");
-    const p2 = guests.find((p) => p.role === "player2");
+    const p1 = guests.find((p) => p.role === "sheep");
+    const p2 = guests.find((p) => p.role === "ram");
+
     if ((p1 === me) || (p2 === me)) {
+        nom.play();
         if ((keyCode === DOWN_ARROW) || (keyCode === 83)) {
-            me.sheep.posY = me.sheep.posY + gridSize;
+            me.direction = "down";
+            tryMove(0, gridSize);
         }
         if ((keyCode === UP_ARROW) || (keyCode === 87)) {
-            me.sheep.posY = me.sheep.posY - gridSize;
+            me.direction = "up";
+            tryMove(0, -gridSize);
         }
         if ((keyCode === LEFT_ARROW) || (keyCode === 65)) {
-            me.sheep.posX = me.sheep.posX - gridSize;
+            me.direction = "left";
+            tryMove(-gridSize, 0);
         }
         if ((keyCode === RIGHT_ARROW) || (keyCode === 68)) {
-            me.sheep.posX = me.sheep.posX + gridSize;
+            me.direction = "right";
+            tryMove(gridSize, 0);
         }
     
         let col = me.sheep.posX / gridSize;
@@ -337,6 +438,26 @@ function keyPressed() {
         } 
     }
 }
+
+function tryMove(x, y) {
+    const targetLocation = { x: me.sheep.posX + x, y: me.sheep.posY + y };
+    const bounds = { x: 0, y: 0, w: gridSize*19, h: gridSize*19};
+    if (!pointInRect(targetLocation, bounds)) {
+      return;
+    }
+  
+    me.sheep.posX += x;
+    me.sheep.posY += y;
+}
+
+function pointInRect(p, r) {
+    return (
+      p.x >= r.x && // format wrapped
+      p.x <= r.x + r.w &&
+      p.y >= r.y &&
+      p.y <= r.y + r.h
+    );
+  }
 
 function mousePressed() {
     if (shared_state.gameMode == 0) {
