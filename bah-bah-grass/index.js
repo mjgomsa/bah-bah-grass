@@ -35,7 +35,7 @@ function preload() {
 
     shared_farmer = partyLoadShared("shared_farmer", {
         farmerTimer : 10,
-        posX: 19,
+        posX: 3,
         posY: 7,
         madeIt: false
     });
@@ -55,10 +55,12 @@ function preload() {
     // other assets
     grass = loadImage("./assets/grass.png");
     logo = loadImage("./assets/bahbahgrass_logo.png");
+    grass_border = loadImage("./assets/fence.png");
     grass_start = loadImage("./assets/grass_starter.png");
     grass_instruct = loadImage("./assets/grass_instruction.png")
     farmer = loadImage("./assets/farmer.png");
     nom = loadSound("./assets/nom_noise.wav");
+    // start_b = loadImage("./assets/start_button.png");
 }
 
 
@@ -75,7 +77,7 @@ function setup() {
    
     me.sheep = { posX: 0, posY: -20 };
 
-    
+    button = createImg("./assets/start_button.png" ); 
 }
 
 function draw() {
@@ -103,11 +105,12 @@ function startingScreen() {
     textSize(35);
     pop();
     push();
-    image(logo, 43, 100, 520, 260);
     image(grass_start, 0, 0, 600, 600);
     textSize(20);
     textAlign(CENTER, CENTER);
-    testing = text("Click anywhere to continue", 300, 350);
+    text("Click 'start' to continue", 300, 350);
+    button.position(250, 390);
+    button.mousePressed(changeState);
     pop();
 }
 
@@ -115,7 +118,7 @@ function instructScreen() {
     createCanvas(600, 600);
     background("#99ccff");
     fill('#703e14');
-    image(logo, 220, 19, 160, 80);
+    image(logo, 220, 10, 160, 80);
     image(grass_instruct, 0, 0, 600, 600);
     push();
     textSize(35);
@@ -123,26 +126,30 @@ function instructScreen() {
     textStyle(BOLD);
     text("Instructions", 300, 150);
     pop();
-    textSize(25);
+    textSize(20);
     textAlign(CENTER, CENTER);
     textStyle(NORMAL);
-    text("Eat all grass squares with", 300, 200);
-    text("your teammates before", 300, 240);
-    text("the time runs out.", 300, 280);
+    text("Eat all grass squares with your teammate", 300, 200);
+    text("before the time runs out.", 300, 240);
+    text("Watch out for the farmer replanting grass!", 300, 290);
+    text("Get to the seed before it grows back", 300, 330);
     push();
     pop();
     push();
     textSize(20);
     textAlign(CENTER, CENTER);
-    text("Click anywhere to continue", 300, 340);
+    button.position(250, 390);
+    button.mousePressed(changeState);
     pop();
 
 }
 
 function gameOn() {
+    button.hide();
     createCanvas(600, 600);
     background('beige');
-    image(logo, 220, 19, 160, 80);
+    image(logo, 220, 10, 160, 80);
+    image(grass_border, -3.5, 20, 580, 586);
     translate(90,100);
     assignPlayers();
     drawGrid();
@@ -359,7 +366,7 @@ function replantingGrass() {
 
     if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75) ||
         (shared_time.gameTimer <= 65 && shared_time.gameTimer > 55)) {
-        image(farmer, 400, 0, 50, 50);
+        image(farmer, 428, 0, 50, 50);
         shared.grid[shared_farmer.posX][shared_farmer.posY] = "replanted";
         if(partyIsHost()) {
             if (frameCount % 60 === 0) {
@@ -386,18 +393,20 @@ function replantingGrass() {
             shared.grid[shared_farmer.posX][shared_farmer.posY] = "unplanted";
         }
 
-        text(shared_farmer.farmerTimer, 425,70);
+        // text(shared_farmer.farmerTimer, 425,70);
+        text(shared_farmer.farmerTimer, 453,70);
     } else {
         partySetShared(shared_farmer, {
             farmerTimer : 10,
-            posX: 6,
-            posY: 18,
+            posX: 3,
+            posY: 7,
             madeIt: false
         });
     }
 }
 
 function drawUI() {
+    translate(0,28);
     textAlign(CENTER, CENTER);
     fill("black");
     textSize(15);
@@ -459,7 +468,7 @@ function pointInRect(p, r) {
     );
   }
 
-function mousePressed() {
+function changeState() {
     if (shared_state.gameMode == 0) {
         shared_state.gameMode = 1;
     } else if (shared_state.gameMode == 1) {

@@ -85,3 +85,29 @@ function replantingGrass() {
         });
     }
 }
+
+
+function drawSheep() {
+    //draw sheep for player 1
+    const p1 = guests.find((p) => p.role === "player1");
+    if (p1) {
+        image(
+            sheep,
+            p1.sheep.posX - 8,
+            p1.sheep.posY - 10,
+            gridSize + 15,
+            gridSize + 15
+        );
+    }
+    //draw sheep for player 2
+    const p2 = guests.find((p) => p.role === "player2");
+    if (p2) {
+        image(
+            black_sheep,
+            p2.sheep.posX - 8,
+            p2.sheep.posY - 10,
+            gridSize + 15,
+            gridSize + 15
+        );
+    }
+}
