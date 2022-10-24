@@ -163,14 +163,12 @@ function gameOn() {
     assignPlayers();
     drawGrid();
 
-    // console.log(shared_farmer.seed_array[0][0], shared_farmer.seed_array[0][1]); //success shared array
-
     drawSheep();
     gameTimer();
     drawUI();
 
-    // make this prettier: initially had first if statement with if ||, else
-    
+    // Replanting grass based on the timers
+    // make this prettier looking
     if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75)) {
         seed.position(((shared_farmer.seed_array[0][0])*gridSize)+95,((shared_farmer.seed_array[0][1])*gridSize)+100);
         seed.size(25, 25);
@@ -526,5 +524,3 @@ function resetGrid() {
     }
     shared.grid = newGrid;
 }
-
-
