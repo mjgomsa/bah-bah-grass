@@ -7,8 +7,6 @@ let shared_farmer;
 let nom
 let gridSize = 20;
 
-let seed_pos = [];
-
 function preload() {
     partyConnect(
         "wss://deepstream-server-1.herokuapp.com",
@@ -68,23 +66,11 @@ function setup() {
     if (partyIsHost()) {
         resetGrid();
         partySetShared(shared_time, { gameTimer: 90 });
-        setSeedArray();
-        partySetShared(shared_farmer,  {seed_array: seed_pos}); //random
+        partySetShared(shared_farmer,  {posX: floor(random(0,19)), posY: floor(random(0,19))}); //random
     }
     me.sheep = { posX: 0, posY: -20 };
     button = createImg("./assets/start_button.png", "start button"); 
     seed = createImg("./assets/seed_planted.png", "grass seed art");
-}
-
-function setSeedArray() {
-    seed_pos = [
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))]
-    ];
 }
 
 function draw() {
@@ -162,56 +148,14 @@ function gameOn() {
     translate(90,100);
     assignPlayers();
     drawGrid();
-
-    // console.log(shared_farmer.seed_array[0][0], shared_farmer.seed_array[0][1]); //success shared array
-
+    seed.position((shared_farmer.posX*gridSize)+95,(shared_farmer.posY*gridSize)+100);
+    seed.size(25, 25);
+    seed.hide();
     drawSheep();
     gameTimer();
     drawUI();
 
-    // make this prettier: initially had first if statement with if ||, else
-    
-    if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75)) {
-        seed.position(((shared_farmer.seed_array[0][0])*gridSize)+95,((shared_farmer.seed_array[0][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[0][0], shared_farmer.seed_array[0][1]);
-
-    } else if ((shared_time.gameTimer <= 70 && shared_time.gameTimer > 60)) {
-        seed.position(((shared_farmer.seed_array[1][0])*gridSize)+95,((shared_farmer.seed_array[1][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[1][0], shared_farmer.seed_array[1][1]);
-
-    }  else if ((shared_time.gameTimer <= 55 && shared_time.gameTimer > 45)) {
-        seed.position(((shared_farmer.seed_array[2][0])*gridSize)+95,((shared_farmer.seed_array[2][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[2][0], shared_farmer.seed_array[2][1]);
-
-    } else if ((shared_time.gameTimer <= 40 && shared_time.gameTimer > 30)) {
-        seed.position(((shared_farmer.seed_array[3][0])*gridSize)+95,((shared_farmer.seed_array[3][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[3][0], shared_farmer.seed_array[3][1]);
-
-    } else if ((shared_time.gameTimer <= 25 && shared_time.gameTimer > 15)) {
-        seed.position(((shared_farmer.seed_array[4][0])*gridSize)+95,((shared_farmer.seed_array[4][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[4][0], shared_farmer.seed_array[4][1]);
-
-    } else if ((shared_time.gameTimer <= 10 && shared_time.gameTimer > 0)) {
-        seed.position(((shared_farmer.seed_array[5][0])*gridSize)+95,((shared_farmer.seed_array[5][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[5][0], shared_farmer.seed_array[5][1]);
-
-    } else {
-        shared_farmer.farmerTimer = 10;
-        shared_farmer.madeIt = false;
-    } 
-   
+    replantingGrass();
 
     // gameOver trigger
     if (shared.eaten == gridSize * gridSize) {
@@ -411,42 +355,47 @@ function gameTimer() {
    
 }
 
-function replantingGrass(seed_posX, seed_posY) {
-    const x = (seed_posX) * gridSize;
-    const y = (seed_posY) * gridSize;
+function replantingGrass() {
+    const x = shared_farmer.posX * gridSize;
+    const y = shared_farmer.posY * gridSize;
   
     const p1 = guests.find((p) => p.role === "sheep");
     const p2 = guests.find((p) => p.role === "ram");
 
-    image(farmer, 428, 0, 50, 50);
-    seed.show();
-    if(partyIsHost()) {
-        if (frameCount % 60 === 0) {
-            shared_farmer.farmerTimer--;
-        }
-    }
-    if ((p1 === me) || (p2 === me)) { // if either player made it to the seed
-        if ((me.sheep.posX === x && me.sheep.posY === y)) {
-            shared_farmer.madeIt = true;
-        }
-    }
-    if (shared_farmer.farmerTimer === 0) { //this works!
-        if (shared_farmer.madeIt === false) {
-            console.log("Didn't get seed in time")
-            for (i = 0; i < gridSize; i++) {
-                shared.grid[i][seed_posY] = false;
+    if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75) ||
+        (shared_time.gameTimer <= 65 && shared_time.gameTimer > 55)) {
+        image(farmer, 428, 0, 50, 50);
+        seed.show();
+        if(partyIsHost()) {
+            if (frameCount % 60 === 0) {
+                shared_farmer.farmerTimer--;
             }
-            seed.hide();
         }
+        if ((p1 === me) || (p2 === me)) { // if either player made it to the seed
+            if ((me.sheep.posX === x && me.sheep.posY === y)) {
+                shared_farmer.madeIt = true;
+            }
+        }
+        if (shared_farmer.farmerTimer === 0) { //this works!
+            if (shared_farmer.madeIt === false) {
+                console.log("Didn't get seed in time")
+                for (i = 0; i < gridSize; i++) {
+                    shared.grid[i][shared_farmer.posY] = false;
+                }
+            }
+        } 
+        if (shared_farmer.madeIt === true) {
+            console.log("You got to seed in time!")
+            seed.hide();
+            shared.grid[shared_farmer.posX][shared_farmer.posY] = true;
+        }
+        text(shared_farmer.farmerTimer, 453,70);
     } 
-    if (shared_farmer.madeIt === true) {
-        console.log("You got to seed in time!")
-        seed.hide();
-        shared.grid[seed_posX][seed_posY] = true;
-    }
-    text(shared_farmer.farmerTimer, 453,70);
-} 
-    
+    else {
+        shared_farmer.farmerTimer = 10;
+        shared_farmer.madeIt = false;
+    } 
+}
 
 function drawUI() {
     translate(0,28);
