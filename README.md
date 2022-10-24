@@ -1,7 +1,7 @@
 # p5party
 Multiplayer games made using the P5.party library.
 
-### Bah-Bah-Grass
+## Bah-Bah-Grass
 ### Game Instructions
 Use your A,S,W,D keys or your ARROWS to move your sheep along the grass field. Eat the grass by jumping on top of each grass square.
 The goal is for you and the other player to eat all the grass before the timer runs, shown in the bottom right.
