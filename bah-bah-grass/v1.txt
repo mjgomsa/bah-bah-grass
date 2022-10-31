@@ -37,54 +37,7 @@ function preload() {
         madeIt: false
     });
 
-    //player 1- sheep
-    sheep = loadImage("./assets/sheep.png");
-    sheep2 = loadImage("./assets/sheep-2.png");
-    sheep_left = loadImage("./assets/sheep_left.png");
-    sheep_right = loadImage("./assets/sheep_right.png");
-    sheep_behind = loadImage("./assets/sheep_behind.png");
-
-    //player 2- ram
-    ram = loadImage("./assets/ram.png");
-    ram_left = loadImage("./assets/ram_left.png");
-    ram_right = loadImage("./assets/ram_right.png");
-    ram_behind = loadImage("./assets/ram_behind.png");
-
-    //grass
-    grass = loadImage("./assets/grass.png");
-    grass_alternative = loadImage("./assets/grass_alternative.png");
-    grass_alternative2 = loadImage("./assets/grass_alternative2.png");
-    grass_alternative3 = loadImage("./assets/grass_alternative3.png");
-
-    //grass for backgrounds
-    grass_start = loadImage("./assets/grass_starter.png");
-    grass_instruct = loadImage("./assets/grass_instruction.png")
-    gif = loadImage('./assets/background.gif');
-    
-    //buttons
-    start_pressed = loadImage("./assets/start-pressed.png");
-    start_unpressed = loadImage("./assets/start-btn_unpressed.png");
-    play_pressed = loadImage("./assets/play-pressed.png");
-    play_unpressed = loadImage("./assets/play-btn_unpressed.png");
-
-
-    //logo
-    logo = loadImage("./assets/logo.png");
-
-    // other assets
-    fence = loadImage("./assets/fence.png");
-    farmer = loadImage("./assets/farmer.png");
-    plank = loadImage("./assets/plank.png");
-
-    //sounds
-    click = loadSound("./assets/button.wav") //for button clicks
-    nom = loadSound("./assets/nom_noise.wav"); //for sheep eating
-    end_game = loadSound("./assets/end-game.wav"); //end game sound
-    banjo = loadSound("./assets/banjo.wav"); //start game sound
-    sheep_noise = loadSound("./assets/sheep.wav"); //gameOn sheep noises
-
-    yPosMoving = 300 // initializing hovering text Animation
-    
+    loadStuff();  
 }
 
 function setup() {
@@ -232,48 +185,7 @@ function gameOn() {
     gameTimer();
     drawUI();
 
-    // Replanting grass based on the timers
-    // make this prettier looking
-    if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75)) {
-        seed.position(((shared_farmer.seed_array[0][0])*gridSize)+95,((shared_farmer.seed_array[0][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[0][0], shared_farmer.seed_array[0][1]);
-
-    } else if ((shared_time.gameTimer <= 70 && shared_time.gameTimer > 60)) {
-        seed.position(((shared_farmer.seed_array[1][0])*gridSize)+95,((shared_farmer.seed_array[1][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[1][0], shared_farmer.seed_array[1][1]);
-
-    }  else if ((shared_time.gameTimer <= 55 && shared_time.gameTimer > 45)) {
-        seed.position(((shared_farmer.seed_array[2][0])*gridSize)+95,((shared_farmer.seed_array[2][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[2][0], shared_farmer.seed_array[2][1]);
-
-    } else if ((shared_time.gameTimer <= 40 && shared_time.gameTimer > 30)) {
-        seed.position(((shared_farmer.seed_array[3][0])*gridSize)+95,((shared_farmer.seed_array[3][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[3][0], shared_farmer.seed_array[3][1]);
-
-    } else if ((shared_time.gameTimer <= 25 && shared_time.gameTimer > 15)) {
-        seed.position(((shared_farmer.seed_array[4][0])*gridSize)+95,((shared_farmer.seed_array[4][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[4][0], shared_farmer.seed_array[4][1]);
-
-    } else if ((shared_time.gameTimer <= 10 && shared_time.gameTimer > 0)) {
-        seed.position(((shared_farmer.seed_array[5][0])*gridSize)+95,((shared_farmer.seed_array[5][1])*gridSize)+100);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[5][0], shared_farmer.seed_array[5][1]);
-
-    } else {
-        shared_farmer.farmerTimer = 10;
-        shared_farmer.madeIt = false;
-    } 
+    replantAndCueTimers();
    
 
     // gameOver trigger
@@ -481,6 +393,51 @@ function gameTimer() {
    
 }
 
+function replantAndCueTimers() {
+    // Replanting grass based on the timers
+    // make this prettier looking
+    if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75)) {
+        seed.position(((shared_farmer.seed_array[0][0])*gridSize)+95,((shared_farmer.seed_array[0][1])*gridSize)+100);
+        seed.size(25, 25);
+        seed.hide();
+        replantingGrass(shared_farmer.seed_array[0][0], shared_farmer.seed_array[0][1]);
+
+    } else if ((shared_time.gameTimer <= 70 && shared_time.gameTimer > 60)) {
+        seed.position(((shared_farmer.seed_array[1][0])*gridSize)+95,((shared_farmer.seed_array[1][1])*gridSize)+100);
+        seed.size(25, 25);
+        seed.hide();
+        replantingGrass(shared_farmer.seed_array[1][0], shared_farmer.seed_array[1][1]);
+
+    }  else if ((shared_time.gameTimer <= 55 && shared_time.gameTimer > 45)) {
+        seed.position(((shared_farmer.seed_array[2][0])*gridSize)+95,((shared_farmer.seed_array[2][1])*gridSize)+100);
+        seed.size(25, 25);
+        seed.hide();
+        replantingGrass(shared_farmer.seed_array[2][0], shared_farmer.seed_array[2][1]);
+
+    } else if ((shared_time.gameTimer <= 40 && shared_time.gameTimer > 30)) {
+        seed.position(((shared_farmer.seed_array[3][0])*gridSize)+95,((shared_farmer.seed_array[3][1])*gridSize)+100);
+        seed.size(25, 25);
+        seed.hide();
+        replantingGrass(shared_farmer.seed_array[3][0], shared_farmer.seed_array[3][1]);
+
+    } else if ((shared_time.gameTimer <= 25 && shared_time.gameTimer > 15)) {
+        seed.position(((shared_farmer.seed_array[4][0])*gridSize)+95,((shared_farmer.seed_array[4][1])*gridSize)+100);
+        seed.size(25, 25);
+        seed.hide();
+        replantingGrass(shared_farmer.seed_array[4][0], shared_farmer.seed_array[4][1]);
+
+    } else if ((shared_time.gameTimer <= 10 && shared_time.gameTimer > 0)) {
+        seed.position(((shared_farmer.seed_array[5][0])*gridSize)+95,((shared_farmer.seed_array[5][1])*gridSize)+100);
+        seed.size(25, 25);
+        seed.hide();
+        replantingGrass(shared_farmer.seed_array[5][0], shared_farmer.seed_array[5][1]);
+
+    } else {
+        shared_farmer.farmerTimer = 10;
+        shared_farmer.madeIt = false;
+    } 
+}
+
 function replantingGrass(seed_posX, seed_posY) {
     const x = (seed_posX) * gridSize;
     const y = (seed_posY) * gridSize;
@@ -614,4 +571,54 @@ function resetGrid() {
     }
     shared.grid = newGrid;
     shared.eaten = 0;
+}
+
+function loadStuff() {
+    //player 1- sheep
+    sheep = loadImage("./assets/sheep.png");
+    sheep2 = loadImage("./assets/sheep-2.png");
+    sheep_left = loadImage("./assets/sheep_left.png");
+    sheep_right = loadImage("./assets/sheep_right.png");
+    sheep_behind = loadImage("./assets/sheep_behind.png");
+
+    //player 2- ram
+    ram = loadImage("./assets/ram.png");
+    ram_left = loadImage("./assets/ram_left.png");
+    ram_right = loadImage("./assets/ram_right.png");
+    ram_behind = loadImage("./assets/ram_behind.png");
+
+    //grass
+    grass = loadImage("./assets/grass.png");
+    grass_alternative = loadImage("./assets/grass_alternative.png");
+    grass_alternative2 = loadImage("./assets/grass_alternative2.png");
+    grass_alternative3 = loadImage("./assets/grass_alternative3.png");
+
+    //grass for backgrounds
+    grass_start = loadImage("./assets/grass_starter.png");
+    grass_instruct = loadImage("./assets/grass_instruction.png")
+    gif = loadImage('./assets/background.gif');
+    
+    //buttons
+    start_pressed = loadImage("./assets/start-pressed.png");
+    start_unpressed = loadImage("./assets/start-btn_unpressed.png");
+    play_pressed = loadImage("./assets/play-pressed.png");
+    play_unpressed = loadImage("./assets/play-btn_unpressed.png");
+
+
+    //logo
+    logo = loadImage("./assets/logo.png");
+
+    // other assets
+    fence = loadImage("./assets/fence.png");
+    farmer = loadImage("./assets/farmer.png");
+    plank = loadImage("./assets/plank.png");
+
+    //sounds
+    click = loadSound("./assets/button.wav") //for button clicks
+    nom = loadSound("./assets/nom_noise.wav"); //for sheep eating
+    end_game = loadSound("./assets/end-game.wav"); //end game sound
+    banjo = loadSound("./assets/banjo.wav"); //start game sound
+    sheep_noise = loadSound("./assets/sheep.wav"); //gameOn sheep noises
+
+    yPosMoving = 300 // initializing hovering text Animation
 }
