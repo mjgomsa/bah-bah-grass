@@ -24,3 +24,15 @@
     font-style: normal;
     font-display: swap;
 }
+
+canvas {
+    outline:10px #6e400b solid;
+}
+
+body {
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top:50px;
+}
