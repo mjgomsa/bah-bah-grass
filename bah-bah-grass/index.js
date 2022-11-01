@@ -4,6 +4,7 @@ let guests;
 let shared_time;
 let shared_state;
 let shared_farmer;
+let highScores;
 let nom;
 let gridSize = 20;
 let seed_pos = [];
@@ -14,7 +15,7 @@ const images = {};
 function preload() {
     partyConnect(
         "wss://deepstream-server-1.herokuapp.com",
-        "mjgomsa_bah-bah-grass_beta",
+        "mjgomsa_bah-bah-grass_delta",
         "main"
     );
     shared = partyLoadShared("shared", {grid: [], eaten: 0});
@@ -28,6 +29,8 @@ function preload() {
     shared_state = partyLoadShared("shared_state", {gameMode: 0, won: false, outOfTime: false});
 
     shared_farmer = partyLoadShared("shared_farmer", {farmerTimer : 10, madeIt: false});
+
+    highScores = partyLoadShared("highScores", { scores: []});
 
     loadImgSounds();  
 }
@@ -66,6 +69,7 @@ function createSeedArray() {
 }
 
 function draw() {
+    seed.hide();
     switch (shared_state.gameMode) {
         case 0:
             startingScreen();
@@ -206,22 +210,32 @@ function gameOver() {
     image(farmer, 10, 170, 275, 400);
     image(images.sheep.sheep2, 280, 360);
 
+    determineHighScore();
     push();
     textStyle(BOLD);
-    text("Your Score:", 431, 120);
+    text("Your Score:", 431, 110);
     textSize(100);
     const yPosMoving = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-    text(shared.eaten, 431, yPosMoving+200);
+    text(shared.eaten, 431, yPosMoving+190);
     pop();
+    textSize(20);
+    text("Highscore: "+highScores.scores[0], 431,245);
 
     //restart button
     push();
     if (mouseIsPressed) {
-      image(play_pressed, 300, 260);  }
+      image(play_pressed, 300, 270);  }
     else {
-      image(play_unpressed, 300, 260);
+      image(play_unpressed, 300, 270);
     }
     pop();
+}
+
+function determineHighScore(){
+    let scoreList = [...highScores.scores];
+    scoreList.push(shared.eaten);
+    scoreList = scoreList.sort((a, b) => b - a);
+    highScores.scores = scoreList;  
 }
 
 function assignPlayers() {
@@ -422,35 +436,37 @@ function drawUI() {
 }
 
 function keyPressed() {
-    const p1 = guests.find((p) => p.role === "sheep");
-    const p2 = guests.find((p) => p.role === "ram");
+    if (shared_state.gameMode === 2) {
+        const p1 = guests.find((p) => p.role === "sheep");
+        const p2 = guests.find((p) => p.role === "ram");
 
-    if ((p1 === me) || (p2 === me)) {
-        nom.play();
-        if ((keyCode === DOWN_ARROW) || (keyCode === 83)) {
-            me.direction = "down";
-            tryMove(0, gridSize);
-        }
-        if ((keyCode === UP_ARROW) || (keyCode === 87)) {
-            me.direction = "up";
-            tryMove(0, -gridSize);
-        }
-        if ((keyCode === LEFT_ARROW) || (keyCode === 65)) {
-            me.direction = "left";
-            tryMove(-gridSize, 0);
-        }
-        if ((keyCode === RIGHT_ARROW) || (keyCode === 68)) {
-            me.direction = "right";
-            tryMove(gridSize, 0);
-        }
-    
-        let col = me.sheep.posX / gridSize;
-        let row = me.sheep.posY / gridSize;
+        if ((p1 === me) || (p2 === me)) {
+            nom.play();
+            if ((keyCode === DOWN_ARROW) || (keyCode === 83)) {
+                me.direction = "down";
+                tryMove(0, gridSize);
+            }
+            if ((keyCode === UP_ARROW) || (keyCode === 87)) {
+                me.direction = "up";
+                tryMove(0, -gridSize);
+            }
+            if ((keyCode === LEFT_ARROW) || (keyCode === 65)) {
+                me.direction = "left";
+                tryMove(-gridSize, 0);
+            }
+            if ((keyCode === RIGHT_ARROW) || (keyCode === 68)) {
+                me.direction = "right";
+                tryMove(gridSize, 0);
+            }
         
-        if (shared.grid[col][row] === false) { //planted            
-            shared.grid[col][row] = true;
-            shared.eaten = shared.eaten + 1;
-        } 
+            let col = me.sheep.posX / gridSize;
+            let row = me.sheep.posY / gridSize;
+            
+            if (shared.grid[col][row] === false) { //planted            
+                shared.grid[col][row] = true;
+                shared.eaten = shared.eaten + 1;
+            } 
+        }
     }
 }
 
