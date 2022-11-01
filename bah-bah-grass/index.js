@@ -257,16 +257,25 @@ function drawGrid() {
             const x = col * gridSize;
             const y = row * gridSize;
             stroke('#94541E');
+
+            //alternate grass
+            alternateGrass(images.grass.grass_alternative2, 2, 3);
+            alternateGrass(images.grass.grass_alternative3, 4, 5);
+            alternateGrass(images.grass.grass_alternative, 4, 6);
+            alternateGrass(images.grass.grass_alternative3, 8, 8);
+            alternateGrass(images.grass.grass_alternative, 1, 2);
+            alternateGrass(images.grass.grass_alternative2, 18, 18);
+            alternateGrass(images.grass.grass_alternative3, 19, 14);
+            alternateGrass(images.grass.grass_alternative2, 13, 15);
+            alternateGrass(images.grass.grass_alternative2, 3, 18);
+            alternateGrass(images.grass.grass_alternative, 2, 15);
+            alternateGrass(images.grass.grass_alternative, 19, 3);
+            alternateGrass(images.grass.grass_alternative3, 15, 4);
+
             if (shared.grid[col][row] === false) {
                 fill('#0F3325'); //green
                 rect(x, y , gridSize, gridSize);
-                image(
-                    grass,
-                    x,
-                    y,
-                    gridSize,
-                    gridSize
-                );
+                image(images.grass.main, x, y, gridSize, gridSize);
                 
             } else {
                 fill('#94541E');
@@ -276,6 +285,12 @@ function drawGrid() {
         }
     }
     pop();
+}
+
+function alternateGrass(img, x, y) {
+    if (shared.grid[x][y] === false) {
+        image(img, x*gridSize, y*gridSize, gridSize, gridSize);
+    }
 }
 
 function drawSheep() {
@@ -533,10 +548,11 @@ function loadImgSounds() { // loads images and sounds
     images.ram.behind = loadImage("./assets/ram_behind.png");
 
     //grass
-    grass = loadImage("./assets/grass.png");
-    grass_alternative = loadImage("./assets/grass_alternative.png");
-    grass_alternative2 = loadImage("./assets/grass_alternative2.png");
-    grass_alternative3 = loadImage("./assets/grass_alternative3.png");
+    images.grass = {};
+    images.grass.main = loadImage("./assets/grass.png");
+    images.grass.grass_alternative = loadImage("./assets/grass_alternative.png");
+    images.grass.grass_alternative2 = loadImage("./assets/grass_alternative2.png");
+    images.grass.grass_alternative3 = loadImage("./assets/grass_alternative3.png");
 
     //grass for backgrounds
     grass_start = loadImage("./assets/grass_starter.png");

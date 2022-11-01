@@ -551,3 +551,6 @@ function loadImgSounds() { // loads images and sounds
 
     yPosMoving = 300 // initializing hovering text Animation
 }
+
+
+
