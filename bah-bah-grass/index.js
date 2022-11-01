@@ -415,9 +415,9 @@ function drawUI() {
     textStyle(BOLD);
     text(me.role,285,420);
     textAlign(LEFT);
-    text("Grass eaten: " + shared.eaten, 0, 420);
+    text("Grass eaten: " + shared.eaten, -30, 420);
     textAlign(CENTER, CENTER);
-    text(shared_time.gameTimer, 390, 420);
+    text(shared_time.gameTimer, 430, 420);
     pop();
 }
 
