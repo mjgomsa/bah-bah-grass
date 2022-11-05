@@ -1,14 +1,16 @@
-let shared;
+
 let me;
 let guests;
+let shared_grid;
 let shared_time;
 let shared_state;
 let shared_farmer;
 let highScores;
-let nom;
+
 let gridSize = 20;
 let seed_pos = [];
 const images = {};
+const sounds = {};
 
 // To do: separate and merge grids.
 
@@ -18,7 +20,7 @@ function preload() {
         "mjgomsa_bah-bah-grass_delta",
         "main"
     );
-    shared = partyLoadShared("shared", {grid: [], eaten: 0});
+    shared_grid = partyLoadShared("shared_grid", {grid: [], eaten: 0});
 
     me = partyLoadMyShared({role: "observer", grid:[],});
 
@@ -37,10 +39,10 @@ function preload() {
 
 function setup() {
     //sound setups
-    nom.setVolume(0.1);
-    click.setVolume(10);
-    banjo.setVolume(0.5);
-    sheep_noise.setVolume(0.5);
+    sounds.nom.setVolume(0.1);
+    sounds.click.setVolume(10);
+    sounds.banjo.setVolume(0.5);
+    sounds.sheep_noise.setVolume(0.5);
 
     // partyToggleInfo(true);
     textFont('Pixeloid Sans');
@@ -94,11 +96,11 @@ function startingScreen() {
 
     push();
     textSize(35);
-    image(gif, 0, 0);
-    gif.play();
-    image(grass_start, 0, 0);
-    image(logo, 10, -60);
-    image(farmer, 10, 170, 275, 400);
+    image(images.screens.gif, 0, 0);
+    images.screens.gif.play();
+    image(images.screens.grass_start, 0, 0);
+    image(images.key_art.logo, 10, -60);
+    image(images.key_art.farmer, 10, 170, 275, 400);
 
     textSize(20);
     textAlign(CENTER, CENTER);
@@ -109,26 +111,25 @@ function startingScreen() {
     //start button
     push();
     if (mouseIsPressed) {
-      image(start_pressed, 310, 350);   
+      image(images.buttons.start_pressed, 310, 350);   
     }
     else {
-      image(start_unpressed, 310, 350)
+      image(images.buttons.start_unpressed, 310, 350)
     }
     pop();
 }
-
 //for buttons to changeState()
 function mouseReleased(){
     if (shared_state.gameMode == 0) {
-        click.play(); 
+        sounds.click.play(); 
         changeState();
     }
     else if(shared_state.gameMode == 1) {
-        click.play(); 
+        sounds.click.play(); 
         changeState();
     }
     else if(shared_state.gameMode === 3) {
-        click.play(); 
+        sounds.click.play(); 
         changeState();
     }
 
@@ -140,10 +141,10 @@ function instructScreen() {
     fill('#703e14');
     seed.hide();
 
-    image(gif, 0, 0);
-    gif.play();
-    image(grass_instruct, 0, 0);
-    image(logo, 210, 5, 160, 80);
+    image(images.screens.gif, 0, 0);
+    images.screens.gif.play();
+    image(images.screens.grass_instruct, 0, 0);
+    image(images.key_art.logo, 210, 5, 160, 80);
 
     push();
     textSize(35);
@@ -162,9 +163,9 @@ function instructScreen() {
      //start button
     push();
     if (mouseIsPressed) {
-      image(start_pressed, 170, 350);  }
+      image(images.buttons.start_pressed, 170, 350);  }
     else {
-      image(start_unpressed, 170, 350);
+      image(images.buttons.start_unpressed, 170, 350);
     }
     pop();
 
@@ -173,8 +174,8 @@ function instructScreen() {
 function gameOn() {
     createCanvas(600, 600);
     background("#faf7e1");
-    image(fence, -10, 0, 620, 600);
-    image(logo, 210, 5, 160, 80);
+    image(images.key_art.fence, -10, 0, 620, 600);
+    image(images.key_art.logo, 210, 5, 160, 80);
 
     translate(90,100);
     assignPlayers();
@@ -187,7 +188,7 @@ function gameOn() {
    
 
     // gameOver trigger
-    if (shared.eaten == gridSize * gridSize) {
+    if (shared_grid.eaten == gridSize * gridSize) {
         shared_state.won = true;
         shared_state.gameMode = 3;
         console.log("Game over: all grass eaten, you win");
@@ -203,11 +204,11 @@ function gameOver() {
     background("#99ccff");
     fill('#703e14');
 
-    image(gif, 0, 0);
-    gif.play();
-    image(grass_start, 0, 0, 600, 600);
-    image(logo, 210, 5, 160, 80);
-    image(farmer, 10, 170, 275, 400);
+    image(images.screens.gif, 0, 0);
+    images.screens.gif.play();
+    image(images.screens.grass_start, 0, 0, 600, 600);
+    image(images.key_art.logo, 210, 5, 160, 80);
+    image(images.key_art.farmer, 10, 170, 275, 400);
     image(images.sheep.sheep2, 280, 360);
 
     determineHighScore();
@@ -216,7 +217,7 @@ function gameOver() {
     text("Your Score:", 431, 110);
     textSize(100);
     const yPosMoving = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-    text(shared.eaten, 431, yPosMoving+190);
+    text(shared_grid.eaten, 431, yPosMoving+190);
     pop();
     textSize(20);
     text("Highscore: "+highScores.scores[0], 431,245);
@@ -224,16 +225,16 @@ function gameOver() {
     //restart button
     push();
     if (mouseIsPressed) {
-      image(play_pressed, 300, 270);  }
+      image(images.buttons.play_pressed, 300, 270);  }
     else {
-      image(play_unpressed, 300, 270);
+      image(images.buttons.play_unpressed, 300, 270);
     }
     pop();
 }
 
 function determineHighScore(){
     let scoreList = [...highScores.scores];
-    scoreList.push(shared.eaten);
+    scoreList.push(shared_grid.eaten);
     scoreList = scoreList.sort((a, b) => b - a);
     highScores.scores = scoreList;  
 }
@@ -272,7 +273,7 @@ function drawGrid() {
             alternateGrass(images.grass.grass_alternative, 19, 3);
             alternateGrass(images.grass.grass_alternative3, 15, 4);
 
-            if (shared.grid[col][row] === false) {
+            if (shared_grid.grid[col][row] === false) {
                 fill('#0F3325'); //green
                 rect(x, y , gridSize, gridSize);
                 image(images.grass.main, x, y, gridSize, gridSize);
@@ -288,7 +289,7 @@ function drawGrid() {
 }
 
 function alternateGrass(img, x, y) {
-    if (shared.grid[x][y] === false) {
+    if (shared_grid.grid[x][y] === false) {
         image(img, x*gridSize, y*gridSize, gridSize, gridSize);
     }
 }
@@ -342,7 +343,7 @@ function gameTimer() {
             console.log("Game Over: timer ran out")
             shared_state.outOfTime = true;
             shared_state.gameMode = 3;
-            end_game.play();
+            sounds.end_game.play();
         }
     }
    
@@ -400,7 +401,8 @@ function replantingGrass(seed_posX, seed_posY) {
     const p1 = guests.find((p) => p.role === "sheep");
     const p2 = guests.find((p) => p.role === "ram");
 
-    image(farmer, 435, 0, 35, 50);
+    
+    image(images.key_art.farmer, 435, 0, 35, 50);
     seed.show();
     if(partyIsHost()) {
         if (frameCount % 60 === 0) {
@@ -416,7 +418,7 @@ function replantingGrass(seed_posX, seed_posY) {
         if (shared_farmer.madeIt === false) {
             console.log("Didn't get seed in time")
             for (i = 0; i < gridSize; i++) {
-                shared.grid[i][seed_posY] = false;
+                shared_grid.grid[i][seed_posY] = false;
             }
             seed.hide();
         }
@@ -424,7 +426,7 @@ function replantingGrass(seed_posX, seed_posY) {
     if (shared_farmer.madeIt === true) {
         console.log("You got to seed in time!")
         seed.hide();
-        shared.grid[seed_posX][seed_posY] = true;
+        shared_grid.grid[seed_posX][seed_posY] = true;
     }
     push();
     textFont('Pixeloid Sans');
@@ -444,7 +446,7 @@ function drawUI() {
     textStyle(BOLD);
     text(me.role,285,420);
     textAlign(LEFT);
-    text("Grass eaten: " + shared.eaten, -30, 420);
+    text("Grass eaten: " + shared_grid.eaten, -30, 420);
     textAlign(CENTER, CENTER);
     text(shared_time.gameTimer, 430, 420);
     pop();
@@ -456,7 +458,7 @@ function keyPressed() {
         const p2 = guests.find((p) => p.role === "ram");
 
         if ((p1 === me) || (p2 === me)) {
-            nom.play();
+            sounds.nom.play();
             if ((keyCode === DOWN_ARROW) || (keyCode === 83)) {
                 me.direction = "down";
                 tryMove(0, gridSize);
@@ -477,9 +479,9 @@ function keyPressed() {
             let col = me.sheep.posX / gridSize;
             let row = me.sheep.posY / gridSize;
             
-            if (shared.grid[col][row] === false) { //planted            
-                shared.grid[col][row] = true;
-                shared.eaten = shared.eaten + 1;
+            if (shared_grid.grid[col][row] === false) { //planted            
+                shared_grid.grid[col][row] = true;
+                shared_grid.eaten = shared_grid.eaten + 1;
             } 
         }
     }
@@ -507,11 +509,11 @@ function pointInRect(p, r) {
 
 function changeState() {
     if (shared_state.gameMode == 0) {
-        banjo.play(); 
+        sounds.banjo.play(); 
         shared_state.gameMode = 1;
     } else if (shared_state.gameMode == 1) {
-        banjo.stop();
-        sheep_noise.play();
+        sounds.banjo.stop();
+        sounds.sheep_noise.play();
         shared_state.gameMode = 2;
     }
     else if (shared_state.gameMode == 3) {
@@ -526,10 +528,9 @@ function resetGrid() {
     for (let col = 0; col < gridSize; col++) {
         newGrid[col] = new Array(gridSize).fill(false);
     }
-    shared.grid = newGrid;
-    shared.eaten = 0;
+    shared_grid.grid = newGrid;
+    shared_grid.eaten = 0;
 }
-
 // Cleanup Functions
 function loadImgSounds() { // loads images and sounds
     //player 1- sheep
@@ -555,31 +556,31 @@ function loadImgSounds() { // loads images and sounds
     images.grass.grass_alternative3 = loadImage("./assets/grass_alternative3.png");
 
     //grass for backgrounds
-    grass_start = loadImage("./assets/grass_starter.png");
-    grass_instruct = loadImage("./assets/grass_instruction.png")
-    gif = loadImage('./assets/background.gif');
+    images.screens = {};
+    images.screens.grass_start = loadImage("./assets/grass_starter.png");
+    images.screens.grass_instruct = loadImage("./assets/grass_instruction.png")
+    images.screens.gif = loadImage('./assets/background.gif');
     
     //buttons
-    start_pressed = loadImage("./assets/start-pressed.png");
-    start_unpressed = loadImage("./assets/start-btn_unpressed.png");
-    play_pressed = loadImage("./assets/play-pressed.png");
-    play_unpressed = loadImage("./assets/play-btn_unpressed.png");
-
-
-    //logo
-    logo = loadImage("./assets/logo.png");
+    images.buttons = {};
+    images.buttons.start_pressed = loadImage("./assets/start-pressed.png");
+    images.buttons.start_unpressed = loadImage("./assets/start-btn_unpressed.png");
+    images.buttons.play_pressed = loadImage("./assets/play-pressed.png");
+    images.buttons.play_unpressed = loadImage("./assets/play-btn_unpressed.png");
 
     // other assets
-    fence = loadImage("./assets/fence.png");
-    farmer = loadImage("./assets/farmer.png");
-    plank = loadImage("./assets/plank.png");
+    images.key_art = {};
+    images.key_art.logo = loadImage("./assets/logo.png");
+    images.key_art.fence = loadImage("./assets/fence.png");
+    images.key_art.farmer = loadImage("./assets/farmer.png");
+    // images.key_art.plank = loadImage("./assets/plank.png");
 
     //sounds
-    click = loadSound("./assets/button.wav") //for button clicks
-    nom = loadSound("./assets/nom_noise.wav"); //for sheep eating
-    end_game = loadSound("./assets/end-game.wav"); //end game sound
-    banjo = loadSound("./assets/banjo.wav"); //start game sound
-    sheep_noise = loadSound("./assets/sheep.wav"); //gameOn sheep noises
+    sounds.click = loadSound("./assets/button.wav") //for button clicks
+    sounds.nom = loadSound("./assets/nom_noise.wav"); //for sheep eating
+    sounds.end_game = loadSound("./assets/end-game.wav"); //end game sound
+    sounds.banjo = loadSound("./assets/banjo.wav"); //start game sound
+    sounds.sheep_noise = loadSound("./assets/sheep.wav"); //gameOn sheep noises
 
     yPosMoving = 300 // initializing hovering text Animation
 }
