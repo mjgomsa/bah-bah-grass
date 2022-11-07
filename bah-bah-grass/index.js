@@ -1,3 +1,19 @@
+/**
+ * index.js
+ * 
+ * me: keeps track of my curernt user, includes user position and role
+ * guests: an compilation of all the users other than myself
+ *      guests either have a role to play (aka: sheep or ram) or are assigned the observer role
+ * shared_grid: holds a [][] that holds the current state of the gird- T/F values
+ * shared_time: a shared timer (90s) that runs the game
+ * shared_state: state machine that controls the game's screens
+ * shared_farmer: functionality for replanting grass; includes a timer (10s) and a boolean value that evaluates if a sheep made it or not
+ * highscores: keeps track of the highest score a single session user has achieved
+ * gridSize: determines the size of the grid
+ * seed_pos: array that holds the x,y positions of the randomly assigned seeds on the game
+ * images: an object that contains all of the game's images
+ * sounds: an object that contains all of the game's sounds
+ **/
 
 let me;
 let guests;
@@ -7,12 +23,11 @@ let shared_state;
 let shared_farmer;
 let highScores;
 
-let gridSize = 20;
+const gridSize = 20;
 let seed_pos = [];
 const images = {};
 const sounds = {};
 
-// To do: separate and merge grids.
 
 function preload() {
     partyConnect(
