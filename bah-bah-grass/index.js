@@ -22,9 +22,9 @@ let shared_time;
 let shared_state;
 let shared_farmer;
 let shared_highScores;
+let shared_hostData;
 
 const grid_size = 20;
-let seed_positions = [];
 const images = {};
 const sounds = {};
 
@@ -32,22 +32,24 @@ const sounds = {};
 function preload() {
     partyConnect(
         "wss://deepstream-server-1.herokuapp.com",
-        "mjgomsa_bah-bah-grass_delta",
+        "mjgomsa_bah-bah-grass_gamma",
         "main"
     );
     shared_grid = partyLoadShared("shared_grid", {grid: [], eaten: 0});
 
-    me = partyLoadMyShared({role: "observer"});
+    me = partyLoadMyShared({role: "observer", sheep: {posX: 0, posY: -20}}); // -20 is sus
 
     guests = partyLoadGuestShareds();
 
-    shared_time = partyLoadShared("shared_time");
+    shared_time = partyLoadShared("shared_time", { gameTimer: 90 });
 
     shared_state = partyLoadShared("shared_state", {game_mode: 0, did_win: false, did_timeOut: false});
 
     shared_farmer = partyLoadShared("shared_farmer", {farmerTimer : 10, madeIt: false});
 
     shared_highScores = partyLoadShared("shared_highScores", { scores: []});
+
+    shared_hostData = partyLoadShared("shared_hostData", {seed_positions: []});
 
     preloadImages();  
     preloadSounds();
@@ -60,34 +62,33 @@ function setup() {
     sounds.banjo.setVolume(0.5);
     sounds.sheep_noise.setVolume(0.5);
 
-    // partyToggleInfo(true);
     textFont('Pixeloid Sans');
 
     if (partyIsHost()) {
         resetGrid();
-        partySetShared(shared_time, { gameTimer: 90 });
-        createSeedArray();
-        partySetShared(shared_farmer,  {seed_array: seed_positions}); //random
+        var seed_positions = createSeedArray();
+        partySetShared(shared_hostData,  {seed_array: seed_positions}); // figure out another way to do this
     }
 
-    me.sheep = { posX: 0, posY: -20 }; // initial sheep/ram positions
-
+    // create DOM image
     seed = createImg("./assets/seed_planted.png", "grass seed art");
+    seed.size(25, 25);
+    seed.hide();
 }
 
 function createSeedArray() {
-    seed_positions = [
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))],
-        [floor(random(0,19)), floor(random(0,19))]
-    ];
+    // return [
+    //     [floor(random(0,20)), floor(random(0,20))],
+    //     [floor(random(0,20)), floor(random(0,20))],
+    //     [floor(random(0,20)), floor(random(0,20))],
+    //     [floor(random(0,20)), floor(random(0,20))],
+    //     [floor(random(0,20)), floor(random(0,20))],
+    //     [floor(random(0,20)), floor(random(0,20))]
+    // ];
+    return Array.from({length: 6}, () => [floor(random(0,20)), floor(random(0, 20))]);
 }
 
 function draw() {
-    seed.hide();
     switch (shared_state.game_mode) {
         case 0:
             startingScreen();
@@ -172,7 +173,6 @@ function startingScreen() {
     createCanvas(600, 600);
     background("#99ccff");
     fill('#703e14');
-    seed.hide();
 
     push();
     textSize(35);
@@ -203,7 +203,6 @@ function instructScreen() {
     createCanvas(600, 600);
     background("#99ccff");
     fill('#703e14');
-    seed.hide();
 
     image(images.screens.gif, 0, 0);
     images.screens.gif.play();
@@ -260,7 +259,6 @@ function gameOn() {
 }
 
 function gameOver() {
-    seed.hide();
     createCanvas(600, 600);
     textFont('Pixeloid Sans');
     textSize(35);
@@ -418,39 +416,27 @@ function replantAndCueTimers() {
     const extra_y = 100+50;
 
     if ((shared_time.gameTimer <= 85 && shared_time.gameTimer > 75)) {
-        seed.position(((shared_farmer.seed_array[0][0])*grid_size)+extra_x,((shared_farmer.seed_array[0][1])*grid_size)+extra_y);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[0][0], shared_farmer.seed_array[0][1]);
+        seed.position(((shared_hostData.seed_array[0][0])*grid_size)+extra_x,((shared_hostData.seed_array[0][1])*grid_size)+extra_y);
+        replantingGrass(shared_hostData.seed_array[0][0], shared_hostData.seed_array[0][1]);
     } else if ((shared_time.gameTimer <= 70 && shared_time.gameTimer > 60)) {
-        seed.position(((shared_farmer.seed_array[1][0])*grid_size)+extra_x,((shared_farmer.seed_array[1][1])*grid_size)+extra_y);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[1][0], shared_farmer.seed_array[1][1]);
+        seed.position(((shared_hostData.seed_array[1][0])*grid_size)+extra_x,((shared_hostData.seed_array[1][1])*grid_size)+extra_y);
+        replantingGrass(shared_hostData.seed_array[1][0], shared_hostData.seed_array[1][1]);
 
     }  else if ((shared_time.gameTimer <= 55 && shared_time.gameTimer > 45)) {
-        seed.position(((shared_farmer.seed_array[2][0])*grid_size)+extra_x,((shared_farmer.seed_array[2][1])*grid_size)+extra_y);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[2][0], shared_farmer.seed_array[2][1]);
+        seed.position(((shared_hostData.seed_array[2][0])*grid_size)+extra_x,((shared_hostData.seed_array[2][1])*grid_size)+extra_y);
+        replantingGrass(shared_hostData.seed_array[2][0], shared_hostData.seed_array[2][1]);
 
     } else if ((shared_time.gameTimer <= 40 && shared_time.gameTimer > 30)) {
-        seed.position(((shared_farmer.seed_array[3][0])*grid_size)+extra_x,((shared_farmer.seed_array[3][1])*grid_size)+extra_y);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[3][0], shared_farmer.seed_array[3][1]);
+        seed.position(((shared_hostData.seed_array[3][0])*grid_size)+extra_x,((shared_hostData.seed_array[3][1])*grid_size)+extra_y);
+        replantingGrass(shared_hostData.seed_array[3][0], shared_hostData.seed_array[3][1]);
 
     } else if ((shared_time.gameTimer <= 25 && shared_time.gameTimer > 15)) {
-        seed.position(((shared_farmer.seed_array[4][0])*grid_size)+extra_x,((shared_farmer.seed_array[4][1])*grid_size)+extra_y);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[4][0], shared_farmer.seed_array[4][1]);
+        seed.position(((shared_hostData.seed_array[4][0])*grid_size)+extra_x,((shared_hostData.seed_array[4][1])*grid_size)+extra_y);
+        replantingGrass(shared_hostData.seed_array[4][0], shared_hostData.seed_array[4][1]);
 
     } else if ((shared_time.gameTimer <= 10 && shared_time.gameTimer > 0)) {
-        seed.position(((shared_farmer.seed_array[5][0])*grid_size)+extra_x,((shared_farmer.seed_array[5][1])*grid_size)+extra_y);
-        seed.size(25, 25);
-        seed.hide();
-        replantingGrass(shared_farmer.seed_array[5][0], shared_farmer.seed_array[5][1]);
+        seed.position(((shared_hostData.seed_array[5][0])*grid_size)+extra_x,((shared_hostData.seed_array[5][1])*grid_size)+extra_y);
+        replantingGrass(shared_hostData.seed_array[5][0], shared_hostData.seed_array[5][1]);
 
     } else {
         shared_farmer.farmerTimer = 10;
