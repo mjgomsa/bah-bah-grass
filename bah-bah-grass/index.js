@@ -77,30 +77,22 @@ function setup() {
 }
 
 function createSeedArray() {
-    // return [
-    //     [floor(random(0,20)), floor(random(0,20))],
-    //     [floor(random(0,20)), floor(random(0,20))],
-    //     [floor(random(0,20)), floor(random(0,20))],
-    //     [floor(random(0,20)), floor(random(0,20))],
-    //     [floor(random(0,20)), floor(random(0,20))],
-    //     [floor(random(0,20)), floor(random(0,20))]
-    // ];
     return Array.from({length: 6}, () => [floor(random(0,20)), floor(random(0, 20))]);
 }
 
 function draw() {
     switch (shared_state.game_mode) {
         case 0:
-            startingScreen();
+            drawStart();
             break;
         case 1:
-            instructScreen();
+            drawInstructions();
             break;
         case 2:
-            gameOn();
+            drawGameOn();
             break;
         case 3:
-            gameOver();
+            drawGameOver();
             break;
     }
 }
@@ -169,7 +161,7 @@ function tryMove(x, y) {
 }
 
 
-function startingScreen() {
+function drawStart() {
     createCanvas(600, 600);
     background("#99ccff");
     fill('#703e14');
@@ -199,7 +191,7 @@ function startingScreen() {
     pop();
 }
 
-function instructScreen() {
+function drawInstructions() {
     createCanvas(600, 600);
     background("#99ccff");
     fill('#703e14');
@@ -234,7 +226,7 @@ function instructScreen() {
 
 }
 
-function gameOn() {
+function drawGameOn() {
     createCanvas(600, 600);
     background("#faf7e1");
     image(images.key_art.fence, -10, 0, 620, 600);
@@ -250,7 +242,7 @@ function gameOn() {
     replantAndCueTimers();
    
 
-    // gameOver trigger
+    // drawGameOver trigger
     if (shared_grid.eaten == grid_size * grid_size) {
         shared_state._w = true;
         shared_state.game_mode = 3;
@@ -258,7 +250,7 @@ function gameOn() {
     }
 }
 
-function gameOver() {
+function drawGameOver() {
     createCanvas(600, 600);
     textFont('Pixeloid Sans');
     textSize(35);
@@ -586,5 +578,5 @@ function preloadSounds() {
     sounds.nom = loadSound("./assets/nom_noise.wav"); //for sheep eating
     sounds.end_game = loadSound("./assets/end-game.wav"); //end game sound
     sounds.banjo = loadSound("./assets/banjo.wav"); //start game sound
-    sounds.sheep_noise = loadSound("./assets/sheep.wav"); //gameOn sheep noises
+    sounds.sheep_noise = loadSound("./assets/sheep.wav"); //drawGameOn sheep noises
 }
