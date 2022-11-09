@@ -1,5 +1,13 @@
 {
-  "dependencies": {
-    "p5.party": "^0.12.0"
+  "name": "bah-bah-grass",
+  "version": "0.0.1",
+  "description": "Multiplayer game made using the P5.party library",
+  "main": "main.js",
+  "scripts": {},
+  "author": "MJ Gomez-Saavedra",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "eslint-config-p5js": "^1.1.0"
   }
 }
