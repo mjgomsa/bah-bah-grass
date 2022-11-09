@@ -31,7 +31,7 @@ const sounds = {};
 function preload() {
   partyConnect(
     "wss://deepstream-server-1.herokuapp.com",
-    "mjgomsa_bah-bah-grass_gamma",
+    "mjgomsa_bah-bah-grass_v.0.0.1",
     "main"
   );
   shared_grid = partyLoadShared("shared_grid", { grid: [], eaten: 0 });
