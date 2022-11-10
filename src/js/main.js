@@ -2,10 +2,12 @@
  * main.js
  *
  * This is the entry point for the game.
- * * * Purpose: loads the other modules, sets things up, and coordinates the main game
- * scenes.
- * * * Exports: a function changeScene() that scenes can use to switch to
- * other scenes.
+ *
+ * Purpose: loads the other modules, sets things up, and coordinates the main
+ * game scenes.
+ *
+ * Exports: a function changeScene() that scenes can use to switch
+ * to other scenes.
  *
  */
 
@@ -14,7 +16,9 @@ import * as instructScene from "./instructScene.js";
 import * as playScene from "./playScene.js";
 import * as overScene from "./overScene.js";
 
-let currentScene; // the scene being displayed
+// the scene being displayed
+let currentScene;
+
 // all the available scenes
 export const scenes = {
   title: titleScene,
@@ -43,8 +47,10 @@ function preload() {
     "mjgomsa_bah-bah-grass_v.0.0.2",
     "main"
   );
+
+  // for each scene call preload fn if exists, ignore otherwise
   Object.values(scenes).forEach((scene) => scene.preload?.());
-  // this says: for each scene call preload fn if exists, ignore otherwise
+
   preloadImages();
   preloadSounds();
 }
@@ -61,6 +67,7 @@ function setup() {
 
   // note: object.values() returns an array of a given objects own property values
   Object.values(scenes).forEach((scene) => scene.setup?.());
+
   changeScene(scenes.title);
 }
 
@@ -89,24 +96,16 @@ export function changeScene(newScene) {
     console.error("newScene is already currentScene");
     return;
   }
-  //   currentScene?.leave?.();
-  if (newScene === scenes.instruct) {
-    sounds.banjo.play();
-  } else if (newScene === scenes.play) {
-    sounds.banjo.stop();
-    sounds.sheep_noise.play();
-  }
-  //   else if (newScene === ) { //figure out restart
-  //   }
+  currentScene?.leave?.();
   currentScene = newScene;
-  //   currentScene.enter?.();
+  currentScene.enter?.();
 }
 
 function preloadImages() {
   //player 1- sheep
   images.sheep = {};
-  images.sheep.front = loadImage("./assets/sheep.png");
   images.sheep.sheep2 = loadImage("./assets/sheep-2.png");
+  images.sheep.front = loadImage("./assets/sheep.png");
   images.sheep.left = loadImage("./assets/sheep_left.png");
   images.sheep.right = loadImage("./assets/sheep_right.png");
   images.sheep.behind = loadImage("./assets/sheep_behind.png");
@@ -121,13 +120,10 @@ function preloadImages() {
   //grass
   images.grass = {};
   images.grass.main = loadImage("./assets/grass.png");
-  images.grass.grass_alternative = loadImage("./assets/grass_alternative.png");
-  images.grass.grass_alternative2 = loadImage(
-    "./assets/grass_alternative2.png"
-  );
-  images.grass.grass_alternative3 = loadImage(
-    "./assets/grass_alternative3.png"
-  );
+  images.grass.alts = [];
+  images.grass.alts[0] = loadImage("./assets/grass_alternative.png");
+  images.grass.alts[1] = loadImage("./assets/grass_alternative2.png");
+  images.grass.alts[2] = loadImage("./assets/grass_alternative3.png");
 
   //grass for backgrounds
   images.screens = {};
@@ -144,7 +140,7 @@ function preloadImages() {
   images.buttons.play_pressed = loadImage("./assets/play-pressed.png");
   images.buttons.play_unpressed = loadImage("./assets/play-btn_unpressed.png");
 
-  // other images
+  // key art
   images.key_art = {};
   images.key_art.logo = loadImage("./assets/logo.png");
   images.key_art.fence = loadImage("./assets/fence.png");

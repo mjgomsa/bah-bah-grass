@@ -13,3 +13,9 @@
 Basically theres one function replantGrass that inserts the seed image-- but later within that function I remove the image (previously when it was a DOM img, I would use .show, .hide) and
 
 - also sheep and ram functionality (aka players) not working yet
+
+# Todo
+
+.organize assets with folders (images, fonts) etc.
+.asset file names consistent case snake_case
+.grass_alt_01.png

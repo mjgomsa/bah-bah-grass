@@ -6,7 +6,6 @@
  */
 
 import { changeScene, scenes, images, sounds } from "./main.js";
-import { createSeedArray } from "./utilities.js";
 
 let me;
 let guests;
@@ -52,6 +51,10 @@ export function setup() {
     var seed_positions = createSeedArray();
     partySetShared(shared_hostData, { seed_array: seed_positions }); // figure out another way to do this
   }
+}
+
+export function enter() {
+  sounds.sheep_noise.play();
 }
 
 export function draw() {
@@ -226,18 +229,18 @@ function drawGrid() {
       }
 
       //alternate grass
-      alternateGrass(images.grass.grass_alternative2, 2, 3);
-      alternateGrass(images.grass.grass_alternative3, 4, 5);
-      alternateGrass(images.grass.grass_alternative, 4, 6);
-      alternateGrass(images.grass.grass_alternative3, 8, 8);
-      alternateGrass(images.grass.grass_alternative, 1, 2);
-      alternateGrass(images.grass.grass_alternative2, 18, 18);
-      alternateGrass(images.grass.grass_alternative3, 19, 14);
-      alternateGrass(images.grass.grass_alternative2, 13, 15);
-      alternateGrass(images.grass.grass_alternative2, 3, 18);
-      alternateGrass(images.grass.grass_alternative, 2, 15);
-      alternateGrass(images.grass.grass_alternative, 19, 3);
-      alternateGrass(images.grass.grass_alternative3, 15, 4);
+      alternateGrass(images.grass.alts[1], 2, 3);
+      alternateGrass(images.grass.alts[2], 4, 5);
+      alternateGrass(images.grass.alts[0], 4, 6);
+      alternateGrass(images.grass.alts[2], 8, 8);
+      alternateGrass(images.grass.alts[0], 1, 2);
+      alternateGrass(images.grass.alts[1], 18, 18);
+      alternateGrass(images.grass.alts[2], 19, 14);
+      alternateGrass(images.grass.alts[1], 13, 15);
+      alternateGrass(images.grass.alts[1], 3, 18);
+      alternateGrass(images.grass.alts[0], 2, 15);
+      alternateGrass(images.grass.alts[0], 19, 3);
+      alternateGrass(images.grass.alts[2], 15, 4);
     }
   }
   pop();
@@ -355,4 +358,11 @@ function pointInRect(p, r) {
     p.y >= r.y &&
     p.y <= r.y + r.h
   );
+}
+
+function createSeedArray() {
+  return Array.from({ length: 6 }, () => [
+    floor(random(0, 20)),
+    floor(random(0, 20)),
+  ]);
 }

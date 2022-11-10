@@ -6,7 +6,6 @@
  */
 
 import { changeScene, scenes } from "./main.js";
-// import { noiseColor } from "./utilities.js";
 
 export function draw() {
   background("black");
