@@ -7,47 +7,49 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
+const GRID_SIZE = 20;
+const CELL_SIZE = 20;
+
 let me;
 let guests;
+
 let shared_grid;
 let shared_time;
-// let shared_state; //not needed anymore
 let shared_farmer;
 export let shared_highScores;
 let shared_hostData;
-const grid_size = 20;
 
 let seed_position_X; //temporary
 let seed_position_Y;
 
 export function preload() {
-  shared_grid = partyLoadShared("shared_grid", { grid: [], eaten: 0 });
+  shared_grid = partyLoadShared("shared_grid", {
+    grid: initGrid(),
+    cellsEaten: 0,
+  });
 
-  me = partyLoadMyShared({ role: "observer", position: { x: 0, y: -20 } }); // -20 is sus
-
-  guests = partyLoadGuestShareds();
-
+  // todo: swtich to a timestamp approach for time keeping
   shared_time = partyLoadShared("shared_time", { gameTimer: 90 });
 
-  // shared_state = partyLoadShared("shared_state", {
-  //   // game_mode: 0,
-  //   did_win: false,
-  //   did_timeOut: false,
-  // });
+  shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
+  // todo: remove (part of seed)
   shared_farmer = partyLoadShared("shared_farmer", {
     farmerTimer: 10,
     madeIt: false,
   });
 
-  shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
-
+  // todo: remove (part of seed)
   shared_hostData = partyLoadShared("shared_hostData", { seed_positions: [] });
+
+  // -20 so sheep starts off screen (fix this later)
+  me = partyLoadMyShared({ role: "observer", position: { x: 0, y: -20 } });
+  guests = partyLoadGuestShareds();
 }
 
 export function setup() {
+  // todo: gonna go
   if (partyIsHost()) {
-    resetGrid();
     var seed_positions = createSeedArray();
     partySetShared(shared_hostData, { seed_array: seed_positions }); // figure out another way to do this
   }
@@ -66,96 +68,104 @@ export function draw() {
   background("#faf7e1");
   image(images.key_art.fence, -10, 0, 620, 600);
   image(images.key_art.logo, 210, 5, 160, 80);
+
+  push();
   translate(90, 100);
   drawGrid();
   drawSheep();
+  pop();
   drawUI();
 }
 
 export function update() {
+  // todo: refactor timer
   if (partyIsHost()) {
     if (frameCount % 60 === 0) {
       shared_time.gameTimer--;
     }
   }
 
-  if (shared_grid.eaten === grid_size * grid_size) {
-    console.log("Game over: all grass eaten, you win");
+  if (shared_time.gameTimer === 0) {
+    console.log("Game Over: timer ran out");
+    // todo move to best location
+    sounds.end_game.play();
     changeScene(scenes.over);
   }
 
-  if (shared_time.gameTimer === 0) {
-    console.log("Game Over: timer ran out");
-    sounds.end_game.play();
+  if (shared_grid.cellsEaten === GRID_SIZE * GRID_SIZE) {
+    console.log("Game over: all grass eaten, you win");
     changeScene(scenes.over);
   }
 }
 
-function resetGrid() {
-  const newGrid = [];
-  for (let col = 0; col < grid_size; col++) {
-    newGrid[col] = new Array(grid_size).fill(false);
+function initGrid() {
+  const grid = [];
+  for (let col = 0; col < GRID_SIZE; col++) {
+    grid[col] = new Array(GRID_SIZE).fill(false);
   }
-  shared_grid.grid = newGrid;
-  shared_grid.eaten = 0;
+  return grid;
 }
 
 function assignPlayers() {
   if (!guests.find((p) => p.role === "sheep")) {
     // if there isn't a sheep
-    const o = guests.find((p) => p.role === "observer"); // find the first observer
-    if (o === me) o.role = "sheep"; // if thats me, take the role
+    // find the first observer
+    const o = guests.find((p) => p.role === "observer");
+    // if thats me, take the role
+    if (o === me) o.role = "sheep";
   }
   if (!guests.find((p) => p.role === "ram")) {
     // if there isn't a ram
-    const o = guests.find((p) => p.role === "observer"); // find the first observer
-    if (o === me) o.role = "ram"; // if thats me, take the role
+    // find the first observer
+    const o = guests.find((p) => p.role === "observer");
+    // if thats me, take the role
+    if (o === me) o.role = "ram";
   }
 }
-
+// todo: remove
 function replantAndCueTimers() {
   // TO DO: write shorter and clearer
   const extra_x = (windowWidth - width) / 2 + 87;
   const extra_y = 100 + 50;
 
   if (shared_time.gameTimer <= 85 && shared_time.gameTimer > 75) {
-    seed_position_X = shared_hostData.seed_array[0][0] * grid_size + extra_x;
-    seed_position_Y = shared_hostData.seed_array[0][1] * grid_size + extra_y;
+    seed_position_X = shared_hostData.seed_array[0][0] * CELL_SIZE + extra_x;
+    seed_position_Y = shared_hostData.seed_array[0][1] * CELL_SIZE + extra_y;
     replantGrass(
       shared_hostData.seed_array[0][0],
       shared_hostData.seed_array[0][1]
     );
   } else if (shared_time.gameTimer <= 70 && shared_time.gameTimer > 60) {
-    seed_position_X = shared_hostData.seed_array[1][0] * grid_size + extra_x;
-    seed_position_Y = shared_hostData.seed_array[1][1] * grid_size + extra_y;
+    seed_position_X = shared_hostData.seed_array[1][0] * CELL_SIZE + extra_x;
+    seed_position_Y = shared_hostData.seed_array[1][1] * CELL_SIZE + extra_y;
     replantGrass(
       shared_hostData.seed_array[1][0],
       shared_hostData.seed_array[1][1]
     );
   } else if (shared_time.gameTimer <= 55 && shared_time.gameTimer > 45) {
-    seed_position_X = shared_hostData.seed_array[2][0] * grid_size + extra_x;
-    seed_position_Y = shared_hostData.seed_array[2][1] * grid_size + extra_y;
+    seed_position_X = shared_hostData.seed_array[2][0] * CELL_SIZE + extra_x;
+    seed_position_Y = shared_hostData.seed_array[2][1] * CELL_SIZE + extra_y;
     replantGrass(
       shared_hostData.seed_array[2][0],
       shared_hostData.seed_array[2][1]
     );
   } else if (shared_time.gameTimer <= 40 && shared_time.gameTimer > 30) {
-    seed_position_X = shared_hostData.seed_array[3][0] * grid_size + extra_x;
-    seed_position_Y = shared_hostData.seed_array[3][1] * grid_size + extra_y;
+    seed_position_X = shared_hostData.seed_array[3][0] * CELL_SIZE + extra_x;
+    seed_position_Y = shared_hostData.seed_array[3][1] * CELL_SIZE + extra_y;
     replantGrass(
       shared_hostData.seed_array[3][0],
       shared_hostData.seed_array[3][1]
     );
   } else if (shared_time.gameTimer <= 25 && shared_time.gameTimer > 15) {
-    seed_position_X = shared_hostData.seed_array[4][0] * grid_size + extra_x;
-    seed_position_Y = shared_hostData.seed_array[4][1] * grid_size + extra_y;
+    seed_position_X = shared_hostData.seed_array[4][0] * CELL_SIZE + extra_x;
+    seed_position_Y = shared_hostData.seed_array[4][1] * CELL_SIZE + extra_y;
     replantGrass(
       shared_hostData.seed_array[4][0],
       shared_hostData.seed_array[4][1]
     );
   } else if (shared_time.gameTimer <= 10 && shared_time.gameTimer > 0) {
-    seed_position_X = shared_hostData.seed_array[5][0] * grid_size + extra_x;
-    seed_position_Y = shared_hostData.seed_array[5][1] * grid_size + extra_y;
+    seed_position_X = shared_hostData.seed_array[5][0] * CELL_SIZE + extra_x;
+    seed_position_Y = shared_hostData.seed_array[5][1] * CELL_SIZE + extra_y;
     replantGrass(
       shared_hostData.seed_array[5][0],
       shared_hostData.seed_array[5][1]
@@ -167,8 +177,8 @@ function replantAndCueTimers() {
 }
 
 function replantGrass(seed_posX, seed_posY) {
-  const x = seed_posX * grid_size;
-  const y = seed_posY * grid_size;
+  const x = seed_posX * CELL_SIZE;
+  const y = seed_posY * CELL_SIZE;
 
   const sheep = guests.find((p) => p.role === "sheep");
   const ram = guests.find((p) => p.role === "ram");
@@ -191,7 +201,7 @@ function replantGrass(seed_posX, seed_posY) {
     //this works!
     if (shared_farmer.madeIt === false) {
       console.log("Didn't get seed in time");
-      for (i = 0; i < grid_size; i++) {
+      for (i = 0; i < GRID_SIZE; i++) {
         shared_grid.grid[i][seed_posY] = false;
       }
       seed.hide();
@@ -211,20 +221,22 @@ function replantGrass(seed_posX, seed_posY) {
 
 function drawGrid() {
   push();
-  translate(0, 0);
-  for (let row = 0; row < grid_size; row++) {
-    for (let col = 0; col < grid_size; col++) {
-      const x = col * grid_size;
-      const y = row * grid_size;
+
+  for (let row = 0; row < GRID_SIZE; row++) {
+    for (let col = 0; col < GRID_SIZE; col++) {
+      const x = col * CELL_SIZE;
+      const y = row * CELL_SIZE;
       stroke("#94541E");
 
+      // todo: just draw grass sprite
       if (shared_grid.grid[col][row] === false) {
         fill("#0F3325"); //grass
-        rect(x, y, grid_size, grid_size);
-        image(images.grass.main, x, y, grid_size, grid_size);
+        rect(x, y, CELL_SIZE, CELL_SIZE);
+        image(images.grass.main, x, y, CELL_SIZE, CELL_SIZE);
       } else {
+        // todo: dirt sprite
         fill("#94541E"); //dirt
-        rect(x, y, grid_size, grid_size);
+        rect(x, y, CELL_SIZE, CELL_SIZE);
         // TO DO: make sprite for dirt
       }
 
@@ -248,7 +260,7 @@ function drawGrid() {
 
 function alternateGrass(img, x, y) {
   if (shared_grid.grid[x][y] === false) {
-    image(img, x * grid_size, y * grid_size, grid_size, grid_size);
+    image(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   }
 }
 
@@ -300,7 +312,7 @@ function drawUI() {
   text(me.role, 285, 420);
 
   textAlign(LEFT);
-  text("Grass eaten: " + shared_grid.eaten, -30, 420);
+  text("Grass eaten: " + shared_grid.cellsEaten, -30, 420);
 
   textAlign(CENTER, CENTER);
   text(shared_time.gameTimer, 430, 420);
@@ -308,6 +320,8 @@ function drawUI() {
 }
 
 export function keyPressed() {
+  console.log(me.position);
+
   const sheep = guests.find((p) => p.role === "sheep");
   const ram = guests.find((p) => p.role === "ram");
 
@@ -315,34 +329,36 @@ export function keyPressed() {
     sounds.nom.play();
     if (keyCode === DOWN_ARROW || keyCode === 83) {
       me.direction = "down";
-      tryMove(0, grid_size);
+      tryMove(0, CELL_SIZE);
     }
     if (keyCode === UP_ARROW || keyCode === 87) {
       me.direction = "up";
-      tryMove(0, -grid_size);
+      tryMove(0, -CELL_SIZE);
     }
     if (keyCode === LEFT_ARROW || keyCode === 65) {
       me.direction = "left";
-      tryMove(-grid_size, 0);
+      tryMove(-CELL_SIZE, 0);
     }
     if (keyCode === RIGHT_ARROW || keyCode === 68) {
       me.direction = "right";
-      tryMove(grid_size, 0);
+      tryMove(CELL_SIZE, 0);
     }
 
-    let col = me.position.x / grid_size;
-    let row = me.position.y / grid_size;
+    let col = me.position.x / CELL_SIZE;
+    let row = me.position.y / CELL_SIZE;
 
     if (shared_grid.grid[col][row] === false) {
       shared_grid.grid[col][row] = true;
-      shared_grid.eaten = shared_grid.eaten + 1;
+      shared_grid.cellsEaten = shared_grid.cellsEaten + 1;
     }
   }
 }
 
 function tryMove(x, y) {
+  // TODO the 19 is sus.
+  // TODO position should be in grid cell units
   const targetLocation = { x: me.position.x + x, y: me.position.y + y };
-  const bounds = { x: 0, y: 0, w: grid_size * 19, h: grid_size * 19 };
+  const bounds = { x: 0, y: 0, w: GRID_SIZE * 19, h: GRID_SIZE * 19 };
   if (!pointInRect(targetLocation, bounds)) {
     return;
   }
