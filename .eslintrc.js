@@ -5,7 +5,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ["eslint:recommended", "p5js"],
+  extends: ["eslint:recommended", "p5js", "p5js/sound"],
   overrides: [],
   globals: {
     partyConnect: "readonly",
@@ -13,7 +13,7 @@ module.exports = {
     partySetShared: "readonly",
     partyWatchShared: "readonly",
     partyIsHost: "readonly",
-    paryLoadMyShared: "readonly",
+    partyLoadMyShared: "readonly",
     partyLoadGuestShareds: "readonly",
     partySubscribe: "readonly",
     partyUnsubscribe: "readonly",
