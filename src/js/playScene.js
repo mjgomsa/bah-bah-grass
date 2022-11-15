@@ -70,7 +70,7 @@ export function draw() {
   image(images.key_art.logo, 210, 5, 160, 80);
 
   push();
-  translate(90, 100);
+  translate(90, 100); //translates the location of the actual grass grid
   drawGrid();
   drawSheep();
   pop();
@@ -303,19 +303,18 @@ function switchSheepSprites(test, sheepOrRam) {
 
 function drawUI() {
   push();
-  translate(0, 40);
   fill("#492905");
   textSize(20);
   textStyle(BOLD);
 
   textAlign(CENTER, CENTER);
-  text(me.role, 285, 420);
+  text(me.role, width * 0.6, height * 0.92);
 
   textAlign(LEFT);
-  text("Grass eaten: " + shared_grid.cellsEaten, -30, 420);
+  text("Grass eaten: " + shared_grid.cellsEaten, width * 0.085, height * 0.92);
 
   textAlign(CENTER, CENTER);
-  text(shared_time.gameTimer, 430, 420);
+  text(shared_time.gameTimer, width * 0.85, height * 0.92);
   pop();
 }
 
