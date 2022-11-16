@@ -14,13 +14,11 @@ let me;
 let guests;
 
 let shared_grid;
+let shared_highScores;
 let shared_time;
-let shared_farmer;
-export let shared_highScores;
-let shared_hostData;
 
-let seed_position_X; //temporary
-let seed_position_Y;
+export let final_cellEaten_count = 0;
+export let highscore_export;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
@@ -33,36 +31,26 @@ export function preload() {
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
-  // todo: remove (part of seed)
-  shared_farmer = partyLoadShared("shared_farmer", {
-    farmerTimer: 10,
-    madeIt: false,
-  });
-
-  // todo: remove (part of seed)
-  shared_hostData = partyLoadShared("shared_hostData", { seed_positions: [] });
-
   // -20 so sheep starts off screen (fix this later)
   me = partyLoadMyShared({ role: "observer", position: { x: 0, y: -20 } });
   guests = partyLoadGuestShareds();
-}
-
-export function setup() {
-  // todo: gonna go
-  if (partyIsHost()) {
-    var seed_positions = createSeedArray();
-    partySetShared(shared_hostData, { seed_array: seed_positions }); // figure out another way to do this
-  }
 }
 
 export function enter() {
   sounds.sheep_noise.play();
 }
 
+export function leave() {
+  determineHighScore();
+
+  final_cellEaten_count = shared_grid.cellsEaten;
+  console.log(shared_highScores.scores);
+  console.log(shared_highScores.scores[0]);
+  highscore_export = shared_highScores.scores[0];
+}
+
 export function draw() {
   assignPlayers();
-  // gameTimer(); //now in update
-  // replantAndCueTimers();
 
   // draw
   background("#faf7e1");
@@ -121,102 +109,6 @@ function assignPlayers() {
     // if thats me, take the role
     if (o === me) o.role = "ram";
   }
-}
-// todo: remove
-function replantAndCueTimers() {
-  // TO DO: write shorter and clearer
-  const extra_x = (windowWidth - width) / 2 + 87;
-  const extra_y = 100 + 50;
-
-  if (shared_time.gameTimer <= 85 && shared_time.gameTimer > 75) {
-    seed_position_X = shared_hostData.seed_array[0][0] * CELL_SIZE + extra_x;
-    seed_position_Y = shared_hostData.seed_array[0][1] * CELL_SIZE + extra_y;
-    replantGrass(
-      shared_hostData.seed_array[0][0],
-      shared_hostData.seed_array[0][1]
-    );
-  } else if (shared_time.gameTimer <= 70 && shared_time.gameTimer > 60) {
-    seed_position_X = shared_hostData.seed_array[1][0] * CELL_SIZE + extra_x;
-    seed_position_Y = shared_hostData.seed_array[1][1] * CELL_SIZE + extra_y;
-    replantGrass(
-      shared_hostData.seed_array[1][0],
-      shared_hostData.seed_array[1][1]
-    );
-  } else if (shared_time.gameTimer <= 55 && shared_time.gameTimer > 45) {
-    seed_position_X = shared_hostData.seed_array[2][0] * CELL_SIZE + extra_x;
-    seed_position_Y = shared_hostData.seed_array[2][1] * CELL_SIZE + extra_y;
-    replantGrass(
-      shared_hostData.seed_array[2][0],
-      shared_hostData.seed_array[2][1]
-    );
-  } else if (shared_time.gameTimer <= 40 && shared_time.gameTimer > 30) {
-    seed_position_X = shared_hostData.seed_array[3][0] * CELL_SIZE + extra_x;
-    seed_position_Y = shared_hostData.seed_array[3][1] * CELL_SIZE + extra_y;
-    replantGrass(
-      shared_hostData.seed_array[3][0],
-      shared_hostData.seed_array[3][1]
-    );
-  } else if (shared_time.gameTimer <= 25 && shared_time.gameTimer > 15) {
-    seed_position_X = shared_hostData.seed_array[4][0] * CELL_SIZE + extra_x;
-    seed_position_Y = shared_hostData.seed_array[4][1] * CELL_SIZE + extra_y;
-    replantGrass(
-      shared_hostData.seed_array[4][0],
-      shared_hostData.seed_array[4][1]
-    );
-  } else if (shared_time.gameTimer <= 10 && shared_time.gameTimer > 0) {
-    seed_position_X = shared_hostData.seed_array[5][0] * CELL_SIZE + extra_x;
-    seed_position_Y = shared_hostData.seed_array[5][1] * CELL_SIZE + extra_y;
-    replantGrass(
-      shared_hostData.seed_array[5][0],
-      shared_hostData.seed_array[5][1]
-    );
-  } else {
-    shared_farmer.farmerTimer = 10;
-    shared_farmer.madeIt = false;
-  }
-}
-
-function replantGrass(seed_posX, seed_posY) {
-  const x = seed_posX * CELL_SIZE;
-  const y = seed_posY * CELL_SIZE;
-
-  const sheep = guests.find((p) => p.role === "sheep");
-  const ram = guests.find((p) => p.role === "ram");
-
-  image(images.key_art.farmer, 435, 0, 35, 50);
-  // seed.show();
-  let seed = image(images.seed, seed_position_X, seed_position_Y, 25, 25);
-  if (partyIsHost()) {
-    if (frameCount % 60 === 0) {
-      shared_farmer.farmerTimer--;
-    }
-  }
-  if (sheep === me || ram === me) {
-    // if either player made it to the seed
-    if (me.position.x === x && me.position.y === y) {
-      shared_farmer.madeIt = true;
-    }
-  }
-  if (shared_farmer.farmerTimer === 0) {
-    //this works!
-    if (shared_farmer.madeIt === false) {
-      console.log("Didn't get seed in time");
-      for (i = 0; i < GRID_SIZE; i++) {
-        shared_grid.grid[i][seed_posY] = false;
-      }
-      seed.hide();
-    }
-  }
-  if (shared_farmer.madeIt === true) {
-    console.log("You got to seed in time!");
-    seed.hide();
-    shared_grid.grid[seed_posX][seed_posY] = true;
-  }
-  push();
-  fill("#492905");
-  textSize(20);
-  text(shared_farmer.farmerTimer, 460, 70);
-  pop();
 }
 
 function drawGrid() {
@@ -319,8 +211,6 @@ function drawUI() {
 }
 
 export function keyPressed() {
-  console.log(me.position);
-
   const sheep = guests.find((p) => p.role === "sheep");
   const ram = guests.find((p) => p.role === "ram");
 
@@ -375,9 +265,9 @@ function pointInRect(p, r) {
   );
 }
 
-function createSeedArray() {
-  return Array.from({ length: 6 }, () => [
-    floor(random(0, 20)),
-    floor(random(0, 20)),
-  ]);
+export function determineHighScore() {
+  let scoreList = [...shared_highScores.scores];
+  scoreList.push(shared_grid.cellsEaten);
+  scoreList = scoreList.sort((a, b) => b - a);
+  shared_highScores.scores = scoreList;
 }
