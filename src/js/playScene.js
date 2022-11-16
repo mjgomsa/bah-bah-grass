@@ -31,8 +31,7 @@ export function preload() {
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
-  // -20 so sheep starts off screen (fix this later)
-  me = partyLoadMyShared({ role: "observer", position: { x: 0, y: -20 } });
+  me = partyLoadMyShared({ role: "observer", position: { x: 0, y: 0 } });
   guests = partyLoadGuestShareds();
 }
 
@@ -158,12 +157,12 @@ function alternateGrass(img, x, y) {
 
 function drawSheep() {
   push();
-  translate(-8, -10);
+  translate(-8, -10); // offset of sheep/ram position so that the feet are within the square
 
   const sheep = guests.find((p) => p.role === "sheep");
   if (sheep) {
     push();
-    translate(sheep.position.x, sheep.position.y);
+    translate(sheep.position.x * CELL_SIZE, sheep.position.y * CELL_SIZE);
     switchSheepSprites(sheep, images.sheep);
     pop();
   }
@@ -171,7 +170,7 @@ function drawSheep() {
   const ram = guests.find((p) => p.role === "ram");
   if (ram) {
     push();
-    translate(ram.position.x, ram.position.y);
+    translate(ram.position.x * CELL_SIZE, ram.position.y * CELL_SIZE);
     switchSheepSprites(ram, images.ram);
     pop();
   }
@@ -218,26 +217,25 @@ export function keyPressed() {
     sounds.nom.play();
     if (keyCode === DOWN_ARROW || keyCode === 83) {
       me.direction = "down";
-      tryMove(0, CELL_SIZE);
+      tryMove(0, 1);
     }
     if (keyCode === UP_ARROW || keyCode === 87) {
       me.direction = "up";
-      tryMove(0, -CELL_SIZE);
+      tryMove(0, -1);
     }
     if (keyCode === LEFT_ARROW || keyCode === 65) {
       me.direction = "left";
-      tryMove(-CELL_SIZE, 0);
+      tryMove(-1, 0);
     }
     if (keyCode === RIGHT_ARROW || keyCode === 68) {
       me.direction = "right";
-      tryMove(CELL_SIZE, 0);
+      tryMove(1, 0);
     }
 
-    let col = me.position.x / CELL_SIZE;
-    let row = me.position.y / CELL_SIZE;
+    console.log(me.position.x, me.position.y);
 
-    if (shared_grid.grid[col][row] === false) {
-      shared_grid.grid[col][row] = true;
+    if (shared_grid.grid[me.position.x][me.position.y] === false) {
+      shared_grid.grid[me.position.x][me.position.y] = true;
       shared_grid.cellsEaten = shared_grid.cellsEaten + 1;
     }
   }
@@ -246,7 +244,10 @@ export function keyPressed() {
 function tryMove(x, y) {
   // TODO the 19 is sus.
   // TODO position should be in grid cell units
-  const targetLocation = { x: me.position.x + x, y: me.position.y + y };
+  const targetLocation = {
+    x: me.position.x * CELL_SIZE + x,
+    y: me.position.y * CELL_SIZE + y,
+  };
   const bounds = { x: 0, y: 0, w: GRID_SIZE * 19, h: GRID_SIZE * 19 };
   if (!pointInRect(targetLocation, bounds)) {
     return;
