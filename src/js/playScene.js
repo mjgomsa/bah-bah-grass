@@ -242,8 +242,6 @@ export function keyPressed() {
 }
 
 function tryMove(x, y) {
-  // TODO the 19 is sus.
-  // TODO position should be in grid cell units
   const targetLocation = {
     x: me.position.x * CELL_SIZE + x,
     y: me.position.y * CELL_SIZE + y,
