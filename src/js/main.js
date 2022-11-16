@@ -104,56 +104,60 @@ export function changeScene(newScene) {
 function preloadImages() {
   //player 1- sheep
   images.sheep = {};
-  images.sheep.sheep2 = loadImage("./assets/sheep-2.png");
-  images.sheep.front = loadImage("./assets/sheep.png");
-  images.sheep.left = loadImage("./assets/sheep_left.png");
-  images.sheep.right = loadImage("./assets/sheep_right.png");
-  images.sheep.behind = loadImage("./assets/sheep_behind.png");
+  images.sheep.front = loadImage("./assets/images/sheep.png");
+  images.sheep.left = loadImage("./assets/images/sheep_left.png");
+  images.sheep.right = loadImage("./assets/images/sheep_right.png");
+  images.sheep.behind = loadImage("./assets/images/sheep_behind.png");
 
   //player 2- ram
   images.ram = {};
-  images.ram.front = loadImage("./assets/ram.png");
-  images.ram.left = loadImage("./assets/ram_left.png");
-  images.ram.right = loadImage("./assets/ram_right.png");
-  images.ram.behind = loadImage("./assets/ram_behind.png");
+  images.ram.front = loadImage("./assets/images/ram.png");
+  images.ram.left = loadImage("./assets/images/ram_left.png");
+  images.ram.right = loadImage("./assets/images/ram_right.png");
+  images.ram.behind = loadImage("./assets/images/ram_behind.png");
 
   //grass
   images.grass = {};
-  images.grass.main = loadImage("./assets/grass.png");
+  images.grass.main = loadImage("./assets/images/grass.png");
   images.grass.alts = [];
-  images.grass.alts[0] = loadImage("./assets/grass_alternative.png");
-  images.grass.alts[1] = loadImage("./assets/grass_alternative2.png");
-  images.grass.alts[2] = loadImage("./assets/grass_alternative3.png");
+  images.grass.alts[0] = loadImage("./assets/images/grass_alternative.png");
+  images.grass.alts[1] = loadImage("./assets/images/grass_alternative2.png");
+  images.grass.alts[2] = loadImage("./assets/images/grass_alternative3.png");
 
   //grass for backgrounds
   images.screens = {};
-  images.screens.grass_start = loadImage("./assets/grass_starter.png");
-  images.screens.grass_instruct = loadImage("./assets/grass_instruction.png");
-  images.screens.cloud_background = loadImage("./assets/background.gif");
+  images.screens.grass_start = loadImage("./assets/images/grass_starter.png");
+  images.screens.grass_instruct = loadImage(
+    "./assets/images/grass_instruction.png"
+  );
+  images.screens.cloud_background = loadImage("./assets/images/background.gif");
 
   //buttons
   images.buttons = {};
-  images.buttons.start_pressed = loadImage("./assets/start-pressed.png");
+  images.buttons.start_pressed = loadImage("./assets/images/start-pressed.png");
   images.buttons.start_unpressed = loadImage(
-    "./assets/start-btn_unpressed.png"
+    "./assets/images/start-btn_unpressed.png"
   );
-  images.buttons.play_pressed = loadImage("./assets/play-pressed.png");
-  images.buttons.play_unpressed = loadImage("./assets/play-btn_unpressed.png");
+  images.buttons.play_pressed = loadImage("./assets/images/play-pressed.png");
+  images.buttons.play_unpressed = loadImage(
+    "./assets/images/play-btn_unpressed.png"
+  );
 
   // key art
   images.key_art = {};
-  images.key_art.logo = loadImage("./assets/logo.png");
-  images.key_art.fence = loadImage("./assets/fence.png");
-  images.key_art.farmer = loadImage("./assets/farmer.png");
+  images.key_art.logo = loadImage("./assets/images/logo.png");
+  images.key_art.fence = loadImage("./assets/images/fence.png");
+  images.key_art.farmer = loadImage("./assets/images/farmer.png");
+  images.key_art.sheep = loadImage("./assets/images/sheep-2.png");
 
   // seed
-  images.seed = loadImage("./assets/seed_planted.png");
+  images.seed = loadImage("./assets/images/seed_planted.png");
 }
 
 function preloadSounds() {
-  sounds.click = loadSound("./assets/button.wav"); //for button clicks
-  sounds.nom = loadSound("./assets/nom_noise.wav"); //for sheep eating
-  sounds.end_game = loadSound("./assets/end-game.wav"); //end game sound
-  sounds.banjo = loadSound("./assets/banjo.wav"); //start game sound
-  sounds.sheep_noise = loadSound("./assets/sheep.wav"); //drawGameOn sheep noises
+  sounds.click = loadSound("./assets/sounds/button.wav"); //for button clicks
+  sounds.nom = loadSound("./assets/sounds/nom_noise.wav"); //for sheep eating
+  sounds.end_game = loadSound("./assets/sounds/end-game.wav"); //end game sound
+  sounds.banjo = loadSound("./assets/sounds/banjo.wav"); //start game sound
+  sounds.sheep_noise = loadSound("./assets/sounds/sheep.wav"); //drawGameOn sheep noises
 }

@@ -15,7 +15,7 @@ export function draw() {
   image(images.screens.grass_start, 0, 0, 600, 600);
   image(images.key_art.logo, 210, 5, 160, 80);
   image(images.key_art.farmer, 10, 170, 275, 400);
-  image(images.sheep.sheep2, 280, 360); //rename sheep2
+  image(images.key_art.sheep, 280, 360); //rename sheep2
 
   //draw high score
   push();
