@@ -106,25 +106,24 @@ function drawGrid() {
 
       //alternate grass
       // note data drive?
-      alternateGrass(images.grass.alts[1], 2, 3);
-      alternateGrass(images.grass.alts[2], 4, 5);
-      alternateGrass(images.grass.alts[0], 4, 6);
-      alternateGrass(images.grass.alts[2], 8, 8);
-      alternateGrass(images.grass.alts[0], 1, 2);
-      alternateGrass(images.grass.alts[1], 18, 18);
-      alternateGrass(images.grass.alts[2], 19, 14);
-      alternateGrass(images.grass.alts[1], 13, 15);
-      alternateGrass(images.grass.alts[1], 3, 18);
-      alternateGrass(images.grass.alts[0], 2, 15);
-      alternateGrass(images.grass.alts[0], 19, 3);
-      alternateGrass(images.grass.alts[2], 15, 4);
+      drawAltGrass(images.grass.alts[1], 2, 3);
+      drawAltGrass(images.grass.alts[2], 4, 5);
+      drawAltGrass(images.grass.alts[0], 4, 6);
+      drawAltGrass(images.grass.alts[2], 8, 8);
+      drawAltGrass(images.grass.alts[0], 1, 2);
+      drawAltGrass(images.grass.alts[1], 18, 18);
+      drawAltGrass(images.grass.alts[2], 19, 14);
+      drawAltGrass(images.grass.alts[1], 13, 15);
+      drawAltGrass(images.grass.alts[1], 3, 18);
+      drawAltGrass(images.grass.alts[0], 2, 15);
+      drawAltGrass(images.grass.alts[0], 19, 3);
+      drawAltGrass(images.grass.alts[2], 15, 4);
     }
   }
   pop();
 }
 
-// note rename
-function alternateGrass(img, x, y) {
+function drawAltGrass(img, x, y) {
   if (shared_grid.grid[x][y] === false) {
     image(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   }

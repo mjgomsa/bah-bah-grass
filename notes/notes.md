@@ -8,3 +8,5 @@
 .screen movement currently not synched up.. when ram clicks start game it doesnt automatically start game for sheep
 
 .nomalize sound levels
+.bug, game doesn't restart properly. is timer reset?
+.reset everything on new game start
