@@ -6,6 +6,7 @@
  */
 
 import { changeScene, scenes, images, sounds } from "./main.js";
+import { pointInRect, array2D } from "./utilities.js";
 
 const GRID_SIZE = 20; // rows and cols in grid
 const CELL_SIZE = 20; // pixel width and height of grid cells
@@ -21,7 +22,7 @@ export let cellsEaten = 0;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
-    grid: initGrid(),
+    grid: array2D(20, 20, false),
   });
 
   // todo: swtich to a timestamp approach for time keeping
@@ -50,10 +51,12 @@ export function draw() {
   image(images.key_art.logo, 210, 5, 160, 80);
 
   push();
-  translate(90, 100); //translates the location of the actual grass grid
+  // position game board
+  translate(90, 100);
   drawGrid();
   drawSheep();
   pop();
+
   drawUI();
 }
 
@@ -77,31 +80,6 @@ export function update() {
   if (cellsEaten === GRID_SIZE * GRID_SIZE) {
     console.log("Game over: all grass eaten, you win");
     changeScene(scenes.over);
-  }
-}
-
-function initGrid() {
-  const grid = [];
-  for (let col = 0; col < GRID_SIZE; col++) {
-    grid[col] = new Array(GRID_SIZE).fill(false);
-  }
-  return grid;
-}
-
-function assignPlayers() {
-  if (!guests.find((p) => p.role === "sheep")) {
-    // if there isn't a sheep
-    // find the first observer
-    const o = guests.find((p) => p.role === "observer");
-    // if thats me, take the role
-    if (o === me) o.role = "sheep";
-  }
-  if (!guests.find((p) => p.role === "ram")) {
-    // if there isn't a ram
-    // find the first observer
-    const o = guests.find((p) => p.role === "observer");
-    // if thats me, take the role
-    if (o === me) o.role = "ram";
   }
 }
 
@@ -249,18 +227,26 @@ function tryMove(x, y) {
   me.position.y += y;
 }
 
-function pointInRect(p, r) {
-  return (
-    p.x >= r.x && // format wrapped
-    p.x <= r.x + r.w &&
-    p.y >= r.y &&
-    p.y <= r.y + r.h
-  );
-}
-
 export function updateHighScores() {
   let scoreList = [...shared_highScores.scores];
   scoreList.push(cellsEaten);
   scoreList = scoreList.sort((a, b) => b - a);
   shared_highScores.scores = scoreList;
+}
+
+function assignPlayers() {
+  if (!guests.find((p) => p.role === "sheep")) {
+    // if there isn't a sheep
+    // find the first observer
+    const o = guests.find((p) => p.role === "observer");
+    // if thats me, take the role
+    if (o === me) o.role = "sheep";
+  }
+  if (!guests.find((p) => p.role === "ram")) {
+    // if there isn't a ram
+    // find the first observer
+    const o = guests.find((p) => p.role === "observer");
+    // if thats me, take the role
+    if (o === me) o.role = "ram";
+  }
 }
