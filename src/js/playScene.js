@@ -30,7 +30,11 @@ export function preload() {
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
-  me = partyLoadMyShared({ role: "observer", position: { x: 0, y: 0 } });
+  me = partyLoadMyShared({
+    role: "observer",
+    position: { x: 0, y: 0 },
+    direction: "down",
+  });
   guests = partyLoadGuestShareds();
 }
 
@@ -54,7 +58,7 @@ export function draw() {
   // position game board
   translate(90, 100);
   drawGrid();
-  drawSheep();
+  drawPlayers();
   pop();
 
   drawUI();
@@ -129,44 +133,23 @@ function drawAltGrass(img, x, y) {
   }
 }
 
-function drawSheep() {
-  push();
-  translate(-8, -10); // offset of sheep/ram position so that the feet are within the square
-
-  // note maybe boil down
+function drawPlayers() {
   const sheep = guests.find((p) => p.role === "sheep");
-  if (sheep) {
-    push();
-    translate(sheep.position.x * CELL_SIZE, sheep.position.y * CELL_SIZE);
-    switchSheepSprites(sheep, images.sheep);
-    pop();
-  }
+  if (sheep) drawPlayer(sheep, images.sheep);
 
   const ram = guests.find((p) => p.role === "ram");
-  if (ram) {
-    push();
-    translate(ram.position.x * CELL_SIZE, ram.position.y * CELL_SIZE);
-    switchSheepSprites(ram, images.ram);
-    pop();
-  }
-  pop();
+  if (ram) drawPlayer(ram, images.ram);
 }
 
-//note rename function + params
-// note boil this down
-function switchSheepSprites(test, sheepOrRam) {
-  if (test.direction === "down") {
-    image(sheepOrRam.front, 0, 0, 35, 35);
-  }
-  if (test.direction === "left") {
-    image(sheepOrRam.left, 0, 0, 35, 35);
-  }
-  if (test.direction === "right") {
-    image(sheepOrRam.right, 0, 0, 35, 35);
-  }
-  if (test.direction === "up") {
-    image(sheepOrRam.behind, 0, 0, 35, 35);
-  }
+function drawPlayer(player, sprites) {
+  push();
+  // move to square
+  translate(player.position.x * CELL_SIZE, player.position.y * CELL_SIZE);
+  // position in square
+  translate(-8, -10);
+
+  image(sprites[player.direction], 0, 0, 35, 35);
+  pop();
 }
 
 function drawUI() {

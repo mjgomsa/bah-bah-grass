@@ -98,17 +98,17 @@ export function changeScene(newScene) {
 function preloadImages() {
   //player 1- sheep
   images.sheep = {};
-  images.sheep.front = loadImage("./assets/images/sheep.png");
+  images.sheep.down = loadImage("./assets/images/sheep.png");
   images.sheep.left = loadImage("./assets/images/sheep_left.png");
   images.sheep.right = loadImage("./assets/images/sheep_right.png");
-  images.sheep.behind = loadImage("./assets/images/sheep_behind.png");
+  images.sheep.up = loadImage("./assets/images/sheep_behind.png");
 
   //player 2- ram
   images.ram = {};
-  images.ram.front = loadImage("./assets/images/ram.png");
+  images.ram.down = loadImage("./assets/images/ram.png");
   images.ram.left = loadImage("./assets/images/ram_left.png");
   images.ram.right = loadImage("./assets/images/ram_right.png");
-  images.ram.behind = loadImage("./assets/images/ram_behind.png");
+  images.ram.up = loadImage("./assets/images/ram_behind.png");
 
   //grass
   images.grass = {};
