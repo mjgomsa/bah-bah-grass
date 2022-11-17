@@ -2,8 +2,7 @@
 
 # Todo
 
-.organize assets with folders (images, fonts) etc.
 .asset file names consistent case snake_case
-.grass_alt_01.png
+.grass_alternative and .grass_end are totally but the name implies they are similar
 
-(1) screen movement currently not synched up.. when ram clicks start game it doesnt automatically start game for sheep
+.screen movement currently not synched up.. when ram clicks start game it doesnt automatically start game for sheep
