@@ -16,6 +16,7 @@ let guests;
 
 let shared_grid;
 let shared_time;
+let shared_seeds;
 export let shared_highScores;
 
 export let cellsEaten = 0;
@@ -29,6 +30,8 @@ export function preload() {
   shared_time = partyLoadShared("shared_time", { gameTimer: 90 });
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
+
+  shared_seeds = partyLoadShared("shared_seeds", { seeds: [] });
 
   me = partyLoadMyShared({
     role: "observer",
@@ -68,8 +71,10 @@ export function draw() {
 }
 
 export function update() {
-  cellsEaten = shared_grid.grid.flat().filter((x) => x === true).length;
   updateTimer();
+  updateSeeds();
+
+  cellsEaten = shared_grid.grid.flat().filter((x) => x === true).length;
 
   if (shared_time.gameTimer === 0) {
     console.log("Game Over: timer ran out");
@@ -120,6 +125,17 @@ function drawGrid() {
       drawAltGrass(images.grass.alts[2], 15, 4);
     }
   }
+
+  for (const seed of shared_seeds.seeds) {
+    image(
+      images.seed,
+      seed.x * CELL_SIZE,
+      seed.y * CELL_SIZE,
+      CELL_SIZE,
+      CELL_SIZE
+    );
+  }
+
   pop();
 }
 
@@ -206,8 +222,8 @@ function move(dX, dY) {
 
   if (shared_grid.grid[me.position.x][me.position.y] === false) {
     sounds.sheep_eat.play();
-    partyEmit("eatCell", { x: me.position.x, y: me.position.y });
   }
+  partyEmit("eatCell", { x: me.position.x, y: me.position.y });
 }
 
 function assignPlayers() {
@@ -229,9 +245,53 @@ function assignPlayers() {
 
 ////////////////////////////////////////////////////////////////
 // Host Functions
+
+const SEED_LIFESPAN = 10;
+const SEED_LIFESPAN_SPAWN1 = 5;
+
+function updateSeeds() {
+  if (!partyIsHost()) return;
+  if (shared_seeds.seeds.length < 1) {
+    spawnSeed();
+  }
+
+  for (const seed of shared_seeds.seeds) {
+    seed.age++;
+    if (seed.age === SEED_LIFESPAN_SPAWN1 * 60) {
+      growGrass(seed.x, seed.y - 1);
+      growGrass(seed.x + 1, seed.y);
+      growGrass(seed.x, seed.y + 1);
+      growGrass(seed.x - 1, seed.y);
+    }
+  }
+
+  shared_seeds.seeds = shared_seeds.seeds.filter(
+    (seed) => seed.age < SEED_LIFESPAN * 60
+  );
+}
+
+function growGrass(x, y) {
+  if (!pointInRect({ x, y }, { x: 0, y: 0, w: 19, h: 19 })) return;
+  shared_grid.grid[x][y] = false;
+}
+
+function spawnSeed() {
+  shared_seeds.seeds.push({
+    x: floor(random() * GRID_SIZE),
+    y: floor(random() * GRID_SIZE),
+    age: 0,
+  });
+}
+
 function onEatCell(loc) {
   if (!partyIsHost()) return;
   shared_grid.grid[loc.x][loc.y] = true;
+  for (const seed of shared_seeds.seeds) {
+    console.log(seed.x, seed.y, loc.x, loc.y);
+    if (seed.x === loc.x && seed.y === loc.y) {
+      seed.age = 1000000000; // old enough that it will be removed
+    }
+  }
 }
 
 function updateTimer() {
