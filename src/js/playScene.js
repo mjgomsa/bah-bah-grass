@@ -26,7 +26,7 @@ export function preload() {
   });
 
   // todo: swtich to a timestamp approach for time keeping
-  shared_time = partyLoadShared("shared_time", { gameTimer: 10 });
+  shared_time = partyLoadShared("shared_time", { gameTimer: 90 });
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
@@ -174,44 +174,44 @@ export function keyPressed() {
   const ram = guests.find((p) => p.role === "ram");
 
   if (sheep === me || ram === me) {
-    // note sheep should only eat if they move onto grass
-    sounds.sheep_eat.play();
     if (keyCode === DOWN_ARROW || keyCode === 83) {
       me.direction = "down";
-      tryMove(0, 1);
+      move(0, 1);
     }
     if (keyCode === UP_ARROW || keyCode === 87) {
       me.direction = "up";
-      tryMove(0, -1);
+      move(0, -1);
     }
     if (keyCode === LEFT_ARROW || keyCode === 65) {
       me.direction = "left";
-      tryMove(-1, 0);
+      move(-1, 0);
     }
     if (keyCode === RIGHT_ARROW || keyCode === 68) {
       me.direction = "right";
-      tryMove(1, 0);
-    }
-
-    // note: unneeded test
-    if (shared_grid.grid[me.position.x][me.position.y] === false) {
-      shared_grid.grid[me.position.x][me.position.y] = true;
+      move(1, 0);
     }
   }
 }
 
-function tryMove(x, y) {
+function move(dX, dY) {
+  // test if move possible
   const targetLocation = {
-    x: me.position.x * CELL_SIZE + x,
-    y: me.position.y * CELL_SIZE + y,
+    x: me.position.x + dX,
+    y: me.position.y + dY,
   };
-  const bounds = { x: 0, y: 0, w: GRID_SIZE * 19, h: GRID_SIZE * 19 };
+  const bounds = { x: 0, y: 0, w: 19, h: 19 };
   if (!pointInRect(targetLocation, bounds)) {
     return;
   }
 
-  me.position.x += x;
-  me.position.y += y;
+  // execute move
+  me.position.x += dX;
+  me.position.y += dY;
+
+  if (shared_grid.grid[me.position.x][me.position.y] === false) {
+    sounds.sheep_eat.play();
+    shared_grid.grid[me.position.x][me.position.y] = true;
+  }
 }
 
 export function updateHighScores() {
