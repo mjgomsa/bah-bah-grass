@@ -287,7 +287,6 @@ function onEatCell(loc) {
   if (!partyIsHost()) return;
   shared_grid.grid[loc.x][loc.y] = true;
   for (const seed of shared_seeds.seeds) {
-    console.log(seed.x, seed.y, loc.x, loc.y);
     if (seed.x === loc.x && seed.y === loc.y) {
       seed.age = 1000000000; // old enough that it will be removed
     }
