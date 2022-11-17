@@ -36,6 +36,8 @@ export function preload() {
     direction: "down",
   });
   guests = partyLoadGuestShareds();
+
+  partySubscribe("eatCell", onEatCell);
 }
 
 export function enter() {
@@ -204,7 +206,7 @@ function move(dX, dY) {
 
   if (shared_grid.grid[me.position.x][me.position.y] === false) {
     sounds.sheep_eat.play();
-    shared_grid.grid[me.position.x][me.position.y] = true;
+    partyEmit("eatCell", { x: me.position.x, y: me.position.y });
   }
 }
 
@@ -227,6 +229,10 @@ function assignPlayers() {
 
 ////////////////////////////////////////////////////////////////
 // Host Functions
+function onEatCell(loc) {
+  if (!partyIsHost()) return;
+  shared_grid.grid[loc.x][loc.y] = true;
+}
 
 function updateTimer() {
   if (!partyIsHost()) return;
