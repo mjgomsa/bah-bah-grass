@@ -43,6 +43,7 @@ export function enter() {
 }
 
 export function leave() {
+  sounds.end_game.play();
   updateHighScores();
 }
 
@@ -66,18 +67,10 @@ export function draw() {
 
 export function update() {
   cellsEaten = shared_grid.grid.flat().filter((x) => x === true).length;
-
-  // todo: refactor timer
-  if (partyIsHost()) {
-    if (frameCount % 60 === 0) {
-      shared_time.gameTimer--;
-    }
-  }
+  updateTimer();
 
   if (shared_time.gameTimer === 0) {
     console.log("Game Over: timer ran out");
-    // todo move to best location
-    sounds.end_game.play();
     changeScene(scenes.over);
   }
 
@@ -215,13 +208,6 @@ function move(dX, dY) {
   }
 }
 
-export function updateHighScores() {
-  let scoreList = [...shared_highScores.scores];
-  scoreList.push(cellsEaten);
-  scoreList = scoreList.sort((a, b) => b - a);
-  shared_highScores.scores = scoreList;
-}
-
 function assignPlayers() {
   if (!guests.find((p) => p.role === "sheep")) {
     // if there isn't a sheep
@@ -237,4 +223,22 @@ function assignPlayers() {
     // if thats me, take the role
     if (o === me) o.role = "ram";
   }
+}
+
+////////////////////////////////////////////////////////////////
+// Host Functions
+
+function updateTimer() {
+  if (!partyIsHost()) return;
+  if (frameCount % 60 === 0) {
+    shared_time.gameTimer--;
+  }
+}
+
+function updateHighScores() {
+  if (!partyIsHost()) return;
+  let scoreList = [...shared_highScores.scores];
+  scoreList.push(cellsEaten);
+  scoreList = scoreList.sort((a, b) => b - a);
+  shared_highScores.scores = scoreList;
 }

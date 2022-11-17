@@ -1,14 +1,26 @@
 # Notes Bah-Bah-Grass
 
-# Todo
+# Assets
 
 .asset file names consistent case snake_case
 .grass_alternative and .grass_end are totally but the name implies they are similar
-
-.screen movement currently not synched up.. when ram clicks start game it doesnt automatically start game for sheep
-
 .nomalize sound levels
-.bug, game doesn't restart properly. is timer reset?
+.sprites should be sized as used, so we wouldn't need to rescale on draw
+
+# Features
+
 .reset everything on new game start
 .make it so that initial grass square is eaten
-.sprites should be sized as used, so we wouldn't need to pass size
+.lobby/waiting room, sync game start
+
+# Improvements
+
+.refactor draw grid
+
+# Conflicts
+
+.both players can eat grass at the same time! same shared.
+
+# Bugs
+
+.bug, game doesn't restart properly. is timer reset?
