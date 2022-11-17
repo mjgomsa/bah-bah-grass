@@ -7,7 +7,7 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-import { cellsEaten, highscore_export } from "./playScene.js";
+import { cellsEaten, shared_highScores } from "./playScene.js";
 
 export function draw() {
   // draw images
@@ -31,7 +31,7 @@ export function draw() {
   text(cellsEaten, 431, yOffset + 190);
 
   textSize(20);
-  text("Highscore: " + highscore_export, 431, 245);
+  text("Highscore: " + shared_highScores.scores[0], 431, 245);
 
   pop();
 

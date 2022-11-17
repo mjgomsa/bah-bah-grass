@@ -14,11 +14,10 @@ let me;
 let guests;
 
 let shared_grid;
-let shared_highScores;
 let shared_time;
+export let shared_highScores;
 
 export let cellsEaten = 0;
-export let highscore_export;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
@@ -26,7 +25,7 @@ export function preload() {
   });
 
   // todo: swtich to a timestamp approach for time keeping
-  shared_time = partyLoadShared("shared_time", { gameTimer: 90 });
+  shared_time = partyLoadShared("shared_time", { gameTimer: 10 });
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
@@ -40,10 +39,6 @@ export function enter() {
 
 export function leave() {
   updateHighScores();
-
-  console.log(shared_highScores.scores);
-  console.log(shared_highScores.scores[0]);
-  highscore_export = shared_highScores.scores[0];
 }
 
 export function draw() {
