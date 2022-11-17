@@ -105,6 +105,7 @@ function drawGrid() {
       }
 
       //alternate grass
+      // note data drive?
       alternateGrass(images.grass.alts[1], 2, 3);
       alternateGrass(images.grass.alts[2], 4, 5);
       alternateGrass(images.grass.alts[0], 4, 6);
@@ -122,6 +123,7 @@ function drawGrid() {
   pop();
 }
 
+// note rename
 function alternateGrass(img, x, y) {
   if (shared_grid.grid[x][y] === false) {
     image(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
@@ -132,6 +134,7 @@ function drawSheep() {
   push();
   translate(-8, -10); // offset of sheep/ram position so that the feet are within the square
 
+  // note maybe boil down
   const sheep = guests.find((p) => p.role === "sheep");
   if (sheep) {
     push();
@@ -150,6 +153,8 @@ function drawSheep() {
   pop();
 }
 
+//note rename function + params
+// note boil this down
 function switchSheepSprites(test, sheepOrRam) {
   if (test.direction === "down") {
     image(sheepOrRam.front, 0, 0, 35, 35);
@@ -187,6 +192,7 @@ export function keyPressed() {
   const ram = guests.find((p) => p.role === "ram");
 
   if (sheep === me || ram === me) {
+    // note sheep should only eat if they move onto grass
     sounds.sheep_eat.play();
     if (keyCode === DOWN_ARROW || keyCode === 83) {
       me.direction = "down";
@@ -205,8 +211,7 @@ export function keyPressed() {
       tryMove(1, 0);
     }
 
-    console.log(me.position.x, me.position.y);
-
+    // note: unneeded test
     if (shared_grid.grid[me.position.x][me.position.y] === false) {
       shared_grid.grid[me.position.x][me.position.y] = true;
     }
