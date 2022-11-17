@@ -87,6 +87,9 @@ export function update() {
   }
 }
 
+// note revisit drawing code, once we have sprites for all state
+// grid[x][y].state, grid[x][y].sprite
+
 function drawGrid() {
   push();
 
@@ -96,20 +99,18 @@ function drawGrid() {
       const y = row * CELL_SIZE;
       stroke("#94541E");
 
-      // todo: just draw grass sprite
       if (shared_grid.grid[col][row] === false) {
         fill("#0F3325"); //grass
         rect(x, y, CELL_SIZE, CELL_SIZE);
         image(images.grass.main, x, y, CELL_SIZE, CELL_SIZE);
       } else {
-        // todo: dirt sprite
         fill("#94541E"); //dirt
         rect(x, y, CELL_SIZE, CELL_SIZE);
         // TO DO: make sprite for dirt
       }
 
       //alternate grass
-      // note data drive?
+
       drawAltGrass(images.grass.alts[1], 2, 3);
       drawAltGrass(images.grass.alts[2], 4, 5);
       drawAltGrass(images.grass.alts[0], 4, 6);
