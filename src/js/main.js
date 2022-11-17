@@ -3,11 +3,12 @@
  *
  * This is the entry point for the game.
  *
- * Purpose: loads the other modules, sets things up, and coordinates the main
- * game scenes.
+ * It is responsible for:
+ * - loading the game scene modules
+ * - preloading assets
+ * - setting up the canvas
+ * - coordinating main game scenes
  *
- * Exports: a function changeScene() that scenes can use to switch
- * to other scenes.
  *
  */
 
@@ -27,12 +28,11 @@ export const scenes = {
   over: overScene,
 };
 
-// Globals
 export const images = {};
 export const sounds = {};
 
-//Object.assign method copies all properties from one source to a target object
-// Object.assign(target, source)
+// assign p5 callback functions to the global (window) scope
+// so p5 can access them
 Object.assign(window, {
   preload,
   draw,
@@ -48,7 +48,7 @@ function preload() {
     "main"
   );
 
-  // for each scene call preload fn if exists, ignore otherwise
+  // preload scenes
   Object.values(scenes).forEach((scene) => scene.preload?.());
 
   preloadImages();
@@ -58,12 +58,6 @@ function preload() {
 function setup() {
   createCanvas(600, 600);
   textFont("Pixeloid Sans");
-
-  //sounds set ups
-  sounds.nom.setVolume(0.1);
-  sounds.click.setVolume(10);
-  sounds.banjo.setVolume(0.5);
-  sounds.sheep_noise.setVolume(0.5);
 
   // note: object.values() returns an array of a given objects own property values
   Object.values(scenes).forEach((scene) => scene.setup?.());
@@ -155,9 +149,17 @@ function preloadImages() {
 }
 
 function preloadSounds() {
-  sounds.click = loadSound("./assets/sounds/button.wav"); //for button clicks
-  sounds.nom = loadSound("./assets/sounds/nom_noise.wav"); //for sheep eating
-  sounds.end_game = loadSound("./assets/sounds/end-game.wav"); //end game sound
-  sounds.banjo = loadSound("./assets/sounds/banjo.wav"); //start game sound
-  sounds.sheep_noise = loadSound("./assets/sounds/sheep.wav"); //drawGameOn sheep noises
+  sounds.click = loadSound("./assets/sounds/button.wav");
+  sounds.click.setVolume(10);
+
+  sounds.sheep_eat = loadSound("./assets/sounds/nom_noise.wav");
+  sounds.sheep_eat.setVolume(0.1);
+
+  sounds.banjo = loadSound("./assets/sounds/banjo.wav");
+  sounds.banjo.setVolume(0.5);
+
+  sounds.sheep_bleat = loadSound("./assets/sounds/sheep.wav");
+  sounds.sheep_bleat.setVolume(0.5);
+
+  sounds.end_game = loadSound("./assets/sounds/end-game.wav");
 }

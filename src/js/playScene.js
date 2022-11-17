@@ -36,7 +36,7 @@ export function preload() {
 }
 
 export function enter() {
-  sounds.sheep_noise.play();
+  sounds.sheep_bleat.play();
 }
 
 export function leave() {
@@ -214,7 +214,7 @@ export function keyPressed() {
   const ram = guests.find((p) => p.role === "ram");
 
   if (sheep === me || ram === me) {
-    sounds.nom.play();
+    sounds.sheep_eat.play();
     if (keyCode === DOWN_ARROW || keyCode === 83) {
       me.direction = "down";
       tryMove(0, 1);

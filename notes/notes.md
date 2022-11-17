@@ -6,3 +6,5 @@
 .grass_alternative and .grass_end are totally but the name implies they are similar
 
 .screen movement currently not synched up.. when ram clicks start game it doesnt automatically start game for sheep
+
+.nomalize sound levels
