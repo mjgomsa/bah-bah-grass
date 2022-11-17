@@ -7,8 +7,8 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-const GRID_SIZE = 20;
-const CELL_SIZE = 20;
+const GRID_SIZE = 20; // rows and cols in grid
+const CELL_SIZE = 20; // pixel width and height of grid cells
 
 let me;
 let guests;
@@ -17,13 +17,12 @@ let shared_grid;
 let shared_highScores;
 let shared_time;
 
-export let final_cellEaten_count = 0;
+export let cellsEaten = 0;
 export let highscore_export;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
     grid: initGrid(),
-    cellsEaten: 0,
   });
 
   // todo: swtich to a timestamp approach for time keeping
@@ -40,9 +39,8 @@ export function enter() {
 }
 
 export function leave() {
-  determineHighScore();
+  updateHighScores();
 
-  final_cellEaten_count = shared_grid.cellsEaten;
   console.log(shared_highScores.scores);
   console.log(shared_highScores.scores[0]);
   highscore_export = shared_highScores.scores[0];
@@ -65,6 +63,8 @@ export function draw() {
 }
 
 export function update() {
+  cellsEaten = shared_grid.grid.flat().filter((x) => x === true).length;
+
   // todo: refactor timer
   if (partyIsHost()) {
     if (frameCount % 60 === 0) {
@@ -79,7 +79,7 @@ export function update() {
     changeScene(scenes.over);
   }
 
-  if (shared_grid.cellsEaten === GRID_SIZE * GRID_SIZE) {
+  if (cellsEaten === GRID_SIZE * GRID_SIZE) {
     console.log("Game over: all grass eaten, you win");
     changeScene(scenes.over);
   }
@@ -202,7 +202,7 @@ function drawUI() {
   text(me.role, width * 0.6, height * 0.92);
 
   textAlign(LEFT);
-  text("Grass eaten: " + shared_grid.cellsEaten, width * 0.085, height * 0.92);
+  text("Grass eaten: " + cellsEaten, width * 0.085, height * 0.92);
 
   textAlign(CENTER, CENTER);
   text(shared_time.gameTimer, width * 0.85, height * 0.92);
@@ -236,7 +236,6 @@ export function keyPressed() {
 
     if (shared_grid.grid[me.position.x][me.position.y] === false) {
       shared_grid.grid[me.position.x][me.position.y] = true;
-      shared_grid.cellsEaten = shared_grid.cellsEaten + 1;
     }
   }
 }
@@ -264,9 +263,9 @@ function pointInRect(p, r) {
   );
 }
 
-export function determineHighScore() {
+export function updateHighScores() {
   let scoreList = [...shared_highScores.scores];
-  scoreList.push(shared_grid.cellsEaten);
+  scoreList.push(cellsEaten);
   scoreList = scoreList.sort((a, b) => b - a);
   shared_highScores.scores = scoreList;
 }

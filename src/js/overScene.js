@@ -7,7 +7,7 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-import { final_cellEaten_count, highscore_export } from "./playScene.js";
+import { cellsEaten, highscore_export } from "./playScene.js";
 
 export function draw() {
   // draw images
@@ -19,16 +19,20 @@ export function draw() {
 
   //draw high score
   push();
+
   textSize(35);
   fill("#703e14");
   textAlign(CENTER, CENTER);
   textStyle(BOLD);
   text("Your Score:", 431, 110);
+
   textSize(100);
   const yOffset = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-  text(final_cellEaten_count, 431, yOffset + 190);
+  text(cellsEaten, 431, yOffset + 190);
+
   textSize(20);
   text("Highscore: " + highscore_export, 431, 245);
+
   pop();
 
   //restart button

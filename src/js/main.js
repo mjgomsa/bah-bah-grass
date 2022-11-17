@@ -48,7 +48,7 @@ function preload() {
     "main"
   );
 
-  // preload scenes
+  // preload all scenes
   Object.values(scenes).forEach((scene) => scene.preload?.());
 
   preloadImages();
@@ -59,7 +59,7 @@ function setup() {
   createCanvas(600, 600);
   textFont("Pixeloid Sans");
 
-  // note: object.values() returns an array of a given objects own property values
+  // setup all scenes
   Object.values(scenes).forEach((scene) => scene.setup?.());
 
   changeScene(scenes.title);
