@@ -19,8 +19,6 @@
 
 # Conflicts
 
-.both players can eat grass at the same time! same shared.
-
 # Bugs
 
 .bug, game doesn't restart properly. is timer reset?
