@@ -1,8 +1,15 @@
 /**
  * playScene.js
  *
- * This is the main game and all its functionalities
+ * This is the main game and all its functionalities.
+ * GRID_SIZE: defines the number of rows/columns in the grid
+ * CELL_SIZE: defines the pixel count of a singular square of grass
  *
+ * SHARED OBJECTS:
+ * * shared_grid: an object that contains main grass grid that is shared between players. Shared.grid is read by all but written only to by the host.
+ * * shared_time: an object that contians the main timer of the game. The game is contingent of this timer—meaning that if it runs out the game is over.
+ * * shared_highscores: an object that is exported containing the high scores for a single session
+ * * shared_seeds: an object that contains an array of seeds that are written to by the host
  */
 
 import { changeScene, scenes, images, sounds } from "./main.js";
