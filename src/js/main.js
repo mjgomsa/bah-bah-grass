@@ -149,16 +149,16 @@ function preloadImages() {
 }
 
 function preloadSounds() {
-  sounds.click = loadSound("./assets/sounds/button.wav");
+  sounds.click = loadSound("./assets/sounds/click.wav");
   sounds.click.setVolume(10);
 
-  sounds.sheep_eat = loadSound("./assets/sounds/nom_noise.wav");
+  sounds.sheep_eat = loadSound("./assets/sounds/sheep_eat.wav");
   sounds.sheep_eat.setVolume(0.1);
 
   sounds.banjo = loadSound("./assets/sounds/banjo.wav");
   sounds.banjo.setVolume(0.5);
 
-  sounds.sheep_bleat = loadSound("./assets/sounds/sheep.wav");
+  sounds.sheep_bleat = loadSound("./assets/sounds/sheep_bleat.wav");
   sounds.sheep_bleat.setVolume(0.5);
 
   sounds.end_game = loadSound("./assets/sounds/end-game.wav");
