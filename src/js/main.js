@@ -98,25 +98,25 @@ export function changeScene(newScene) {
 function preloadImages() {
   //player 1- sheep
   images.sheep = {};
-  images.sheep.down = loadImage("./assets/images/sheep.png");
+  images.sheep.down = loadImage("./assets/images/sheep_down.png");
   images.sheep.left = loadImage("./assets/images/sheep_left.png");
   images.sheep.right = loadImage("./assets/images/sheep_right.png");
-  images.sheep.up = loadImage("./assets/images/sheep_behind.png");
+  images.sheep.up = loadImage("./assets/images/sheep_up.png");
 
   //player 2- ram
   images.ram = {};
-  images.ram.down = loadImage("./assets/images/ram.png");
+  images.ram.down = loadImage("./assets/images/ram_down.png");
   images.ram.left = loadImage("./assets/images/ram_left.png");
   images.ram.right = loadImage("./assets/images/ram_right.png");
-  images.ram.up = loadImage("./assets/images/ram_behind.png");
+  images.ram.up = loadImage("./assets/images/ram_up.png");
 
   //grass
   images.grass = {};
   images.grass.main = loadImage("./assets/images/grass.png");
   images.grass.alts = [];
-  images.grass.alts[0] = loadImage("./assets/images/grass_alternative.png");
-  images.grass.alts[1] = loadImage("./assets/images/grass_alternative2.png");
-  images.grass.alts[2] = loadImage("./assets/images/grass_alternative3.png");
+  images.grass.alts[0] = loadImage("./assets/images/grass_alternative_000.png");
+  images.grass.alts[1] = loadImage("./assets/images/grass_alternative_001.png");
+  images.grass.alts[2] = loadImage("./assets/images/grass_alternative_002.png");
 
   //grass for backgrounds
   images.screens = {};
