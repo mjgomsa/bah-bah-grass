@@ -118,13 +118,17 @@ function preloadImages() {
   images.grass.alts[1] = loadImage("./assets/images/grass_alternative_001.png");
   images.grass.alts[2] = loadImage("./assets/images/grass_alternative_002.png");
 
-  //grass for backgrounds
+  //screen-specific images
   images.screens = {};
-  images.screens.grass_start = loadImage("./assets/images/grass_starter.png");
-  images.screens.grass_instruct = loadImage(
-    "./assets/images/grass_instruction.png"
+  images.screens.grass_start = loadImage(
+    "./assets/images/screens_starter_grass.png"
   );
-  images.screens.cloud_background = loadImage("./assets/images/background.gif");
+  images.screens.grass_instruct = loadImage(
+    "./assets/images/screens_instruct_grass.png"
+  );
+  images.screens.cloud_background = loadImage(
+    "./assets/images/screens_bkgnd_clouds.gif"
+  );
 
   //buttons
   images.buttons = {};
@@ -135,13 +139,13 @@ function preloadImages() {
 
   // key art
   images.key_art = {};
-  images.key_art.logo = loadImage("./assets/images/logo.png");
-  images.key_art.fence = loadImage("./assets/images/fence.png");
-  images.key_art.farmer = loadImage("./assets/images/farmer.png");
-  images.key_art.sheep = loadImage("./assets/images/sheep-2.png");
+  images.key_art.logo = loadImage("./assets/images/keyart_logo.png");
+  images.key_art.fence = loadImage("./assets/images/keyart_fence.png");
+  images.key_art.farmer = loadImage("./assets/images/keyart_farmer.png");
+  images.key_art.sheep = loadImage("./assets/images/keyart_sheep.png");
 
   // seed
-  images.seed = loadImage("./assets/images/seed_planted.png");
+  images.seed = loadImage("./assets/images/seed.png");
 }
 
 function preloadSounds() {
