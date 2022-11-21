@@ -25,9 +25,9 @@ export function draw() {
 
   // start button
   if (mouseIsPressed) {
-    image(images.buttons.start_pressed, 310, 350);
+    image(images.buttons.start_down, 310, 350);
   } else {
-    image(images.buttons.start_unpressed, 310, 350);
+    image(images.buttons.start_up, 310, 350);
   }
 }
 

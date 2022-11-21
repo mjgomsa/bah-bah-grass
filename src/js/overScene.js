@@ -37,9 +37,9 @@ export function draw() {
 
   //restart button
   if (mouseIsPressed) {
-    image(images.buttons.play_pressed, 300, 270);
+    image(images.buttons.play_down, 300, 270);
   } else {
-    image(images.buttons.play_unpressed, 300, 270);
+    image(images.buttons.play_up, 300, 270);
   }
 }
 

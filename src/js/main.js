@@ -128,14 +128,10 @@ function preloadImages() {
 
   //buttons
   images.buttons = {};
-  images.buttons.start_pressed = loadImage("./assets/images/start-pressed.png");
-  images.buttons.start_unpressed = loadImage(
-    "./assets/images/start-btn_unpressed.png"
-  );
-  images.buttons.play_pressed = loadImage("./assets/images/play-pressed.png");
-  images.buttons.play_unpressed = loadImage(
-    "./assets/images/play-btn_unpressed.png"
-  );
+  images.buttons.start_down = loadImage("./assets/images/btn_start_down.png");
+  images.buttons.start_up = loadImage("./assets/images/btn_start_up.png");
+  images.buttons.play_down = loadImage("./assets/images/btn_play_down.png");
+  images.buttons.play_up = loadImage("./assets/images/btn_play_up.png");
 
   // key art
   images.key_art = {};
