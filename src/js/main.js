@@ -161,5 +161,5 @@ function preloadSounds() {
   sounds.sheep_bleat = loadSound("./assets/sounds/sheep_bleat.wav");
   sounds.sheep_bleat.setVolume(0.5);
 
-  sounds.end_game = loadSound("./assets/sounds/end-game.wav");
+  sounds.end_game = loadSound("./assets/sounds/end_game.wav");
 }
