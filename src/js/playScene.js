@@ -6,7 +6,12 @@
  * CELL_SIZE: defines the pixel count of a singular square of grass
  *
  * SHARED OBJECTS:
- * * shared_grid: an object that contains main grass grid that is shared between players. Shared.grid is read by all but written only to by the host.
+ * * shared_grid: {  //  a general shared object; is read by all, written to only by the host.
+ *   grid: [][] // a 2D array [x][y] of the grid object, with a boolean value (False = grass, True = No grass)
+ * }
+ *
+ * * shared_grid:
+ * * * * grid:
  * * shared_time: an object that contians the main timer of the game. The game is contingent of this timer—meaning that if it runs out the game is over.
  * * shared_highscores: an object that is exported containing the high scores for a single session
  * * shared_seeds: an object that contains an array of seeds that are written to by the host
@@ -30,7 +35,7 @@ export let cellsEaten = 0;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
-    grid: array2D(20, 20, false),
+    grid: array2D(20, 20, true),
   });
 
   // todo: swtich to a timestamp approach for time keeping
@@ -81,7 +86,7 @@ export function update() {
   updateTimer();
   updateSeeds();
 
-  cellsEaten = shared_grid.grid.flat().filter((x) => x === true).length;
+  cellsEaten = shared_grid.grid.flat().filter((x) => x === false).length;
 
   if (shared_time.gameTimer === 0) {
     console.log("Game Over: timer ran out");
@@ -106,7 +111,7 @@ function drawGrid() {
       const y = row * CELL_SIZE;
       stroke("#94541E");
 
-      if (shared_grid.grid[col][row] === false) {
+      if (shared_grid.grid[col][row] === true) {
         fill("#0F3325"); //grass
         rect(x, y, CELL_SIZE, CELL_SIZE);
         image(images.grass.main, x, y, CELL_SIZE, CELL_SIZE);
@@ -147,7 +152,7 @@ function drawGrid() {
 }
 
 function drawAltGrass(img, x, y) {
-  if (shared_grid.grid[x][y] === false) {
+  if (shared_grid.grid[x][y] === true) {
     image(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   }
 }
@@ -227,7 +232,8 @@ function move(dX, dY) {
   me.position.x += dX;
   me.position.y += dY;
 
-  if (shared_grid.grid[me.position.x][me.position.y] === false) {
+  if (shared_grid.grid[me.position.x][me.position.y] === true) {
+    console.log(shared_grid.grid);
     sounds.sheep_eat.play();
   }
   partyEmit("eatCell", { x: me.position.x, y: me.position.y });
@@ -279,7 +285,7 @@ function updateSeeds() {
 
 function growGrass(x, y) {
   if (!pointInRect({ x, y }, { x: 0, y: 0, w: 19, h: 19 })) return;
-  shared_grid.grid[x][y] = false;
+  shared_grid.grid[x][y] = true;
 }
 
 function spawnSeed() {
@@ -292,7 +298,7 @@ function spawnSeed() {
 
 function onEatCell(loc) {
   if (!partyIsHost()) return;
-  shared_grid.grid[loc.x][loc.y] = true;
+  shared_grid.grid[loc.x][loc.y] = false;
   for (const seed of shared_seeds.seeds) {
     if (seed.x === loc.x && seed.y === loc.y) {
       seed.age = 1000000000; // old enough that it will be removed
