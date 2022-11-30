@@ -1,15 +1,19 @@
 /**
  * main.js
  *
- * This is the entry point for the game.
+ * This is the entry point for the game. This file loads the other modules, sets things up, and coordinates the main game states.
  *
- * It is responsible for:
- * - loading the game scene modules
- * - preloading assets
- * - setting up the canvas
- * - coordinating main game scenes
- *
- *
+ * METHODS:
+ *** preload: called when the game is preloaded
+ *** setup: called when the game is set up
+ *** update: called every frame, game logic, no drawing
+ *** draw: called every frame, should draw the scene, no game logic
+ *** mouseReleased: called when mouse is released
+ *** keyPressed: called when key is pressed
+ *** enter: called when scene is entered
+ *** leave: called when scene is left.
+ *** preloadImages: called within preload
+ *** preloadSounds: called within preload
  */
 
 import * as titleScene from "./titleScene.js";
