@@ -2,19 +2,47 @@
  * playScene.js
  *
  * This is the main game and all its functionalities.
+ *
+ * CONSTANTS:
  * GRID_SIZE: defines the number of rows/columns in the grid
  * CELL_SIZE: defines the pixel count of a singular square of grass
+ * SEED_LIFESPAN : defines the age/duration of a seed object
+ * SEED_LIFESPAN_SPAWN1 : defines how often a seed should spawn
  *
  * SHARED OBJECTS:
- * * shared_grid: {  //  a general shared object; is read by all, written to only by the host.
- *   grid: [][] // a 2D array [x][y] of the grid object, with a boolean value (False = grass, True = No grass)
+ *
+ * * shared_grid : {         // a general shared object; is read by all, written to only by the host.
+ *     grid: [][]            // a 2D array [x][y] of the grid object, with a boolean value (True = grass, False = no grass)
  * }
  *
- * * shared_grid:
- * * * * grid:
- * * shared_time: an object that contians the main timer of the game. The game is contingent of this timer—meaning that if it runs out the game is over.
- * * shared_highscores: an object that is exported containing the high scores for a single session
- * * shared_seeds: an object that contains an array of seeds that are written to by the host
+ * * shared_time: {           // a general shared object; is read by all, written to only by the host.
+ *      gameTimer : 90        // seconds per each game
+ * }
+ *
+ * * shared_highscores: {     // a general shared object; is read by all, written to only by the host.
+ *      scores: []            // an array containing all scores per one session
+ * }
+ *
+ * * shared_seeds: {          // a general shared object; is read by all, written to only by the host.
+ *      seeds: [              // an array of seed objects
+ *        {
+ *          x,                // x position
+ *          y,                // y position
+ *          age,              // age of seed in seconds
+ *        },
+ *      ]
+ * }
+ *
+ * * me : {                   // "my" shared object; is read by all, written to only by own client.
+ *      role,                 // either an "observer", "sheep" or a "ram"
+ *      position: {
+ *            x,              // x position of my player
+ *            y,              // y position of my player
+ *      },
+ *      direction,            // either "up", "down", "left", "right"; determines the appropriate img speck to be selected
+ * }
+ *
+ * * guests : []              // a "guests" shared object, containing an array of all guests in the game
  */
 
 import { changeScene, scenes, images, sounds } from "./main.js";
@@ -22,6 +50,8 @@ import { pointInRect, array2D } from "./utilities.js";
 
 const GRID_SIZE = 20; // rows and cols in grid
 const CELL_SIZE = 20; // pixel width and height of grid cells
+const SEED_LIFESPAN = 10;
+const SEED_LIFESPAN_SPAWN1 = 5;
 
 let me;
 let guests;
@@ -29,8 +59,8 @@ let guests;
 let shared_grid;
 let shared_time;
 let shared_seeds;
-export let shared_highScores;
 
+export let shared_highScores;
 export let cellsEaten = 0;
 
 export function preload() {
@@ -258,9 +288,6 @@ function assignPlayers() {
 
 ////////////////////////////////////////////////////////////////
 // Host Functions
-
-const SEED_LIFESPAN = 10;
-const SEED_LIFESPAN_SPAWN1 = 5;
 
 function updateSeeds() {
   if (!partyIsHost()) return;
