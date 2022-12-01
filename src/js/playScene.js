@@ -3,46 +3,41 @@
  *
  * This is the main game and all its functionalities.
  *
- * CONSTANTS:
- * GRID_SIZE: defines the number of rows/columns in the grid
- * CELL_SIZE: defines the pixel count of a singular square of grass
- * SEED_LIFESPAN : defines the age/duration of a seed object
- * SEED_LIFESPAN_SPAWN1 : defines how often a seed should spawn
  *
  * SHARED OBJECTS:
  *
- * * shared_grid : {         // a general shared object; is read by all, written to only by the host.
- *     grid: [][]            // a 2D array [x][y] of the grid object, with a boolean value (True = grass, False = no grass)
+ * shared_grid : {         //read by all, written to only by the host.
+ *     grid: [][]            // 2D array [x][y] of bools (true = grass, false = no grass)
  * }
  *
- * * shared_time: {           // a general shared object; is read by all, written to only by the host.
- *      gameTimer : 90        // seconds per each game
+ * shared_time: {           // read by all, written to only by the host.
+ *      gameTimer : 90        // seconds remaining in game round
  * }
  *
- * * shared_highscores: {     // a general shared object; is read by all, written to only by the host.
- *      scores: []            // an array containing all scores per one session
+ * shared_highscores: {     // read by all, written to only by the host.
+ *      scores: []            // an array containing sorted top scores for this session
  * }
  *
- * * shared_seeds: {          // a general shared object; is read by all, written to only by the host.
- *      seeds: [              // an array of seed objects
+ * shared_seeds: {          // is read by all, written to only by the host.
+ *      seeds: [
  *        {
  *          x,                // x position
  *          y,                // y position
- *          age,              // age of seed in seconds
+ *          age,              // age of seed in frames
  *        },
  *      ]
  * }
  *
- * * me : {                   // "my" shared object; is read by all, written to only by own client.
- *      role,                 // either an "observer", "sheep" or a "ram"
+ * me : {                   // "my" shared object; is read by all, written to only by own client.
+ *      role,                 // "none", "observer", "sheep", or "ram"
  *      position: {
- *            x,              // x position of my player
- *            y,              // y position of my player
+ *            x,              // x position in cells
+ *            y,              // y position in cells
  *      },
- *      direction,            // either "up", "down", "left", "right"; determines the appropriate img speck to be selected
+ *      direction,            // "up", "down", "left", "right"; determines sprite to draw
  * }
  *
- * * guests : []              // a "guests" shared object, containing an array of all guests in the game
+ * guests : []              // a "guests" shared object, containing an array of all guests in the game
  */
 
 import { changeScene, scenes, images, sounds } from "./main.js";
@@ -50,8 +45,8 @@ import { pointInRect, array2D } from "./utilities.js";
 
 const GRID_SIZE = 20; // rows and cols in grid
 const CELL_SIZE = 20; // pixel width and height of grid cells
-const SEED_LIFESPAN = 10;
-const SEED_LIFESPAN_SPAWN1 = 5;
+const SEED_LIFESPAN = 10; // age/duration of a seed object
+const SEED_LIFESPAN_SPAWN1 = 5; // defines how often a seed should spawn
 
 let me;
 let guests;
@@ -69,14 +64,17 @@ export function preload() {
   });
 
   // todo: swtich to a timestamp approach for time keeping
-  shared_time = partyLoadShared("shared_time", { gameTimer: 90 });
+  shared_time = partyLoadShared("shared_time", {
+    state: "waiting",
+    gameTimer: 90,
+  });
 
   shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
 
   shared_seeds = partyLoadShared("shared_seeds", { seeds: [] });
 
   me = partyLoadMyShared({
-    role: "observer",
+    role: "none",
     position: { x: 0, y: 0 },
     direction: "down",
   });
@@ -86,17 +84,16 @@ export function preload() {
 }
 
 export function enter() {
+  me.role = "observer";
   sounds.sheep_bleat.play();
 }
 
 export function leave() {
+  me.role = "none";
   sounds.end_game.play();
-  updateHighScores();
 }
 
 export function draw() {
-  assignPlayers();
-
   // draw
   background("#faf7e1");
   image(images.key_art.fence, -10, 0, 620, 600);
@@ -113,19 +110,20 @@ export function draw() {
 }
 
 export function update() {
-  updateTimer();
-  updateSeeds();
+  assignPlayers();
 
-  cellsEaten = shared_grid.grid.flat().filter((x) => x === false).length;
+  if (shared_time.state === "playing") {
+    cellsEaten = shared_grid.grid.flat().filter((x) => x === false).length;
 
-  if (shared_time.gameTimer === 0) {
-    console.log("Game Over: timer ran out");
-    changeScene(scenes.over);
-  }
+    if (shared_time.gameTimer === 0) {
+      console.log("Game Over: timer ran out");
+      changeScene(scenes.over);
+    }
 
-  if (cellsEaten === GRID_SIZE * GRID_SIZE) {
-    console.log("Game over: all grass eaten, you win");
-    changeScene(scenes.over);
+    if (cellsEaten === GRID_SIZE * GRID_SIZE) {
+      console.log("Game over: all grass eaten, you win");
+      changeScene(scenes.over);
+    }
   }
 }
 
@@ -219,7 +217,9 @@ function drawUI() {
   text("Grass eaten: " + cellsEaten, width * 0.085, height * 0.92);
 
   textAlign(CENTER, CENTER);
-  text(shared_time.gameTimer, width * 0.85, height * 0.92);
+  if (shared_time.state === "playing") {
+    text(shared_time.gameTimer, width * 0.85, height * 0.92);
+  }
   pop();
 }
 
@@ -262,11 +262,12 @@ function move(dX, dY) {
   me.position.x += dX;
   me.position.y += dY;
 
-  if (shared_grid.grid[me.position.x][me.position.y] === true) {
-    console.log(shared_grid.grid);
-    sounds.sheep_eat.play();
+  if (shared_time.state === "playing") {
+    if (shared_grid.grid[me.position.x][me.position.y] === true) {
+      sounds.sheep_eat.play();
+    }
+    partyEmit("eatCell", { x: me.position.x, y: me.position.y });
   }
-  partyEmit("eatCell", { x: me.position.x, y: me.position.y });
 }
 
 function assignPlayers() {
@@ -288,6 +289,36 @@ function assignPlayers() {
 
 ////////////////////////////////////////////////////////////////
 // Host Functions
+export function hostUpdate() {
+  console.log("hostUpdate");
+  if (!partyIsHost()) return;
+  console.log("check", shared_time.state);
+  if (
+    shared_time.state === "waiting" &&
+    guests.find((p) => p.role === "sheep") &&
+    guests.find((p) => p.role === "ram")
+  ) {
+    startRound();
+  }
+
+  if (shared_time.state === "playing") {
+    updateTimer();
+    updateSeeds();
+
+    if (shared_time.gameTimer === 0) {
+      updateHighScores();
+    }
+  }
+}
+
+function startRound() {
+  if (!partyIsHost()) return;
+  shared_time.state = "playing";
+  shared_time.gameTimer = 90;
+  shared_grid.grid = array2D(20, 20, true);
+  shared_seeds.seeds = [];
+  //todo: play start sound
+}
 
 function updateSeeds() {
   if (!partyIsHost()) return;
@@ -323,19 +354,10 @@ function spawnSeed() {
   });
 }
 
-function onEatCell(loc) {
-  if (!partyIsHost()) return;
-  shared_grid.grid[loc.x][loc.y] = false;
-  for (const seed of shared_seeds.seeds) {
-    if (seed.x === loc.x && seed.y === loc.y) {
-      seed.age = 1000000000; // old enough that it will be removed
-    }
-  }
-}
-
 function updateTimer() {
   if (!partyIsHost()) return;
-  if (frameCount % 60 === 0) {
+
+  if (shared_time.state === "playing" && frameCount % 60 === 0) {
     shared_time.gameTimer--;
   }
 }
@@ -346,4 +368,14 @@ function updateHighScores() {
   scoreList.push(cellsEaten);
   scoreList = scoreList.sort((a, b) => b - a);
   shared_highScores.scores = scoreList;
+}
+
+function onEatCell(loc) {
+  if (!partyIsHost()) return;
+  shared_grid.grid[loc.x][loc.y] = false;
+  for (const seed of shared_seeds.seeds) {
+    if (seed.x === loc.x && seed.y === loc.y) {
+      seed.age = 1000000000; // old enough that it will be removed
+    }
+  }
 }
