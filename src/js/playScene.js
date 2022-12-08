@@ -45,7 +45,7 @@ import { pointInRect, array2D } from "./utilities.js";
 
 const GRID_SIZE = 20; // rows and cols in grid
 const CELL_SIZE = 20; // pixel width and height of grid cells
-const SEED_LIFESPAN = 10; // age/duration of a seed object
+const SEED_LIFESPAN = 6; // age/duration of a seed object
 const SEED_LIFESPAN_SPAWN1 = 5; // defines how often a seed should spawn
 
 let me;
@@ -339,7 +339,7 @@ function endRound() {
 
 function resetGameState() {
   shared_time.state = "waiting";
-  shared_time.gameTimer = 9;
+  shared_time.gameTimer = 90;
   shared_grid.grid = array2D(20, 20, true);
   shared_grid.cellsEaten = 0;
   shared_seeds.seeds = [];
@@ -354,16 +354,42 @@ function updateSeeds() {
   for (const seed of shared_seeds.seeds) {
     seed.age++;
     if (seed.age === SEED_LIFESPAN_SPAWN1 * 60) {
-      growGrass(seed.x, seed.y - 1);
-      growGrass(seed.x + 1, seed.y);
-      growGrass(seed.x, seed.y + 1);
-      growGrass(seed.x - 1, seed.y);
+      spawnDiamond(seed.x, seed.y, 1);
+    }
+    if (seed.age === SEED_LIFESPAN_SPAWN1 * 60 + 20) {
+      spawnDiamond(seed.x, seed.y, 2);
+    }
+    if (seed.age === SEED_LIFESPAN_SPAWN1 * 60 + 40) {
+      spawnDiamond(seed.x, seed.y, 3);
     }
   }
 
   shared_seeds.seeds = shared_seeds.seeds.filter(
     (seed) => seed.age < SEED_LIFESPAN * 60
   );
+}
+
+function spawnDiamond(x, y, dist = 1) {
+  const cells = makeDiamond(x, y, dist);
+  console.log(cells);
+  for (const cell of cells) {
+    growGrass(cell[0], cell[1]);
+  }
+}
+
+// makeDiamond
+// returns all cells that are `dist` from `x`, `y`
+// measured with manhattan distance
+
+function makeDiamond(x, y, dist) {
+  const cells = [];
+  for (let i = 0; i < dist; i++) {
+    cells.push([x + i, y - dist + i]); //quadrant I
+    cells.push([x - dist + i, y - i]); //quadrant II
+    cells.push([x - i, y + dist - i]); //quadrant III
+    cells.push([x + dist - i, y + i]); //quadrant IV
+  }
+  return cells;
 }
 
 function growGrass(x, y) {
