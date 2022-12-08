@@ -7,7 +7,7 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-import { cellsEaten, shared_highScores } from "./playScene.js";
+import { shared_highScores } from "./playScene.js";
 
 export function draw() {
   // draw images
@@ -28,7 +28,7 @@ export function draw() {
 
   textSize(100);
   const yOffset = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-  text(cellsEaten, 431, yOffset + 190);
+  text(shared_highScores.currentScore, 431, yOffset + 190);
 
   textSize(20);
   text("Highscore: " + shared_highScores.scores[0], 431, 245);

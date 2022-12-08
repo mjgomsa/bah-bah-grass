@@ -54,13 +54,12 @@ let guests;
 let shared_grid;
 let shared_time;
 let shared_seeds;
-
 export let shared_highScores;
-export let cellsEaten = 0;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
     grid: array2D(20, 20, true),
+    cellsEaten: 0,
   });
 
   // todo: swtich to a timestamp approach for time keeping
@@ -81,6 +80,12 @@ export function preload() {
   guests = partyLoadGuestShareds();
 
   partySubscribe("eatCell", onEatCell);
+  partySubscribe("startRound", onStartRound);
+  partySubscribe("endRound", () => changeScene(scenes.over));
+}
+
+export function setup() {
+  if (partyIsHost()) resetGameState();
 }
 
 export function enter() {
@@ -109,22 +114,11 @@ export function draw() {
   drawUI();
 }
 
+export function onStartRound() {
+  sounds.sheep_bleat.play();
+}
 export function update() {
   assignPlayers();
-
-  if (shared_time.state === "playing") {
-    cellsEaten = shared_grid.grid.flat().filter((x) => x === false).length;
-
-    if (shared_time.gameTimer === 0) {
-      console.log("Game Over: timer ran out");
-      changeScene(scenes.over);
-    }
-
-    if (cellsEaten === GRID_SIZE * GRID_SIZE) {
-      console.log("Game over: all grass eaten, you win");
-      changeScene(scenes.over);
-    }
-  }
 }
 
 // note revisit drawing code, once we have sprites for all state
@@ -214,7 +208,7 @@ function drawUI() {
   text(me.role, width * 0.6, height * 0.92);
 
   textAlign(LEFT);
-  text("Grass eaten: " + cellsEaten, width * 0.085, height * 0.92);
+  text("Grass eaten: " + shared_grid.cellsEaten, width * 0.085, height * 0.92);
 
   textAlign(CENTER, CENTER);
   if (shared_time.state === "playing") {
@@ -290,23 +284,33 @@ function assignPlayers() {
 ////////////////////////////////////////////////////////////////
 // Host Functions
 export function hostUpdate() {
-  console.log("hostUpdate");
   if (!partyIsHost()) return;
-  console.log("check", shared_time.state);
-  if (
-    shared_time.state === "waiting" &&
-    guests.find((p) => p.role === "sheep") &&
-    guests.find((p) => p.role === "ram")
-  ) {
-    startRound();
+
+  if (shared_time.state === "waiting") {
+    if (
+      guests.find((p) => p.role === "sheep") &&
+      guests.find((p) => p.role === "ram")
+    ) {
+      startRound();
+    }
   }
 
   if (shared_time.state === "playing") {
     updateTimer();
     updateSeeds();
 
+    shared_grid.cellsEaten = shared_grid.grid
+      .flat()
+      .filter((x) => x === false).length;
+
     if (shared_time.gameTimer === 0) {
-      updateHighScores();
+      console.log("Game Over: timer ran out");
+      endRound();
+    }
+
+    if (shared_grid.cellsEaten === GRID_SIZE * GRID_SIZE) {
+      console.log("Game over: all grass eaten, you win");
+      endRound();
     }
   }
 }
@@ -314,10 +318,23 @@ export function hostUpdate() {
 function startRound() {
   if (!partyIsHost()) return;
   shared_time.state = "playing";
-  shared_time.gameTimer = 90;
+  partyEmit("startRound");
+}
+
+function endRound() {
+  if (!partyIsHost()) return;
+  shared_highScores.currentScore = shared_grid.cellsEaten;
+  updateHighScores();
+  resetGameState();
+  partyEmit("endRound");
+}
+
+function resetGameState() {
+  shared_time.state = "waiting";
+  shared_time.gameTimer = 9;
   shared_grid.grid = array2D(20, 20, true);
+  shared_grid.cellsEaten = 0;
   shared_seeds.seeds = [];
-  //todo: play start sound
 }
 
 function updateSeeds() {
@@ -365,7 +382,7 @@ function updateTimer() {
 function updateHighScores() {
   if (!partyIsHost()) return;
   let scoreList = [...shared_highScores.scores];
-  scoreList.push(cellsEaten);
+  scoreList.push(shared_highScores.currentScore);
   scoreList = scoreList.sort((a, b) => b - a);
   shared_highScores.scores = scoreList;
 }

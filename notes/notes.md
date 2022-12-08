@@ -10,8 +10,8 @@
 
 # Bugs
 
-.bug, game doesn't restart properly. is timer reset?
-.round doesn't start unless host is on play screen
+x.bug, game doesn't restart properly. is timer reset?
+x.round doesn't start unless host is on play screen
 
 # Improvements
 
