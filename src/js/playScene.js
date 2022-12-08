@@ -270,14 +270,22 @@ function assignPlayers() {
     // find the first observer
     const o = guests.find((p) => p.role === "observer");
     // if thats me, take the role
-    if (o === me) o.role = "sheep";
+    if (o === me) {
+      me.role = "sheep";
+      me.position.x = 0;
+      me.position.y = 0;
+    }
   }
   if (!guests.find((p) => p.role === "ram")) {
     // if there isn't a ram
     // find the first observer
     const o = guests.find((p) => p.role === "observer");
     // if thats me, take the role
-    if (o === me) o.role = "ram";
+    if (o === me) {
+      me.role = "ram";
+      me.position.x = 19;
+      me.position.y = 19;
+    }
   }
 }
 
