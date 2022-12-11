@@ -205,10 +205,10 @@ function drawUI() {
   textStyle(BOLD);
 
   textAlign(CENTER, CENTER);
-  text(me.role, width * 0.6, height * 0.92);
+  text(me.role, width * 0.5, height * 0.92);
 
   textAlign(LEFT);
-  text("Grass eaten: " + shared_grid.cellsEaten, width * 0.085, height * 0.92);
+  text("Score: " + shared_grid.cellsEaten, width * 0.085, height * 0.92);
 
   textAlign(CENTER, CENTER);
   if (shared_time.state === "playing") {
@@ -216,8 +216,11 @@ function drawUI() {
   }
 
   if (shared_time.state === "waiting") {
+    push();
     fill("white");
-    text("waiting for 'player 2'", width * 0.3, height * 0.97);
+    textAlign(CENTER, CENTER);
+    text("waiting for 'player 2'", width * 0.5, height * 0.97);
+    pop();
   }
   pop();
 }
