@@ -214,6 +214,11 @@ function drawUI() {
   if (shared_time.state === "playing") {
     text(shared_time.gameTimer, width * 0.85, height * 0.92);
   }
+
+  if (shared_time.state === "waiting") {
+    fill("white");
+    text("waiting for 'player 2'", width * 0.3, height * 0.97);
+  }
   pop();
 }
 
