@@ -34,8 +34,8 @@ export function draw() {
   textSize(20);
   text("Eat all grass squares with your teammate", 300, 175);
   text("before the time runs out.", 300, 215);
-  text("Watch out for the farmer replanting grass!", 300, 260);
-  text("Get to the seed before it grows back", 300, 305);
+  text("Watch out for randomly appearing seeds—", 300, 260);
+  text("eat the seed before the grass grows back!", 300, 305);
 
   pop();
 

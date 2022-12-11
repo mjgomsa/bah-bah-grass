@@ -11,11 +11,13 @@
  * }
  *
  * shared_time: {           // read by all, written to only by the host.
+ *      state                 // "waiting" or "playing"
  *      gameTimer : 90        // seconds remaining in game round
  * }
  *
- * shared_highscores: {     // read by all, written to only by the host.
+ * shared_scores: {     // read by all, written to only by the host.
  *      scores: []            // an array containing sorted top scores for this session
+ *      currentScore          // score in current session
  * }
  *
  * shared_seeds: {          // is read by all, written to only by the host.
@@ -54,7 +56,7 @@ let guests;
 let shared_grid;
 let shared_time;
 let shared_seeds;
-export let shared_highScores;
+export let shared_scores;
 
 export function preload() {
   shared_grid = partyLoadShared("shared_grid", {
@@ -62,13 +64,12 @@ export function preload() {
     cellsEaten: 0,
   });
 
-  // todo: swtich to a timestamp approach for time keeping
   shared_time = partyLoadShared("shared_time", {
     state: "waiting",
     gameTimer: 90,
   });
 
-  shared_highScores = partyLoadShared("shared_highScores", { scores: [] });
+  shared_scores = partyLoadShared("shared_scores", { scores: [] });
 
   shared_seeds = partyLoadShared("shared_seeds", { seeds: [] });
 
@@ -144,7 +145,6 @@ function drawGrid() {
       }
 
       //alternate grass
-
       drawAltGrass(images.grass.alts[1], 2, 3);
       drawAltGrass(images.grass.alts[2], 4, 5);
       drawAltGrass(images.grass.alts[0], 4, 6);
@@ -331,7 +331,7 @@ function startRound() {
 
 function endRound() {
   if (!partyIsHost()) return;
-  shared_highScores.currentScore = shared_grid.cellsEaten;
+  shared_scores.currentScore = shared_grid.cellsEaten;
   updateHighScores();
   resetGameState();
   partyEmit("endRound");
@@ -378,9 +378,8 @@ function spawnDiamond(x, y, dist = 1) {
 }
 
 // makeDiamond
-// returns all cells that are `dist` from `x`, `y`
+// returns all cells that are `dist` away from `x`, `y`
 // measured with manhattan distance
-
 function makeDiamond(x, y, dist) {
   const cells = [];
   for (let i = 0; i < dist; i++) {
@@ -415,10 +414,10 @@ function updateTimer() {
 
 function updateHighScores() {
   if (!partyIsHost()) return;
-  let scoreList = [...shared_highScores.scores];
-  scoreList.push(shared_highScores.currentScore);
+  let scoreList = [...shared_scores.scores];
+  scoreList.push(shared_scores.currentScore);
   scoreList = scoreList.sort((a, b) => b - a);
-  shared_highScores.scores = scoreList;
+  shared_scores.scores = scoreList;
 }
 
 function onEatCell(loc) {
