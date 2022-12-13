@@ -132,31 +132,32 @@ function drawGrid() {
     for (let col = 0; col < GRID_SIZE; col++) {
       const x = col * CELL_SIZE;
       const y = row * CELL_SIZE;
-      stroke("#94541E");
 
       if (shared_grid.grid[col][row] === true) {
-        fill("#0F3325"); //grass
-        rect(x, y, CELL_SIZE, CELL_SIZE);
         image(images.grass.main, x, y, CELL_SIZE, CELL_SIZE);
       } else {
-        fill("#94541E"); //dirt
-        rect(x, y, CELL_SIZE, CELL_SIZE);
-        // TO DO: make sprite for dirt
+        image(images.dirt.main, x, y, CELL_SIZE, CELL_SIZE);
       }
 
       //alternate grass
-      drawAltGrass(images.grass.alts[1], 2, 3);
-      drawAltGrass(images.grass.alts[2], 4, 5);
-      drawAltGrass(images.grass.alts[0], 4, 6);
-      drawAltGrass(images.grass.alts[2], 8, 8);
-      drawAltGrass(images.grass.alts[0], 1, 2);
-      drawAltGrass(images.grass.alts[1], 18, 18);
-      drawAltGrass(images.grass.alts[2], 19, 14);
-      drawAltGrass(images.grass.alts[1], 13, 15);
-      drawAltGrass(images.grass.alts[1], 3, 18);
-      drawAltGrass(images.grass.alts[0], 2, 15);
-      drawAltGrass(images.grass.alts[0], 19, 3);
-      drawAltGrass(images.grass.alts[2], 15, 4);
+      drawAltGrass(images.grass.alts[0], 18, 1);
+      drawAltGrass(images.grass.alts[0], 10, 7);
+      drawAltGrass(images.grass.alts[0], 4, 8);
+      drawAltGrass(images.grass.alts[0], 2, 11);
+      drawAltGrass(images.grass.alts[0], 19, 18);
+      drawAltGrass(images.grass.alts[1], 2, 5);
+      drawAltGrass(images.grass.alts[1], 15, 5);
+      drawAltGrass(images.grass.alts[1], 13, 8);
+      drawAltGrass(images.grass.alts[2], 13, 1);
+      drawAltGrass(images.grass.alts[2], 16, 1);
+      drawAltGrass(images.grass.alts[2], 1, 4);
+      drawAltGrass(images.grass.alts[2], 10, 14);
+      drawAltGrass(images.grass.alts[2], 11, 17);
+      drawAltGrass(images.grass.alts[3], 4, 0);
+      drawAltGrass(images.grass.alts[3], 18, 7);
+      drawAltGrass(images.grass.alts[3], 14, 9);
+      drawAltGrass(images.grass.alts[3], 2, 18);
+      drawAltGrass(images.grass.alts[3], 10, 17);
     }
   }
 

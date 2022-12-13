@@ -113,6 +113,11 @@ function preloadImages() {
   images.grass.alts[0] = loadImage("./assets/images/grass_alternative_000.png");
   images.grass.alts[1] = loadImage("./assets/images/grass_alternative_001.png");
   images.grass.alts[2] = loadImage("./assets/images/grass_alternative_002.png");
+  images.grass.alts[3] = loadImage("./assets/images/grass_alternative_003.png");
+
+  //dirt
+  images.dirt = {};
+  images.dirt.main = loadImage("./assets/images/dirt.png");
 
   //screen-specific images
   images.screens = {};
