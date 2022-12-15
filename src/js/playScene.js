@@ -102,8 +102,9 @@ export function leave() {
 export function draw() {
   // draw
   background("#faf7e1");
-  image(images.key_art.fence, -10, 0, 620, 600);
+  // image(images.key_art.fence, -10, 0, 620, 600);
   image(images.key_art.logo, 210, 5, 160, 80);
+  // image(images.key_art.border, 0, 0, 600, 600);
 
   push();
   // position game board

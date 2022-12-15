@@ -141,7 +141,7 @@ function preloadImages() {
   // key art
   images.key_art = {};
   images.key_art.logo = loadImage("./assets/images/keyart_logo.png");
-  images.key_art.fence = loadImage("./assets/images/keyart_fence.png");
+  images.key_art.border = loadImage("./assets/images/keyart_border.png");
   images.key_art.farmer = loadImage("./assets/images/keyart_farmer.png");
   images.key_art.sheep = loadImage("./assets/images/keyart_sheep.png");
 
