@@ -49,13 +49,17 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(600, 600);
+  const c = createCanvas(224, 224).canvas;
+  c.style.width = `${224 * 4}px`;
+  c.style.height = `${224 * 4}px`;
+  c.style.imageRendering = "pixelated";
+
   textFont("Pixeloid Sans");
 
   // setup all scenes
   Object.values(scenes).forEach((scene) => scene.setup?.());
 
-  changeScene(scenes.title);
+  changeScene(scenes.play);
 }
 
 function draw() {
