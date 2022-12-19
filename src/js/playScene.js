@@ -102,14 +102,19 @@ export function leave() {
 export function draw() {
   // draw
   background("#faf7e1");
-  // image(images.key_art.fence, -10, 0, 620, 600);
-  // image(images.key_art.logo, 210, 5, 160, 80);
+
+  // draw grid
+  push();
+  translate(32, 33); // four tile border
+  drawGrid();
+  pop();
+
+  // draw border
   image(images.key_art.border, 0, 0, 224, 224);
 
+  // draw players
   push();
-  // position game board
-  translate(32, 32); // four tile border
-  drawGrid();
+  translate(32, 32);
   drawPlayers();
   pop();
 
