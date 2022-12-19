@@ -37,7 +37,7 @@ Object.assign(window, {
 function preload() {
   partyConnect(
     "wss://deepstream-server-1.herokuapp.com",
-    "mjgomsa_bah-bah-grass_v.0.0.2",
+    "mjgomsa_bah-bah-grass_v.0.0.3",
     "main"
   );
 
@@ -59,7 +59,7 @@ function setup() {
   // setup all scenes
   Object.values(scenes).forEach((scene) => scene.setup?.());
 
-  changeScene(scenes.play);
+  changeScene(scenes.title);
 }
 
 function draw() {
@@ -134,6 +134,9 @@ function preloadImages() {
   images.screens.cloud_background = loadImage(
     "./assets/images/screens_bkgnd_clouds.gif"
   );
+  images.screens.board_start = loadImage(
+    "./assets/images/screens_starter_board.png"
+  );
 
   //buttons
   images.buttons = {};
@@ -150,7 +153,14 @@ function preloadImages() {
   images.key_art.sheep = loadImage("./assets/images/keyart_sheep.png");
 
   // seed
-  images.seed = loadImage("./assets/images/seed.png");
+  images.seed = {};
+  images.seed.main = loadImage("./assets/images/seed.png");
+  images.seed.sprouts = [];
+  images.seed.sprouts[0] = loadImage("./assets/images/sprout_000.png");
+  images.seed.sprouts[1] = loadImage("./assets/images/sprout_001.png");
+  images.seed.sprouts[2] = loadImage("./assets/images/sprout_002.png");
+  images.seed.sprouts[3] = loadImage("./assets/images/sprout_003.png");
+  images.seed.sprouts[4] = loadImage("./assets/images/sprout_004.png");
 }
 
 function preloadSounds() {

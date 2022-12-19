@@ -12,26 +12,26 @@ import { shared_scores } from "./playScene.js";
 export function draw() {
   // draw images
   image(images.screens.cloud_background, 0, 0);
-  image(images.screens.grass_start, 0, 0, 600, 600);
-  image(images.key_art.logo, 210, 5, 160, 80);
-  image(images.key_art.farmer, 10, 170, 275, 400);
-  image(images.key_art.sheep, 280, 360); //rename sheep2
+  image(images.screens.grass_start, 0, 112, 224, 112);
+  // image(images.key_art.logo, 0, 0);
+  // image(images.key_art.farmer, 0, 0);
+  // image(images.key_art.sheep, 280, 360); //rename sheep2
 
   //draw high score
   push();
 
-  textSize(35);
+  textSize(12);
   fill("#703e14");
   textAlign(CENTER, CENTER);
   textStyle(BOLD);
-  text("Your Score:", 431, 110);
+  text("Your Score:", 112, 110);
 
   textSize(100);
   const yOffset = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-  text(shared_scores.currentScore, 431, yOffset + 190);
+  text(shared_scores.currentScore, 112, yOffset + 190);
 
-  textSize(20);
-  text("Highscore: " + shared_scores.scores[0], 431, 245);
+  textSize(8);
+  text("Highscore: " + shared_scores.scores[0], 112, 220);
 
   pop();
 

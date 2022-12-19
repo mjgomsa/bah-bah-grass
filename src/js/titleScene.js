@@ -9,10 +9,16 @@ import { changeScene, scenes, images, sounds } from "./main.js";
 
 export function draw() {
   // draw images
-  image(images.screens.cloud_background, 0, 0);
-  image(images.screens.grass_start, 0, 0);
-  image(images.key_art.logo, 10, -60);
-  image(images.key_art.farmer, 10, 170, 275, 400);
+
+  push();
+  noSmooth();
+  image(images.screens.cloud_background, 0, 0, 224, 224);
+  image(images.screens.grass_start, 0, 112, 224, 112);
+  image(images.screens.board_start, 28, 0, 168, 126);
+  pop();
+
+  // image(images.key_art.logo, 10, -60);
+  // image(images.key_art.farmer, 10, 170, 275, 400);
 
   // 'start' message
   push();
@@ -25,9 +31,15 @@ export function draw() {
 
   // start button
   if (mouseIsPressed) {
-    image(images.buttons.start_down, 310, 350);
+    push();
+    noSmooth();
+    image(images.buttons.play_down, 135, 150, 62, 34);
+    pop();
   } else {
-    image(images.buttons.start_up, 310, 350);
+    push();
+    noSmooth();
+    image(images.buttons.play_up, 135, 150, 62, 34);
+    pop();
   }
 }
 

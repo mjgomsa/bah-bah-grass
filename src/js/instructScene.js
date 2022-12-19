@@ -15,35 +15,36 @@ export function leave() {
 }
 
 export function draw() {
+  push();
+  noSmooth();
   // draw images
-  image(images.screens.cloud_background, 0, 0);
-  image(images.screens.grass_instruct, 0, 0);
-  image(images.key_art.logo, 210, 5, 160, 80);
+  image(images.screens.cloud_background, 0, 0, 224, 224);
+  image(images.screens.grass_instruct, 0, 0, 224, 224);
 
   // draw instructions
-  push();
-
   fill("#703e14");
   textAlign(CENTER, CENTER);
 
-  textStyle(BOLD);
-  textSize(35);
-  text("Instructions", 300, 126);
-
   textStyle(NORMAL);
-  textSize(20);
-  text("Eat all grass squares with your teammate", 300, 175);
-  text("before the time runs out.", 300, 215);
-  text("Watch out for randomly appearing seeds—", 300, 260);
-  text("eat the seed before the grass grows back!", 300, 305);
+  textSize(6);
+  text("Eat all grass squares with your teammate", 112, 45);
+  text("before the time runs out.", 112, 55);
+  text("Watch out for randomly appearing seeds—", 112, 65);
+  text("eat the seed before the grass grows back!", 112, 75);
 
   pop();
 
   //start button
   if (mouseIsPressed) {
-    image(images.buttons.start_down, 170, 350);
+    push();
+    noSmooth();
+    image(images.buttons.play_down, 135, 180, 62, 34);
+    pop();
   } else {
-    image(images.buttons.start_up, 170, 350);
+    push();
+    noSmooth();
+    image(images.buttons.play_up, 135, 180, 62, 34);
+    pop();
   }
 }
 
