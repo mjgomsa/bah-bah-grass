@@ -46,7 +46,7 @@ import { changeScene, scenes, images, sounds } from "./main.js";
 import { pointInRect, array2D } from "./utilities.js";
 
 const GRID_SIZE = 20; // rows and cols in grid
-const CELL_SIZE = 20; // pixel width and height of grid cells
+const CELL_SIZE = 8; // pixel width and height of grid cells
 const SEED_LIFESPAN = 6; // age/duration of a seed object
 const SEED_LIFESPAN_SPAWN1 = 5; // defines how often a seed should spawn
 
@@ -103,12 +103,12 @@ export function draw() {
   // draw
   background("#faf7e1");
   // image(images.key_art.fence, -10, 0, 620, 600);
-  image(images.key_art.logo, 210, 5, 160, 80);
-  // image(images.key_art.border, 0, 0, 600, 600);
+  // image(images.key_art.logo, 210, 5, 160, 80);
+  image(images.key_art.border, 0, 0, 224, 224);
 
   push();
   // position game board
-  translate(90, 100);
+  translate(32, 32); // four tile border
   drawGrid();
   drawPlayers();
   pop();
@@ -194,34 +194,34 @@ function drawPlayer(player, sprites) {
   // move to square
   translate(player.position.x * CELL_SIZE, player.position.y * CELL_SIZE);
   // position in square
-  translate(-8, -10);
+  translate(-2, -4);
 
-  image(sprites[player.direction], 0, 0, 35, 35);
+  image(sprites[player.direction], 0, 0, 12, 12);
   pop();
 }
 
 function drawUI() {
   push();
-  fill("#492905");
-  textSize(20);
+  fill("#6f3b00");
+  textSize(10);
   textStyle(BOLD);
 
-  textAlign(CENTER, CENTER);
-  text(me.role, width * 0.5, height * 0.92);
+  // textAlign(CENTER, CENTER);
+  // text(me.role, width * 0.5, height * 0.92);
 
-  textAlign(LEFT);
-  text("Score: " + shared_grid.cellsEaten, width * 0.085, height * 0.92);
+  textAlign(LEFT, CENTER);
+  text(shared_grid.cellsEaten, width * 0.1, height * 0.05);
 
   textAlign(CENTER, CENTER);
   if (shared_time.state === "playing") {
-    text(shared_time.gameTimer, width * 0.85, height * 0.92);
+    text(shared_time.gameTimer, width * 0.92, height * 0.05);
   }
 
   if (shared_time.state === "waiting") {
     push();
-    fill("white");
+    textSize(7);
     textAlign(CENTER, CENTER);
-    text("waiting for 'player 2'", width * 0.5, height * 0.97);
+    text("waiting for 'player 2'", width * 0.5, height * 0.9);
     pop();
   }
   pop();

@@ -5,6 +5,7 @@
     font-weight: bold;
     font-style: normal;
     font-display: swap;
+    text-rendering: pixelated;
 }
 
 @font-face {
@@ -14,6 +15,7 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
+    text-rendering: pixelated;
 }
 
 @font-face {
@@ -23,6 +25,7 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
+    text-rendering: pixelated;
 }
 
 canvas {
