@@ -126,6 +126,7 @@ function preloadImages() {
 
   //screen-specific images
   images.screens = {};
+  images.screens.title_combo = loadImage("./assets/images/screens_title.png");
   images.screens.grass_start = loadImage(
     "./assets/images/screens_starter_grass.png"
   );
@@ -141,8 +142,6 @@ function preloadImages() {
 
   //buttons
   images.buttons = {};
-  images.buttons.start_down = loadImage("./assets/images/btn_start_down.png");
-  images.buttons.start_up = loadImage("./assets/images/btn_start_up.png");
   images.buttons.play_down = loadImage("./assets/images/btn_play_down.png");
   images.buttons.play_up = loadImage("./assets/images/btn_play_up.png");
 

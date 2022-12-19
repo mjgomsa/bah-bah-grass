@@ -13,8 +13,9 @@ export function draw() {
   push();
   noSmooth();
   image(images.screens.cloud_background, 0, 0, 224, 224);
-  image(images.screens.grass_start, 0, 112, 224, 112);
-  image(images.screens.board_start, 28, 0, 168, 126);
+  image(images.screens.title_combo, 0, 0, 224, 224);
+  // image(images.screens.grass_start, 0, 112, 224, 112);
+  // image(images.screens.board_start, 28, 0, 168, 126);
   pop();
 
   // image(images.key_art.logo, 10, -60);
