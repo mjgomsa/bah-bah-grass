@@ -23,10 +23,10 @@ export function draw() {
 
   // draw instructions
   fill("#703e14");
-  textAlign(CENTER, CENTER);
+  textAlign(LEFT, TOP);
 
   textStyle(NORMAL);
-  textSize(6);
+  textSize(9);
   text("Eat all grass squares with your teammate", 112, 45);
   text("before the time runs out.", 112, 55);
   text("Watch out for randomly appearing seeds—", 112, 65);

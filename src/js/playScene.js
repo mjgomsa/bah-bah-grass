@@ -101,7 +101,7 @@ export function leave() {
 
 export function draw() {
   // draw
-  background("#faf7e1");
+  background("black");
 
   // draw grid
   push();
@@ -206,20 +206,10 @@ function drawPlayer(player, sprites) {
 }
 
 function drawUI() {
-  push();
-  fill("#6f3b00");
-  textSize(10);
-  textStyle(BOLD);
-
-  // textAlign(CENTER, CENTER);
-  // text(me.role, width * 0.5, height * 0.92);
-
-  textAlign(LEFT, CENTER);
-  text(shared_grid.cellsEaten, width * 0.1, height * 0.05);
-
-  textAlign(CENTER, CENTER);
+  
   if (shared_time.state === "playing") {
-    text(shared_time.gameTimer, width * 0.92, height * 0.05);
+    drawNumber(shared_grid.cellsEaten, 20, 5);
+    drawNumber(shared_time.gameTimer, 198, 5);
   }
 
   if (shared_time.state === "waiting") {
@@ -229,7 +219,19 @@ function drawUI() {
     text("waiting for 'player 2'", width * 0.5, height * 0.9);
     pop();
   }
-  pop();
+
+  
+}
+
+// drawNumber
+// draws the number given by `n` at the position given by `x` and `y`
+// uses the 8x8 number tiles in images.numbers[]
+function drawNumber(n, x, y) {
+  const num = floor(n).toString();
+  for (let i = 0; i < num.length; i++) {
+    const digit = parseInt(num[i]);
+    image(images.numbers[digit], x + i * 8, y, 8, 8);
+  }
 }
 
 export function keyPressed() {

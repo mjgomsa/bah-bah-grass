@@ -49,6 +49,7 @@ function preload() {
 }
 
 function setup() {
+  pixelDensity(1);
   const c = createCanvas(224, 224).canvas;
   c.style.width = `${224 * 4}px`;
   c.style.height = `${224 * 4}px`;
@@ -161,6 +162,11 @@ function preloadImages() {
   images.seed.sprouts[2] = loadImage("./assets/images/sprout_002.png");
   images.seed.sprouts[3] = loadImage("./assets/images/sprout_003.png");
   images.seed.sprouts[4] = loadImage("./assets/images/sprout_004.png");
+
+  images.numbers = [];
+  for (let i = 0; i < 10; i++) {
+    images.numbers[i] = loadImage(`./assets/images/number_${i}.png`);
+  }
 }
 
 function preloadSounds() {
