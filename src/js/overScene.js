@@ -7,39 +7,40 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-import { shared_scores } from "./playScene.js";
+import { shared_scores, drawNumber } from "./playScene.js";
 
 export function draw() {
-  // draw images
-  image(images.screens.cloud_background, 0, 0);
-  image(images.screens.grass_start, 0, 112, 224, 112);
-  // image(images.key_art.logo, 0, 0);
-  // image(images.key_art.farmer, 0, 0);
-  // image(images.key_art.sheep, 280, 360); //rename sheep2
-
-  //draw high score
   push();
+  noSmooth();
+  image(images.screens.cloud_background, 0, 0, 224, 224);
+  image(images.screens.over, 0, 0, 224, 224);
+  pop();
 
-  textSize(12);
-  fill("#703e14");
-  textAlign(CENTER, CENTER);
-  textStyle(BOLD);
-  text("Your Score:", 112, 110);
+  push();
+  noSmooth();
+  imageMode(CENTER);
 
-  textSize(100);
   const yOffset = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-  text(shared_scores.currentScore, 112, yOffset + 190);
+  // text(shared_scores.currentScore, 112, yOffset + 190);
+  drawNumber(shared_scores.currentScore, 35, yOffset + 95, 43);
 
-  textSize(8);
-  text("Highscore: " + shared_scores.scores[0], 112, 220);
+  // textSize(8);
+  // text("Highscore: " + shared_scores.scores[0], 112, 220);
+  drawNumber(shared_scores.scores[0], 145, 135, 15);
 
   pop();
 
-  //restart button
+  // start button
   if (mouseIsPressed) {
-    image(images.buttons.play_down, 300, 270);
+    push();
+    noSmooth();
+    image(images.buttons.play_down, 100, 160, 62, 34);
+    pop();
   } else {
-    image(images.buttons.play_up, 300, 270);
+    push();
+    noSmooth();
+    image(images.buttons.play_up, 100, 160, 62, 34);
+    pop();
   }
 }
 

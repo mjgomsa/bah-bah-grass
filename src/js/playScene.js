@@ -207,8 +207,8 @@ function drawPlayer(player, sprites) {
 
 function drawUI() {
   if (shared_time.state === "playing") {
-    drawNumber(shared_grid.cellsEaten, 20, 5);
-    drawNumber(shared_time.gameTimer, 198, 5);
+    drawNumber(shared_grid.cellsEaten, 20, 5, 8);
+    drawNumber(shared_time.gameTimer, 198, 5, 8);
   }
 
   if (shared_time.state === "waiting") {
@@ -221,11 +221,11 @@ function drawUI() {
 // drawNumber
 // draws the number given by `n` at the position given by `x` and `y`
 // uses the 8x8 number tiles in images.numbers[]
-function drawNumber(n, x, y) {
+export function drawNumber(n, x, y, scale) {
   const num = floor(n).toString();
   for (let i = 0; i < num.length; i++) {
     const digit = parseInt(num[i]);
-    image(images.numbers[digit], x + i * 8, y, 8, 8);
+    image(images.numbers[digit], x + i * scale, y, scale, scale);
   }
 }
 

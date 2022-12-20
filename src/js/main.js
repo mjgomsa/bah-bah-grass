@@ -127,21 +127,16 @@ function preloadImages() {
   //screen-specific images
   images.screens = {};
   images.screens.title_combo = loadImage("./assets/images/screens_title.png");
-  images.screens.grass_start = loadImage(
-    "./assets/images/screens_starter_grass.png"
-  );
   images.screens.grass_instruct = loadImage(
-    "./assets/images/screens_instruct_grass.png"
+    "./assets/images/screens_instruct.png"
   );
   images.screens.cloud_background = loadImage(
     "./assets/images/screens_bkgnd_clouds.gif"
   );
-  images.screens.board_start = loadImage(
-    "./assets/images/screens_starter_board.png"
-  );
   images.screens.play_wait = loadImage(
     "./assets/images/screens_play_waiting.png"
   );
+  images.screens.over = loadImage("./assets/images/screens_over.png");
 
   //buttons
   images.buttons = {};
