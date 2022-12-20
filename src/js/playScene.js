@@ -206,7 +206,6 @@ function drawPlayer(player, sprites) {
 }
 
 function drawUI() {
-  
   if (shared_time.state === "playing") {
     drawNumber(shared_grid.cellsEaten, 20, 5);
     drawNumber(shared_time.gameTimer, 198, 5);
@@ -214,13 +213,9 @@ function drawUI() {
 
   if (shared_time.state === "waiting") {
     push();
-    textSize(7);
-    textAlign(CENTER, CENTER);
-    text("waiting for 'player 2'", width * 0.5, height * 0.9);
+    image(images.screens.play_wait, 63, 181);
     pop();
   }
-
-  
 }
 
 // drawNumber

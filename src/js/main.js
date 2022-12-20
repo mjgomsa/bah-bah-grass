@@ -139,6 +139,9 @@ function preloadImages() {
   images.screens.board_start = loadImage(
     "./assets/images/screens_starter_board.png"
   );
+  images.screens.play_wait = loadImage(
+    "./assets/images/screens_play_waiting.png"
+  );
 
   //buttons
   images.buttons = {};
