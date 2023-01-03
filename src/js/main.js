@@ -145,14 +145,10 @@ function preloadImages() {
 
   // key art
   images.key_art = {};
-  images.key_art.logo = loadImage("./assets/images/keyart_logo.png");
   images.key_art.border = loadImage("./assets/images/keyart_border.png");
-  images.key_art.farmer = loadImage("./assets/images/keyart_farmer.png");
-  images.key_art.sheep = loadImage("./assets/images/keyart_sheep.png");
 
   // seed
   images.seed = {};
-  images.seed.main = loadImage("./assets/images/seed.png");
   images.seed.sprouts = [];
   images.seed.sprouts[0] = loadImage("./assets/images/sprout_000.png");
   images.seed.sprouts[1] = loadImage("./assets/images/sprout_001.png");
