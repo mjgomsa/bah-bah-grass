@@ -21,12 +21,11 @@ export function draw() {
   imageMode(CENTER);
 
   const yOffset = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
-  // text(shared_scores.currentScore, 112, yOffset + 190);
-  drawNumber(shared_scores.currentScore, 35, yOffset + 95, 43);
+  drawNumber(shared_scores.currentScore, 68, yOffset + 85, 43);
+  // drawNumber(shared_scores.currentScore, 35, yOffset + 95, 43);
 
-  // textSize(8);
-  // text("Highscore: " + shared_scores.scores[0], 112, 220);
-  drawNumber(shared_scores.scores[0], 145, 135, 15);
+  drawNumber(shared_scores.scores[0], 150, 123, 15);
+  // drawNumber(shared_scores.scores[0], 145, 135, 15);
 
   pop();
 
@@ -34,12 +33,12 @@ export function draw() {
   if (mouseIsPressed) {
     push();
     noSmooth();
-    image(images.buttons.play_down, 100, 160, 62, 34);
+    image(images.buttons.play_down, 155, 180, 62, 34);
     pop();
   } else {
     push();
     noSmooth();
-    image(images.buttons.play_up, 100, 160, 62, 34);
+    image(images.buttons.play_up, 155, 180, 62, 34);
     pop();
   }
 }
