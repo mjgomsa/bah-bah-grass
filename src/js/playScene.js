@@ -383,7 +383,7 @@ function updateSeeds() {
 
 function spawnDiamond(x, y, dist = 1) {
   const cells = makeDiamond(x, y, dist);
-  console.log(cells);
+  // console.log(cells);
   for (const cell of cells) {
     growGrass(cell[0], cell[1]);
   }
