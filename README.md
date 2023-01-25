@@ -1,6 +1,6 @@
 ## Bah-Bah-Grass
 
-Multiplayer games made using the P5.party library.
+Multiplayer game made using the P5.party library.
 
 ### Game Instructions
 
