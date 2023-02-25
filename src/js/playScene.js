@@ -168,13 +168,9 @@ function drawGrid() {
   }
 
   for (const seed of shared_seeds.seeds) {
-    image(
-      images.seed.sprouts[4],
-      seed.x * CELL_SIZE,
-      seed.y * CELL_SIZE,
-      CELL_SIZE,
-      CELL_SIZE
-    );
+    translate(seed.x * CELL_SIZE, seed.y * CELL_SIZE);
+    translate(0, -3);
+    image(images.seed.sprouts[4], 0, 0, 8, 10);
   }
 
   pop();
