@@ -21,6 +21,18 @@ export function draw() {
   image(images.screens.grass_instruct, 0, 0, 224, 224);
   pop();
 
+  push();
+  fill("#703e14");
+  textSize(9);
+  text("Eat all grass squares with", 45, 70);
+  text("your teammates before", 45, 80);
+  text("the time runs out.", 45, 90);
+  text("Watch out for randomly", 45, 110);
+  text("appearing seeds!", 45, 120);
+  text("Eat all the seed before", 45, 140);
+  text("the grass grows back!", 45, 150);
+  pop();
+
   //start button
   if (mouseIsPressed) {
     push();

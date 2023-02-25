@@ -324,12 +324,12 @@ export function hostUpdate() {
       .filter((x) => x === false).length;
 
     if (shared_time.gameTimer === 0) {
-      console.log("Game Over: timer ran out");
+      // console.log("Game Over: timer ran out");
       endRound();
     }
 
     if (shared_grid.cellsEaten === GRID_SIZE * GRID_SIZE) {
-      console.log("Game over: all grass eaten, you win");
+      // console.log("Game over: all grass eaten, you win");
       endRound();
     }
   }
@@ -409,11 +409,16 @@ function growGrass(x, y) {
 }
 
 function spawnSeed() {
-  shared_seeds.seeds.push({
-    x: floor(random() * GRID_SIZE),
-    y: floor(random() * GRID_SIZE),
-    age: 0,
-  });
+  var x_dirt_pos = floor(random() * GRID_SIZE);
+  var y_dirt_pos = floor(random() * GRID_SIZE);
+
+  if (shared_grid.grid[x_dirt_pos][y_dirt_pos] === false) {
+    shared_seeds.seeds.push({
+      x: x_dirt_pos,
+      y: y_dirt_pos,
+      age: 0,
+    });
+  }
 }
 
 function updateTimer() {
