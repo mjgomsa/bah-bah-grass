@@ -133,6 +133,8 @@ function preloadImages() {
   images.screens.cloud_background = loadImage(
     "./assets/images/screens_bkgnd_clouds.gif"
   );
+  images.screens.clouds = loadImage("./assets/images/screens_clouds.png");
+  images.screens.sky = loadImage("./assets/images/screens_sky.png");
   images.screens.play_wait = loadImage(
     "./assets/images/screens_play_waiting.png"
   );

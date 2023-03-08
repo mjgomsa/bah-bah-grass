@@ -6,6 +6,10 @@
  */
 import { changeScene, scenes, images, sounds } from "./main.js";
 
+let cloudPosX1 = 0;
+let cloudPosX2 = -200;
+var scrollSpeed = 1;
+
 export function enter() {
   sounds.banjo.loop();
 }
@@ -17,7 +21,8 @@ export function leave() {
 export function draw() {
   push();
   noSmooth();
-  image(images.screens.cloud_background, 0, 0, 224, 224);
+  image(images.screens.sky, 0, 0, 224, 224);
+  drawAnimatedClouds();
   image(images.screens.grass_instruct, 0, 0, 224, 224);
   pop();
 
@@ -50,4 +55,19 @@ export function draw() {
 export function mouseReleased() {
   sounds.click.play();
   changeScene(scenes.play);
+}
+
+function drawAnimatedClouds() {
+  const img1 = image(images.screens.clouds, cloudPosX1, 10, 224, 76);
+  const img2 = image(images.screens.clouds, cloudPosX2, 10, 224, 76);
+
+  cloudPosX1 -= scrollSpeed;
+  cloudPosX2 -= scrollSpeed;
+
+  if (cloudPosX1 < -width) {
+    cloudPosX1 = width;
+  }
+  if (cloudPosX2 < -width) {
+    cloudPosX2 = width;
+  }
 }
