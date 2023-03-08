@@ -51,8 +51,8 @@ function preload() {
 function setup() {
   pixelDensity(1);
   const c = createCanvas(224, 224).canvas;
-  c.style.width = `${224 * 4}px`;
-  c.style.height = `${224 * 4}px`;
+  c.style.width = `${224 * 3}px`;
+  c.style.height = `${224 * 3}px`;
   c.style.imageRendering = "pixelated";
 
   textFont("Pixeloid Sans");
