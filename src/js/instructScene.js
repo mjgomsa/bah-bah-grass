@@ -8,7 +8,7 @@ import { changeScene, scenes, images, sounds } from "./main.js";
 
 let cloudPosX1 = 0;
 let cloudPosX2 = -200;
-var scrollSpeed = 1;
+const scrollSpeed = 1;
 
 export function enter() {
   sounds.banjo.loop();
@@ -37,6 +37,7 @@ export function draw() {
   text("Eat all the seed before", 45, 140);
   text("the grass grows back!", 45, 150);
   pop();
+
 
   //start button
   if (mouseIsPressed) {

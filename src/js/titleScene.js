@@ -7,13 +7,9 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-let cloudPosX1 = 0;
-let cloudPosX2 = -200;
-var scrollSpeed = 1;
 
 export function draw() {
   // draw images
-
   push();
   noSmooth();
   image(images.screens.sky, 0, 0, 224, 224);
@@ -21,6 +17,7 @@ export function draw() {
   image(images.screens.title_combo, 0, 0, 224, 224);
   pop();
 
+  // draw text
   push();
   fill("#703e14");
   textSize(9);
@@ -33,12 +30,12 @@ export function draw() {
   if (mouseIsPressed) {
     push();
     noSmooth();
-    image(images.buttons.play_down, 155, 180, 62, 34);
+    image(images.buttons.play_down, 156, 180, 62, 34);
     pop();
   } else {
     push();
     noSmooth();
-    image(images.buttons.play_up, 155, 180, 62, 34);
+    image(images.buttons.play_up, 156, 180, 62, 34);
     pop();
   }
 }
@@ -49,16 +46,6 @@ export function mouseReleased() {
 }
 
 function drawAnimatedClouds() {
-  const img1 = image(images.screens.clouds, cloudPosX1, 10, 224, 76);
-  const img2 = image(images.screens.clouds, cloudPosX2, 10, 224, 76);
-
-  cloudPosX1 -= scrollSpeed;
-  cloudPosX2 -= scrollSpeed;
-
-  if (cloudPosX1 < -width) {
-    cloudPosX1 = width;
-  }
-  if (cloudPosX2 < -width) {
-    cloudPosX2 = width;
-  }
+  image(images.screens.clouds, -frameCount % 224, 10, 224, 76);
+  image(images.screens.clouds, -frameCount % 224 + 224, 10, 224, 76);
 }

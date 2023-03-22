@@ -36,9 +36,8 @@ Object.assign(window, {
 
 function preload() {
   partyConnect(
-    "wss://deepstream-server-1.herokuapp.com",
-    "mjgomsa_bah-bah-grass_v.0.0.3",
-    "main"
+    "wss://demoserver.p5party.org",
+    "bah_bah_grass",
   );
 
   // preload all scenes
