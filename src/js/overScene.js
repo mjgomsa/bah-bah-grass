@@ -54,16 +54,6 @@ export function mouseReleased() {
 }
 
 function drawAnimatedClouds() {
-  const img1 = image(images.screens.clouds, cloudPosX1, 10, 224, 76);
-  const img2 = image(images.screens.clouds, cloudPosX2, 10, 224, 76);
-
-  cloudPosX1 -= scrollSpeed;
-  cloudPosX2 -= scrollSpeed;
-
-  if (cloudPosX1 < -width) {
-    cloudPosX1 = width;
-  }
-  if (cloudPosX2 < -width) {
-    cloudPosX2 = width;
-  }
+  image(images.screens.clouds, -frameCount % 224, 10, 224, 76);
+  image(images.screens.clouds, (-frameCount % 224) + 224, 10, 224, 76);
 }

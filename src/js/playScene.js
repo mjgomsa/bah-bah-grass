@@ -6,41 +6,40 @@
  *
  * SHARED OBJECTS:
  *
- * shared_grid : {       // read by all, written to only by the host.
- *     grid: [][]        // 2D array [x][y] of bools 
- *                       // (true = grass, false = no grass)
+ * shared_grid : {         //read by all, written to only by the host.
+ *     grid: [][]            // 2D array [x][y] of bools (true = grass, false = no grass)
  * }
  *
- * shared_time: {        // read by all, written to only by the host.
- *      state            // "waiting" or "playing"
- *      gameTimer : 90   // seconds remaining in game round
+ * shared_time: {           // read by all, written to only by the host.
+ *      state                 // "waiting" or "playing"
+ *      gameTimer : 90        // seconds remaining in game round
  * }
  *
- * shared_scores: {      // read by all, written to only by the host.
- *      scores: []       // an array containing sorted top scores for this session
- *      currentScore     // score in current session
+ * shared_scores: {     // read by all, written to only by the host.
+ *      scores: []            // an array containing sorted top scores for this session
+ *      currentScore          // score in current session
  * }
  *
- * shared_seeds: {       // is read by all, written to only by the host.
+ * shared_seeds: {          // is read by all, written to only by the host.
  *      seeds: [
  *        {
- *          x,           // x position
- *          y,           // y position
- *          age,         // age of seed in frames
+ *          x,                // x position
+ *          y,                // y position
+ *          age,              // age of seed in frames
  *        },
  *      ]
  * }
  *
- * me : {                // "my" shared object; is read by all, written to only by own client.
- *      role,            // "none", "observer", "sheep", or "ram"
+ * me : {                   // "my" shared object; is read by all, written to only by own client.
+ *      role,                 // "none", "observer", "sheep", or "ram"
  *      position: {
- *            x,         // x position in cells
- *            y,         // y position in cells
+ *            x,              // x position in cells
+ *            y,              // y position in cells
  *      },
- *      direction,       // "up", "down", "left", "right"; determines sprite to draw
+ *      direction,            // "up", "down", "left", "right"; determines sprite to draw
  * }
  *
- * guests : []           // a "guests" shared object, containing an array of all guests in the game
+ * guests : []              // a "guests" shared object, containing an array of all guests in the game
  */
 
 import { changeScene, scenes, images, sounds } from "./main.js";
@@ -49,7 +48,7 @@ import { pointInRect, array2D } from "./utilities.js";
 const GRID_SIZE = 20; // rows and cols in grid
 const CELL_SIZE = 8; // pixel width and height of grid cells
 const SEED_LIFESPAN = 6; // age/duration of a seed object
-const SEED_BLOOM = 5; // defines how often a seed should spawn
+const SEED_LIFESPAN_SPAWN1 = 5; // defines how often a seed should spawn
 
 let me;
 let guests;
@@ -101,7 +100,6 @@ export function leave() {
 }
 
 export function draw() {
-
   // draw
   background("black");
 
@@ -147,29 +145,27 @@ function drawGrid() {
         image(images.dirt.main, x, y, CELL_SIZE, CELL_SIZE);
       }
 
-      
+      //alternate grass
+      drawAltGrass(images.grass.alts[0], 18, 1);
+      drawAltGrass(images.grass.alts[0], 10, 7);
+      drawAltGrass(images.grass.alts[0], 4, 8);
+      drawAltGrass(images.grass.alts[0], 2, 11);
+      drawAltGrass(images.grass.alts[0], 19, 18);
+      drawAltGrass(images.grass.alts[1], 2, 5);
+      drawAltGrass(images.grass.alts[1], 15, 5);
+      drawAltGrass(images.grass.alts[1], 13, 8);
+      drawAltGrass(images.grass.alts[2], 13, 1);
+      drawAltGrass(images.grass.alts[2], 16, 1);
+      drawAltGrass(images.grass.alts[2], 1, 4);
+      drawAltGrass(images.grass.alts[2], 10, 14);
+      drawAltGrass(images.grass.alts[2], 11, 17);
+      drawAltGrass(images.grass.alts[3], 4, 0);
+      drawAltGrass(images.grass.alts[3], 18, 7);
+      drawAltGrass(images.grass.alts[3], 14, 9);
+      drawAltGrass(images.grass.alts[3], 2, 18);
+      drawAltGrass(images.grass.alts[3], 10, 17);
     }
   }
-
-  //alternate grass
-  drawAltGrass(images.grass.alts[0], 18, 1);
-  drawAltGrass(images.grass.alts[0], 10, 7);
-  drawAltGrass(images.grass.alts[0], 4, 8);
-  drawAltGrass(images.grass.alts[0], 2, 11);
-  drawAltGrass(images.grass.alts[0], 19, 18);
-  drawAltGrass(images.grass.alts[1], 2, 5);
-  drawAltGrass(images.grass.alts[1], 15, 5);
-  drawAltGrass(images.grass.alts[1], 13, 8);
-  drawAltGrass(images.grass.alts[2], 13, 1);
-  drawAltGrass(images.grass.alts[2], 16, 1);
-  drawAltGrass(images.grass.alts[2], 1, 4);
-  drawAltGrass(images.grass.alts[2], 10, 14);
-  drawAltGrass(images.grass.alts[2], 11, 17);
-  drawAltGrass(images.grass.alts[3], 4, 0);
-  drawAltGrass(images.grass.alts[3], 18, 7);
-  drawAltGrass(images.grass.alts[3], 14, 9);
-  drawAltGrass(images.grass.alts[3], 2, 18);
-  drawAltGrass(images.grass.alts[3], 10, 17);
 
   for (const seed of shared_seeds.seeds) {
     translate(seed.x * CELL_SIZE, seed.y * CELL_SIZE);
@@ -182,8 +178,7 @@ function drawGrid() {
 
 function drawAltGrass(img, x, y) {
   if (shared_grid.grid[x][y] === true) {
-    // image(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-    image(img, x * CELL_SIZE, y * CELL_SIZE);
+    image(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
   }
 }
 
@@ -272,6 +267,8 @@ function move(dX, dY) {
   if (shared_time.state === "playing") {
     if (shared_grid.grid[me.position.x][me.position.y] === true) {
       sounds.sheep_eat.play();
+    } else {
+      sounds.sheep_stomp.play();
     }
     partyEmit("eatCell", { x: me.position.x, y: me.position.y });
   }
@@ -366,18 +363,17 @@ function updateSeeds() {
 
   for (const seed of shared_seeds.seeds) {
     seed.age++;
-    if (seed.age === SEED_BLOOM * 60) {
+    if (seed.age === SEED_LIFESPAN_SPAWN1 * 60) {
       spawnDiamond(seed.x, seed.y, 1);
     }
-    if (seed.age === SEED_BLOOM * 60 + 20) {
+    if (seed.age === SEED_LIFESPAN_SPAWN1 * 60 + 20) {
       spawnDiamond(seed.x, seed.y, 2);
     }
-    if (seed.age === SEED_BLOOM * 60 + 40) {
+    if (seed.age === SEED_LIFESPAN_SPAWN1 * 60 + 40) {
       spawnDiamond(seed.x, seed.y, 3);
     }
   }
 
-  // remove seeds that are too old
   shared_seeds.seeds = shared_seeds.seeds.filter(
     (seed) => seed.age < SEED_LIFESPAN * 60
   );
@@ -411,8 +407,8 @@ function growGrass(x, y) {
 }
 
 function spawnSeed() {
-  const x_dirt_pos = floor(random() * GRID_SIZE);
-  const y_dirt_pos = floor(random() * GRID_SIZE);
+  var x_dirt_pos = floor(random() * GRID_SIZE);
+  var y_dirt_pos = floor(random() * GRID_SIZE);
 
   if (shared_grid.grid[x_dirt_pos][y_dirt_pos] === false) {
     shared_seeds.seeds.push({
@@ -445,6 +441,7 @@ function onEatCell(loc) {
   for (const seed of shared_seeds.seeds) {
     if (seed.x === loc.x && seed.y === loc.y) {
       seed.age = 1000000000; // old enough that it will be removed
+      sounds.seed_eaten.play();
     }
   }
 }

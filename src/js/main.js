@@ -36,8 +36,9 @@ Object.assign(window, {
 
 function preload() {
   partyConnect(
-    "wss://demoserver.p5party.org",
-    "bah_bah_grass",
+    "wss://deepstream-server-1.herokuapp.com",
+    "mjgomsa_bah-bah-grass_v.0.0.3",
+    "main"
   );
 
   // preload all scenes
@@ -125,7 +126,9 @@ function preloadImages() {
 
   //screen-specific images
   images.screens = {};
-  images.screens.title_combo = loadImage("./assets/images/screens_title.png");
+  images.screens.title_combo = loadImage(
+    "./assets/images/screens_title_combo.png"
+  );
   images.screens.grass_instruct = loadImage(
     "./assets/images/screens_instruct.png"
   );
@@ -169,6 +172,11 @@ function preloadSounds() {
 
   sounds.sheep_eat = loadSound("./assets/sounds/sheep_eat.wav");
   sounds.sheep_eat.setVolume(0.1);
+
+  sounds.sheep_stomp = loadSound("./assets/sounds/sheep_stomp.wav");
+  sounds.sheep_stomp.setVolume(0.4);
+
+  sounds.seed_eaten = loadSound("./assets/sounds/seed_eaten.wav");
 
   sounds.banjo = loadSound("./assets/sounds/banjo.wav");
   sounds.banjo.setVolume(0.5);
