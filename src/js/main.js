@@ -132,9 +132,6 @@ function preloadImages() {
   images.screens.grass_instruct = loadImage(
     "./assets/images/screens_instruct.png"
   );
-  images.screens.cloud_background = loadImage(
-    "./assets/images/screens_bkgnd_clouds.gif"
-  );
   images.screens.clouds = loadImage("./assets/images/screens_clouds.png");
   images.screens.sky = loadImage("./assets/images/screens_sky.png");
   images.screens.play_wait = loadImage(
@@ -152,13 +149,7 @@ function preloadImages() {
   images.key_art.border = loadImage("./assets/images/keyart_border.png");
 
   // seed
-  images.seed = {};
-  images.seed.sprouts = [];
-  images.seed.sprouts[0] = loadImage("./assets/images/sprout_000.png");
-  images.seed.sprouts[1] = loadImage("./assets/images/sprout_001.png");
-  images.seed.sprouts[2] = loadImage("./assets/images/sprout_002.png");
-  images.seed.sprouts[3] = loadImage("./assets/images/sprout_003.png");
-  images.seed.sprouts[4] = loadImage("./assets/images/sprout_004.png");
+  images.seed_sprout = loadImage("./assets/images/sprout.png");
 
   images.numbers = [];
   for (let i = 0; i < 10; i++) {
