@@ -142,7 +142,7 @@ function drawGrid() {
       if (shared_grid.grid[col][row] === true) {
         image(images.grass.main, x, y, CELL_SIZE, CELL_SIZE);
       } else {
-        image(images.dirt.main, x, y, CELL_SIZE, CELL_SIZE);
+        image(images.dirt, x, y, CELL_SIZE, CELL_SIZE);
       }
 
       //alternate grass

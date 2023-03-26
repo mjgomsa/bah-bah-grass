@@ -121,8 +121,7 @@ function preloadImages() {
   images.grass.alts[3] = loadImage("./assets/images/grass_alternative_003.png");
 
   //dirt
-  images.dirt = {};
-  images.dirt.main = loadImage("./assets/images/dirt.png");
+  images.dirt = loadImage("./assets/images/dirt.png");
 
   //screen-specific images
   images.screens = {};
