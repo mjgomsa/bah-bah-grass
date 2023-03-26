@@ -115,6 +115,9 @@ export function draw() {
   drawPlayers();
   pop();
 
+  // draw lower fence
+  image(images.key_art.lower_fence, 0, 0, 224, 224);
+
   drawUI();
 }
 

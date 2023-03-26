@@ -146,6 +146,9 @@ function preloadImages() {
   // key art
   images.key_art = {};
   images.key_art.border = loadImage("./assets/images/keyart_border.png");
+  images.key_art.lower_fence = loadImage(
+    "./assets/images/keyart_lowerfence.png"
+  );
 
   // seed
   images.seed_sprout = loadImage("./assets/images/sprout.png");
