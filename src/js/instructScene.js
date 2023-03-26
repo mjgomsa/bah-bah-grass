@@ -15,6 +15,7 @@ export function leave() {
 }
 
 export function draw() {
+  // draw images
   push();
   noSmooth();
   image(images.screens.sky, 0, 0, 224, 224);
@@ -22,6 +23,7 @@ export function draw() {
   image(images.screens.grass_instruct, 0, 0, 224, 224);
   pop();
 
+  // draw text
   push();
   fill("#703e14");
   textSize(9);

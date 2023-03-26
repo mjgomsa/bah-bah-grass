@@ -10,6 +10,7 @@ import { changeScene, scenes, images, sounds } from "./main.js";
 import { shared_scores, drawNumber } from "./playScene.js";
 
 export function draw() {
+  // draw images
   push();
   noSmooth();
   image(images.screens.sky, 0, 0, 224, 224);
@@ -17,29 +18,25 @@ export function draw() {
   image(images.screens.over, 0, 0, 224, 224);
   pop();
 
+  // draw text
   push();
   noSmooth();
   imageMode(CENTER);
-
   const yOffset = max(sin((-frameCount * 40) / 600) * 5); //hovering text animation
   drawNumber(shared_scores.currentScore, 68, yOffset + 85, 43);
-  // drawNumber(shared_scores.currentScore, 35, yOffset + 95, 43);
-
   drawNumber(shared_scores.scores[0], 150, 123, 15);
-  // drawNumber(shared_scores.scores[0], 145, 135, 15);
-
   pop();
 
   // start button
   if (mouseIsPressed) {
     push();
     noSmooth();
-    image(images.buttons.play_down, 155, 180, 62, 34);
+    image(images.buttons.play_down, 156, 180, 62, 34);
     pop();
   } else {
     push();
     noSmooth();
-    image(images.buttons.play_up, 155, 180, 62, 34);
+    image(images.buttons.play_up, 156, 180, 62, 34);
     pop();
   }
 }

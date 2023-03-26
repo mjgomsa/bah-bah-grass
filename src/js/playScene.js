@@ -128,9 +128,6 @@ export function update() {
   assignPlayers();
 }
 
-// note revisit drawing code, once we have sprites for all state
-// grid[x][y].state, grid[x][y].sprite
-
 function drawGrid() {
   push();
 
