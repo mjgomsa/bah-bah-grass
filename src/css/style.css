@@ -1,25 +1,6 @@
 @font-face {
     font-family: 'Pixeloid Sans';
-    src: url('../../assets/fonts/PixeloidSans-Bold.woff2') format('woff2'),
-        url('../../assets/fonts/PixeloidSans-Bold.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pixeloid Mono';
-    src: url('../../assets/fonts/PixeloidMono.woff2') format('woff2'),
-        url('../../assets/fonts/PixeloidMono.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Pixeloid Sans';
-    src: url('../../assets/fonts/PixeloidSans.woff2') format('woff2'),
-        url('../../assets/fonts/PixeloidSans.woff') format('woff');
+    src: url('../../assets/fonts/PixeloidSans.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
