@@ -9,10 +9,6 @@ import { changeScene, scenes, images, sounds } from "./main.js";
 
 import { shared_scores, drawNumber } from "./playScene.js";
 
-let cloudPosX1 = 0;
-let cloudPosX2 = -200;
-var scrollSpeed = 1;
-
 export function draw() {
   push();
   noSmooth();

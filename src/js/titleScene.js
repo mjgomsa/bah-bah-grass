@@ -7,7 +7,6 @@
 
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-
 export function draw() {
   // draw images
   push();
@@ -47,5 +46,5 @@ export function mouseReleased() {
 
 function drawAnimatedClouds() {
   image(images.screens.clouds, -frameCount % 224, 10, 224, 76);
-  image(images.screens.clouds, -frameCount % 224 + 224, 10, 224, 76);
+  image(images.screens.clouds, (-frameCount % 224) + 224, 10, 224, 76);
 }

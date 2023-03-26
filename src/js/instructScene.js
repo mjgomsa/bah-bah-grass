@@ -6,10 +6,6 @@
  */
 import { changeScene, scenes, images, sounds } from "./main.js";
 
-let cloudPosX1 = 0;
-let cloudPosX2 = -200;
-const scrollSpeed = 1;
-
 export function enter() {
   sounds.banjo.loop();
 }
