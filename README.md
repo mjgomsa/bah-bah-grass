@@ -54,11 +54,6 @@ Click [here](https://mjgomsa.github.io/bah-bah-grass/index.html) to go to the ga
   - By Edsward
   - License: “[This work is licensed under the Creative Commons 0 License.](http://creativecommons.org/publicdomain/zero/1.0/)”
 
-- Sheep Stomp SFX:
-
-  - [https://pixabay.com/sound-effects/086115-glasstompwav-80834/](https://pixabay.com/sound-effects/086115-glasstompwav-80834/)
-  - By Pixaby
-  - License: “[This work is licensed under the Creative Commons 0 License.](http://creativecommons.org/publicdomain/zero/1.0/)”
 
 - Seed Eaten (Ding) SFX:
   - [https://pixabay.com/sound-effects/ding-36029/](https://pixabay.com/sound-effects/ding-36029/)

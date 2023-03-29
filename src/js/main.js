@@ -166,8 +166,7 @@ function preloadSounds() {
   sounds.sheep_eat = loadSound("./assets/sounds/sheep_eat.wav");
   sounds.sheep_eat.setVolume(0.1);
 
-  sounds.sheep_stomp = loadSound("./assets/sounds/sheep_stomp.wav");
-  sounds.sheep_stomp.setVolume(0.4);
+  sounds.sheep_step = loadSound("./assets/sounds/sheep_step.wav");
 
   sounds.seed_eaten = loadSound("./assets/sounds/seed_eaten.wav");
 

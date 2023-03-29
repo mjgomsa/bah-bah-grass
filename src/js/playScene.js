@@ -83,6 +83,7 @@ export function preload() {
   partySubscribe("eatCell", onEatCell);
   partySubscribe("startRound", onStartRound);
   partySubscribe("endRound", () => changeScene(scenes.over));
+  partySubscribe("playSound", (sound) => sounds[sound].play());
 }
 
 export function setup() {
@@ -259,13 +260,12 @@ function move(dX, dY) {
   // execute move
   me.position.x += dX;
   me.position.y += dY;
-
+  
+  partyEmit("playSound", "sheep_step");
   if (shared_time.state === "playing") {
     if (shared_grid.grid[me.position.x][me.position.y] === true) {
-      sounds.sheep_eat.play();
-    } else {
-      sounds.sheep_stomp.play();
-    }
+      partyEmit("playSound", "sheep_eat");
+    } 
     partyEmit("eatCell", { x: me.position.x, y: me.position.y });
   }
 }
@@ -438,7 +438,7 @@ function onEatCell(loc) {
   for (const seed of shared_seeds.seeds) {
     if (seed.x === loc.x && seed.y === loc.y) {
       seed.age = 1000000000; // old enough that it will be removed
-      sounds.seed_eaten.play();
+      partyEmit("playSound", "seed_eaten");
     }
   }
 }
