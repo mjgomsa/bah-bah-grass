@@ -17,17 +17,16 @@ Click [here](https://mjgomsa.github.io/bah-bah-grass/index.html) to go to the ga
 - Typeface: Pixeloid Sans _Regular_
   - By GGBotNet
   - [https://ggbot.itch.io/pixeloid-font](https://ggbot.itch.io/pixeloid-font)
-  - License: “This font family are licensed under the SIL Open Font License, Version 1.1
-    - Notes: You can use them freely in your products & projects - print or digital, commercial or otherwise. However, you can't sell the fonts on their own.”
+  - License: [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL)
+  
 
 #### Sounds:
 
 - Banjo Background Music:
 
   - [https://freesound.org/people/SoundsExciting/sounds/213094/](https://freesound.org/people/SoundsExciting/sounds/213094/)
-  - License: “[This work is licensed under the Creative Commons 0 License.](http://creativecommons.org/publicdomain/zero/1.0/)”
-    - Notes: The person who associated a work with this deed has **dedicated** the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
-    - You can copy, modify, distribute and perform the work, even for commercial purposes, all without asking permission. See **Other Information** below.
+  - License: [Creative Commons 0 License](http://creativecommons.org/publicdomain/zero/1.0/)”
+
 
 - Button Click SFX:
 
