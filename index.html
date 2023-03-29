@@ -12,8 +12,11 @@
   </head>
   <body>
     <main></main>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/addons/p5.sound.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+    <!-- use old version of p5.sound.js -->
+    <!-- because new versions have audio glitch -->
+    <!-- https://github.com/processing/p5.js-sound/issues/494 -->
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/addons/p5.sound.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5.party@latest/dist/p5.party.js"></script>
     <script type="module" src="./src/js/main.js"></script>
   </body>
