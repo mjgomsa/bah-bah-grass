@@ -206,7 +206,7 @@ function drawUI() {
 
   if (shared_time.state === "waiting") {
     push();
-    image(images.screens.play_wait, 63, 181);
+    image(images.screens.play_wait, 63, 190);
     pop();
   }
 }
@@ -260,12 +260,12 @@ function move(dX, dY) {
   // execute move
   me.position.x += dX;
   me.position.y += dY;
-  
+
   partyEmit("playSound", "sheep_step");
   if (shared_time.state === "playing") {
     if (shared_grid.grid[me.position.x][me.position.y] === true) {
       partyEmit("playSound", "sheep_eat");
-    } 
+    }
     partyEmit("eatCell", { x: me.position.x, y: me.position.y });
   }
 }
