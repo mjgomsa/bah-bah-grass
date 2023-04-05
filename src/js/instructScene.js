@@ -27,13 +27,13 @@ export function draw() {
   push();
   fill("#703e14");
   textSize(9);
-  text("Eat all grass squares with", 45, 70);
-  text("your teammates before", 45, 80);
-  text("the time runs out.", 45, 90);
-  text("Watch out for randomly", 45, 110);
-  text("appearing seeds!", 45, 120);
-  text("Eat all the seed before", 45, 140);
-  text("the grass grows back!", 45, 150);
+  text("Eat as much grass as possible with", 25, 70);
+  text("your teammate before the timer", 25, 80);
+  text("goes off.", 25, 90);
+  text("Beware! Seeds will sprout randomly", 25, 108);
+  text("on the grass you've already eaten.", 25, 118);
+  text("Work together to dominate the field!", 25, 138);
+  text("Use ASWD keys to move.", 25, 148);
   pop();
 
   //start button
