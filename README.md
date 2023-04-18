@@ -3,27 +3,30 @@
 Bah Bah Grass is a two player video game made using the [P5.party](https://github.com/jbakse/p5.party) library.
 <br><br>
 
-## **Game Instructions:**
+---
+
+## Game Instructions:
 
 You and your teammate's mission is to eat as much grass as possible within 90 seconds. Move around the grid using the **ASWD** keys to chomp on the grass squares.
 
 But beware! Seeds will sprout randomly on the grass you've already eaten, and if you don't get to them in time, the grass will grow back and you'll lose progress.
 
-Work together with your teammate to strategize and dominate the field. Are you ready to become the ultimate grass-eating duo? Let the game begin!!
+Work together with your teammate to strategize and devour the field. Are you ready to become the ultimate grass-chomping duo? Let the game begin!
 
 ### Click [here](https://mjgomsa.github.io/bah-bah-grass/index.html) to go to the game.
 
 <br>
 
-## **External Assets Licensing:**
+---
+
+## External Assets Licensing:
 
 ## Fonts:
 
 - Typeface: Pixeloid Sans _Regular_
   - By: GGBotNet
   - [https://ggbot.itch.io/pixeloid-font](https://ggbot.itch.io/pixeloid-font)
-  - License: [SIL Open Font License, Version 1.1](https://scripts.sil.org/OFL)
-    - License.txt file included in assets > fonts
+  - License: [SIL Open Font License, Version 1.1](./assets/fonts/License.txt)
 
 ## Sounds:
 
@@ -62,3 +65,7 @@ Work together with your teammate to strategize and dominate the field. Are you r
   - By: OwlStorm
   - [https://pixabay.com/sound-effects/ding-36029/](https://pixabay.com/sound-effects/ding-36029/)
   - License: [Creative Commons 0 License](http://creativecommons.org/publicdomain/zero/1.0/)
+
+---
+
+### **Contributors:** MJ Gomez-Saavedra, Rand Rivera and Justin Bakse
