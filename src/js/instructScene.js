@@ -29,11 +29,11 @@ export function draw() {
   textSize(9);
   text("Eat as much grass as possible with", 25, 70);
   text("your teammate before the timer", 25, 80);
-  text("goes off.", 25, 90);
+  text("runs out.", 25, 90);
   text("Beware! Seeds will sprout randomly", 25, 108);
-  text("on the grass you've already eaten.", 25, 118);
-  text("Work together to dominate the field!", 25, 138);
-  text("Use ASWD keys to move.", 25, 148);
+  text("and set back your progress.", 25, 118);
+  text("Work together to devour the field!", 25, 138);
+  text("Use the ASWD keys to move.", 25, 148);
   pop();
 
   //start button
